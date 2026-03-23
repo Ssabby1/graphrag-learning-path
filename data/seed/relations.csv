@@ -1,0 +1,3 @@
+﻿from_concept_id,to_concept_id,relation_type
+c_001,c_002,PREREQUISITE_OF
+c_002,c_003,PREREQUISITE_OF
