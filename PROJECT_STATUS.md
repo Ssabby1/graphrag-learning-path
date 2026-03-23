@@ -1,6 +1,6 @@
-﻿Updated: 2026-03-17
+Updated: 2026-03-17
 
-Status: Job-oriented GraphRAG build.
+Status: GraphRAG system build in progress.
 
 - Foundation APIs and graph retrieval are ready.
 - Next step is pipeline formalization and `/graphrag/query`.

@@ -1,4 +1,4 @@
-﻿# GraphRAG Roadmap (Job Version)
+# GraphRAG Roadmap
 
 Updated: 2026-03-17
 

@@ -1,71 +1,141 @@
-# Job GraphRAG Version
+<p align="right">
+  <a href="./README.md">English</a> | <a href="./README.zh-CN.md">Chinese</a>
+</p>
 
-This is `graduate_design_graphrag`, the job-oriented evolution branch.
+# GraphRAG Learning Path
 
-## Primary Objective
-Turn the project into a portfolio-grade GraphRAG system with clear pipeline boundaries and measurable quality.
+A GraphRAG system for learning path recommendation.
 
-## Current Foundation
-- Knowledge graph in Neo4j
-- FastAPI retrieval APIs
-- Path planning with deterministic topo-sort
-- LLM explanation layer with fallback
-- GraphRAG query endpoint with structured contract:
-  - `answer`
-  - `path`
-  - `evidence`
-  - `citations`
-  - `meta`
+This project combines knowledge graph retrieval, prerequisite-aware path reasoning, and grounded LLM explanation generation to produce explainable learning guidance for a target concept. Instead of responding from prompts alone, the system retrieves graph evidence, plans a valid concept path, and returns structured outputs with citations and runtime metadata.
+
+## Overview
+
+GraphRAG Learning Path is an end-to-end AI application project that demonstrates how to connect symbolic graph structure with natural-language generation in a practical product workflow.
+
+The system focuses on the full GraphRAG loop:
+
+- retrieve evidence from a knowledge graph
+- reason over prerequisite structure
+- generate grounded natural-language explanations
+- return machine-friendly outputs for inspection and evaluation
+
+## Core Capabilities
+
+- Knowledge graph retrieval over concepts and prerequisite relations stored in Neo4j
+- Prerequisite-aware path planning with deterministic topological ordering
+- GraphRAG query endpoint with structured fields: `answer`, `path`, `evidence`, `citations`, `meta`
+- Grounded explanation generation with fallback behavior when LLM support is unavailable
+- Interactive Vue frontend for concept search, path visualization, and bilingual exploration
+- Automated API and service tests covering retrieval, planning, and response contracts
+
+## Tech Stack
+
+### AI / Retrieval
+
+- GraphRAG
+- Knowledge Graph Retrieval
+- Hybrid Retrieval
+- Reciprocal Rank Fusion (RRF)
+- Reranking
+- Grounded LLM Explanation
+- Structured Evidence and Citation Outputs
+
+### Backend
+
+- Python
+- FastAPI
+- Neo4j
+- NetworkX
+- LangChain Core
+
+### Frontend
+
+- Vue 3
+- Vite
+- ECharts
+
+### Testing
+
+- Pytest
+- HTTPX
+
+## Pipeline
+
+`retrieve -> reason -> generate -> inspect`
+
+1. Retrieve graph evidence relevant to the target concept.
+2. Reason over prerequisite dependencies to build a valid learning path.
+3. Generate a grounded explanation from retrieved evidence and planned path.
+4. Return structured outputs so the result can be inspected by both humans and downstream systems.
+
+## Example Output Contract
+
+The `/graphrag/query` endpoint returns a structured response designed for explainability:
+
+```json
+{
+  "answer": "Grounded recommendation text",
+  "path": ["C001", "C002", "C003"],
+  "evidence": ["C001 is a prerequisite of C002"],
+  "citations": [
+    {
+      "concept_id": "C001",
+      "kind": "concept",
+      "source": "graph"
+    }
+  ],
+  "meta": {
+    "source": "fallback",
+    "model": "disabled"
+  }
+}
+```
 
 ## Quick Start
-1. Start backend:
+
+### Backend
+
 ```powershell
 cd backend
 $env:PYTHONPATH='.'
 .\.venv\Scripts\python.exe run.py
 ```
-2. Start frontend:
+
+### Frontend
+
 ```powershell
 cd frontend
 npm install
 npm run dev
 ```
-3. Open browser: `http://127.0.0.1:5173`
 
-## 2-Min Interview Demo
-1. Open the `GraphRAG Query Demo` panel in the UI.
-2. Use:
-   - `question`: `How should I learn C003?`
-   - `target_concept_id`: `C003`
-   - `mastered_concepts`: `C001`
-3. Click `Run GraphRAG Query`.
-4. Show output sections:
-   - `answer`: final grounded response
-   - `path`: ordered learning sequence
-   - `evidence`: prerequisite concepts
-   - `citations`: traceable concept-level references
-   - `meta`: runtime signal (`has_cycle`, `model`, `source`)
-5. Point to the graph rendering area to show path visualization consistency.
+Open `http://127.0.0.1:5173`
 
-## API Example
-```bash
-curl -X POST http://127.0.0.1:8000/graphrag/query \
-  -H "Content-Type: application/json" \
-  -d "{\"question\":\"How should I learn C003?\",\"target_concept_id\":\"C003\",\"mastered_concepts\":[\"C001\"]}"
-```
+## 2-Min Demo Flow
 
-## What to Highlight in Interviews
-- We separated retrieval/path logic from generation logic (`path_service` vs `explanation_service`).
-- The GraphRAG endpoint returns both answer text and machine-friendly evidence/citations.
-- The service supports fallback behavior when LLM is unavailable.
-- The contract is covered by API tests, so iteration stays safe.
+1. Open the GraphRAG query view in the frontend.
+2. Search and select a target concept.
+3. Add mastered concepts or enter a natural-language learning question.
+4. Generate the learning path.
+5. Generate the grounded explanation.
+6. Show the returned `path`, `evidence`, `citations`, and `meta` fields together with the graph view.
 
-## What to Read First
-1. VERSION_SCOPE.md
-2. PROJECT_STATUS.md
-3. PROJECT_STATUS_CN.md
-4. GRAPHRAG_ROADMAP.md
-5. Æô¶¯ÎÄµµ.txt
+## What This Project Demonstrates
 
-## Note
-Any root docs outside the active whitelist should be treated as historical unless revalidated.
+- Designing a GraphRAG pipeline around structured retrieval and reasoning, not just prompt orchestration
+- Combining symbolic graph structure with natural-language explanation generation
+- Building explainable AI outputs with evidence and citation fields
+- Turning an AI workflow into a usable full-stack application with test coverage
+
+## Repository Notes
+
+This public repository contains the shareable project code and supporting documentation. Some original research materials, full datasets, and local development assets are intentionally excluded.
+
+## Related Docs
+
+- `PROJECT_STATUS.md`
+- `PROJECT_STATUS_CN.md`
+- `GRAPHRAG_ROADMAP.md`
+- `docs/architecture.md`
+- `docs/api.md`
+- `docs/data_model.md`
