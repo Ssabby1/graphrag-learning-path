@@ -131,11 +131,8 @@ Open `http://127.0.0.1:5173`
 
 This public repository contains the shareable project code and supporting documentation. Some original research materials, full datasets, and local development assets are intentionally excluded.
 
-## Related Docs
+## Technical Docs
 
-- `PROJECT_STATUS.md`
-- `PROJECT_STATUS_CN.md`
-- `GRAPHRAG_ROADMAP.md`
 - `docs/architecture.md`
 - `docs/api.md`
 - `docs/data_model.md`

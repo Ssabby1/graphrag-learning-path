@@ -131,11 +131,8 @@ npm run dev
 
 本公开仓库包含可共享的项目代码与相关文档，未包含完整研究材料、全量数据与本地开发资产。
 
-## 相关文档
+## 技术文档
 
-- `PROJECT_STATUS.md`
-- `PROJECT_STATUS_CN.md`
-- `GRAPHRAG_ROADMAP.md`
 - `docs/architecture.md`
 - `docs/api.md`
 - `docs/data_model.md`
