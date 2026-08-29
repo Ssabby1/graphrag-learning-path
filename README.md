@@ -1,138 +1,80 @@
-<p align="right">
-  <a href="./README.md">English</a> | <a href="./README.zh-CN.md">Chinese</a>
-</p>
+# 基于知识图谱的个性化学习路径推荐系统
 
-# GraphRAG Learning Path
+本仓库是一个可本地运行的毕业设计项目，主题为“基于知识图谱的个性化学习路径推荐系统”。系统围绕数字逻辑课程构建知识图谱，并结合先修依赖推理、路径排序、检索增强解释与前端可视化，支持从目标知识点到个性化学习路径的生成与展示。
 
-A GraphRAG system for learning path recommendation.
+## 快速运行
 
-This project combines knowledge graph retrieval, prerequisite-aware path reasoning, and grounded LLM explanation generation to produce explainable learning guidance for a target concept. Instead of responding from prompts alone, the system retrieves graph evidence, plans a valid concept path, and returns structured outputs with citations and runtime metadata.
+第一次使用请先安装 Python、Node.js 和 JDK。详细步骤见：
 
-## Overview
+[项目运行说明.md](./项目运行说明.md)
 
-GraphRAG Learning Path is an end-to-end AI application project that demonstrates how to connect symbolic graph structure with natural-language generation in a practical product workflow.
+初始化：
 
-The system focuses on the full GraphRAG loop:
-
-- retrieve evidence from a knowledge graph
-- reason over prerequisite structure
-- generate grounded natural-language explanations
-- return machine-friendly outputs for inspection and evaluation
-
-## Core Capabilities
-
-- Knowledge graph retrieval over concepts and prerequisite relations stored in Neo4j
-- Prerequisite-aware path planning with deterministic topological ordering
-- GraphRAG query endpoint with structured fields: `answer`, `path`, `evidence`, `citations`, `meta`
-- Grounded explanation generation with fallback behavior when LLM support is unavailable
-- Interactive Vue frontend for concept search, path visualization, and bilingual exploration
-- Automated API and service tests covering retrieval, planning, and response contracts
-
-## Tech Stack
-
-### AI / Retrieval
-
-- GraphRAG
-- Knowledge Graph Retrieval
-- Hybrid Retrieval
-- Reciprocal Rank Fusion (RRF)
-- Reranking
-- Grounded LLM Explanation
-- Structured Evidence and Citation Outputs
-
-### Backend
-
-- Python
-- FastAPI
-- Neo4j
-- NetworkX
-- LangChain Core
-
-### Frontend
-
-- Vue 3
-- Vite
-- ECharts
-
-### Testing
-
-- Pytest
-- HTTPX
-
-## Pipeline
-
-`retrieve -> reason -> generate -> inspect`
-
-1. Retrieve graph evidence relevant to the target concept.
-2. Reason over prerequisite dependencies to build a valid learning path.
-3. Generate a grounded explanation from retrieved evidence and planned path.
-4. Return structured outputs so the result can be inspected by both humans and downstream systems.
-
-## Example Output Contract
-
-The `/graphrag/query` endpoint returns a structured response designed for explainability:
-
-```json
-{
-  "answer": "Grounded recommendation text",
-  "path": ["C001", "C002", "C003"],
-  "evidence": ["C001 is a prerequisite of C002"],
-  "citations": [
-    {
-      "concept_id": "C001",
-      "kind": "concept",
-      "source": "graph"
-    }
-  ],
-  "meta": {
-    "source": "fallback",
-    "model": "disabled"
-  }
-}
+```powershell
+.\setup.ps1
 ```
 
-## Quick Start
+启动：
 
-### Backend
+```powershell
+.\start-dev.ps1
+```
+
+停止：
+
+```powershell
+.\stop-dev.ps1
+```
+
+启动后访问：
+
+- 前端页面：http://127.0.0.1:5173
+- 后端接口文档：http://127.0.0.1:8000/docs
+- Neo4j 浏览器：http://127.0.0.1:7474
+
+## 目录结构
+
+- `backend/`：FastAPI 后端源码，包含图谱查询、路径推荐、GraphRAG 和解释服务。
+- `frontend/`：Vue 3 前端源码，包含知识点选择、路径展示和问答交互界面。
+- `neo4j/`：Neo4j Community 本地运行目录。
+- `章节数据/`：课程知识点与关系抽取、整理、汇总后的数据。
+- `scripts/`：Neo4j 数据导入、图谱校验等脚本。
+- `docs/`：项目综述、系统架构、数据模型、接口与实验说明。
+- `成果材料/`：论文、答辩 PPT、演示稿和关键图片等成果文件。
+
+## 技术栈
+
+- 前端：Vue 3、Vite、Axios、ECharts
+- 后端：FastAPI、Uvicorn、NetworkX、LangChain Core
+- 数据库：Neo4j Community
+- 数据处理：Python CSV 脚本
+
+## 常用命令
+
+后端测试：
 
 ```powershell
 cd backend
-$env:PYTHONPATH='.'
-.\.venv\Scripts\python.exe run.py
+.\.venv\Scripts\python.exe -m pytest
 ```
 
-### Frontend
+前端构建：
 
 ```powershell
 cd frontend
-npm install
-npm run dev
+npm run build
 ```
 
-Open `http://127.0.0.1:5173`
+重新导入图谱数据：
 
-## 2-Min Demo Flow
+```powershell
+$env:NEO4J_PASSWORD="kg_learning_path_2026"
+.\backend\.venv\Scripts\python.exe scripts\import_data.py --clear-target
+```
 
-1. Open the GraphRAG query view in the frontend.
-2. Search and select a target concept.
-3. Add mastered concepts or enter a natural-language learning question.
-4. Generate the learning path.
-5. Generate the grounded explanation.
-6. Show the returned `path`, `evidence`, `citations`, and `meta` fields together with the graph view.
+图谱质量校验：
 
-## What This Project Demonstrates
-
-- Designing a GraphRAG pipeline around structured retrieval and reasoning, not just prompt orchestration
-- Combining symbolic graph structure with natural-language explanation generation
-- Building explainable AI outputs with evidence and citation fields
-- Turning an AI workflow into a usable full-stack application with test coverage
-
-## Repository Notes
-
-This public repository contains the shareable project code and supporting documentation. Some original research materials, full datasets, and local development assets are intentionally excluded.
-
-## Technical Docs
-
-- `docs/architecture.md`
-- `docs/api.md`
-- `docs/data_model.md`
+```powershell
+$env:NEO4J_PASSWORD="kg_learning_path_2026"
+.\backend\.venv\Scripts\python.exe scripts\validate_graph.py --report backend\docs\graph_validation_report.md
+```

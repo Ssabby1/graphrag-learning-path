@@ -51,18 +51,13 @@ def interpret_learning_request(question: str, repo: GraphRepository) -> dict:
 
 def _fallback_interpretation(question: str, corpus: list[dict]) -> dict:
     matches = _find_matches(question, corpus)
-    target = None
+    target_match = _select_target_match(matches)
+    target = target_match["concept_id"] if target_match else None
     mastered: list[str] = []
 
     for match in matches:
         if match["is_mastered"]:
             mastered.append(match["concept_id"])
-
-    unmatched = [item["concept_id"] for item in matches if item["concept_id"] not in mastered]
-    if unmatched:
-        target = unmatched[-1]
-    elif matches:
-        target = matches[-1]["concept_id"]
 
     summary_parts = []
     if target:
@@ -111,7 +106,11 @@ def _find_matches(question: str, corpus: list[dict]) -> list[dict]:
         context = lowered[window_start:hit_index]
         last_mastered = max((context.rfind(hint) for hint in MASTERED_HINTS), default=-1)
         last_target = max((context.rfind(hint) for hint in TARGET_HINTS), default=-1)
-        is_mastered = last_mastered >= 0 and last_mastered > last_target
+        mastered_distance = len(context) - last_mastered if last_mastered >= 0 else None
+        target_distance = len(context) - last_target if last_target >= 0 else None
+        is_mastered = mastered_distance is not None and (
+            target_distance is None or mastered_distance < target_distance
+        )
 
         matches.append(
             {
@@ -119,6 +118,8 @@ def _find_matches(question: str, corpus: list[dict]) -> list[dict]:
                 "name": name,
                 "index": hit_index,
                 "matched_text": matched_text,
+                "match_length": len(matched_text),
+                "target_distance": target_distance,
                 "is_mastered": is_mastered,
             }
         )
@@ -132,6 +133,30 @@ def _find_matches(question: str, corpus: list[dict]) -> list[dict]:
         deduped.append(item)
         seen.add(item["concept_id"])
     return deduped
+
+
+def _select_target_match(matches: list[dict]) -> dict | None:
+    candidates = [item for item in matches if not item["is_mastered"]]
+    if not candidates:
+        candidates = matches
+
+    if not candidates:
+        return None
+
+    def _priority(item: dict) -> tuple:
+        target_distance = item.get("target_distance")
+        has_target_hint = 1 if target_distance is not None else 0
+        target_proximity = -target_distance if target_distance is not None else float("-inf")
+        return (
+            has_target_hint,
+            target_proximity,
+            item.get("match_length", 0),
+            len(item.get("name") or ""),
+            -item.get("index", 0),
+            item.get("concept_id") or "",
+        )
+
+    return max(candidates, key=_priority)
 
 
 def _call_planner_llm(question: str, corpus: list[dict], fallback: dict) -> dict:

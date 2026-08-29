@@ -104,10 +104,17 @@
       </div>
     </section>
 
-    <section class="graph-section card">
-      <div class="section-kicker">Graph View</div>
-      <h2>Learning Path Graph</h2>
-      <p class="section-text">The graph highlights the generated path in order.</p>
+    <section ref="graphSectionRef" class="graph-section card" :class="{ fullscreen: isGraphFullscreen }">
+      <div class="graph-toolbar">
+        <div>
+          <div class="section-kicker">图谱视图</div>
+          <h2>学习路径图谱</h2>
+          <p class="section-text">图中将按顺序高亮展示系统生成的学习路径。</p>
+        </div>
+        <button class="secondary-button graph-fullscreen-button" @click="toggleGraphFullscreen">
+          {{ isGraphFullscreen ? '退出全屏' : '全屏查看' }}
+        </button>
+      </div>
       <div ref="chartRef" class="chart"></div>
     </section>
 
@@ -143,8 +150,8 @@
 import * as echarts from 'echarts';
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { fetchConceptCorpus, fetchConceptDetail, fetchGraphOverview, fetchGraphRagQuery, fetchHealth, fetchPlannerInterpret, fetchRecommendPath } from '../api/client';
-const zh = { heroEyebrow:'知识图谱驱动的学习规划',heroTitle:'先说你想学什么，我们把路径和依据整理给你',heroBody:'按知识点名称搜索，或直接用一句自然语言描述目标。系统会帮你识别关键概念、生成推荐路径，并补充文字解释。',guideTitle:'你可以这样开始',hideGuide:'收起',serviceStatus:'服务状态',selectedTarget:'当前目标',notSelected:'未选择',serviceNotice:'服务提示',plannerInput:'路径输入',plannerTitle:'从目标知识点开始规划',plannerDescription:'先选目标，再补充已掌握知识点或学习问题。',refreshData:'刷新数据',targetConcept:'目标知识点',targetPlaceholder:'输入知识点名称、ID 或描述关键词',noDescription:'暂无描述',masteredConcepts:'已掌握知识点',masteredHelp:'这里支持和目标知识点一样的检索下拉，你可以按名称查看对应编号再选择。',masteredPlaceholder:'输入已掌握知识点名称、ID 或描述关键词',learningQuestion:'学习问题',questionHelp:'例如：如果我想学习布尔代数，应该先掌握什么？',questionPlaceholder:'输入一句自然语言问题',identifying:'正在识别...',identifyTarget:'从问题中识别目标',generatePathPending:'正在生成路径...',recommendPath:'生成学习路径',generateExplanationPending:'正在生成解释...',generateExplanation:'生成文字解释',targetSnapshot:'目标概览',pickTarget:'请选择一个目标知识点',targetSnapshotPlaceholder:'选中目标后，这里会显示基础信息。',internalId:'内部 ID',chapter:'章节',plannerInterpretation:'问题识别结果',plannerInterpretationIdle:'你还没有解析学习问题。',pathResult:'路径结果',recommendationSummary:'推荐摘要',pathPlaceholder:'点击“生成学习路径”后，这里会显示推荐结果。',reasoningSteps:'推理步骤',graphRagAnswer:'文字解释',naturalLanguageExplanation:'自然语言说明',graphRagPlaceholder:'点击“生成文字解释”后，这里会显示回答。',clearSelection:'清除',removeMasteredAria:'移除已掌握知识点',online:'在线',checkRequired:'需要检查',backendUnavailable:'后端不可用',conceptNotFound:'未找到知识点',requestFailed:'请求失败',chooseTargetFirst:'请先选择一个目标知识点。',stepTargetTitle:'选定目标',stepTargetDescription:'先确认你想学的知识点。',stepQuestionTitle:'补充背景',stepQuestionDescription:'告诉系统你已经会什么，或直接写问题。',stepResultTitle:'查看结果',stepResultDescription:'生成路径和解释。',hintSelectTarget:'先搜索并选择一个目标知识点。',hintAddBackground:'目标已经选好了，现在可以补充已掌握知识点或学习问题。',hintGeneratePath:'信息已经足够，可以直接生成学习路径。',hintReadResult:'路径已经生成，可以继续生成文字解释。' };
-const en = { heroEyebrow:'Graph-Backed Learning Planner',heroTitle:'Tell us what you want to learn, and we will lay out the path and evidence',heroBody:'Search by concept name or describe your goal in one sentence. The system helps identify key concepts, generate a learning path, and explain the result.',guideTitle:'You can start here',hideGuide:'Hide',serviceStatus:'Service',selectedTarget:'Current target',notSelected:'Not selected',serviceNotice:'Service notice',plannerInput:'Path input',plannerTitle:'Start from the concept you want to learn',plannerDescription:'Choose a target, then add mastered concepts or a learning question.',refreshData:'Refresh data',targetConcept:'Target concept',targetPlaceholder:'Type a concept name, ID, or description keyword',noDescription:'No description',masteredConcepts:'Mastered concepts',masteredHelp:'This field now supports the same searchable dropdown as the target field, so you can see names and IDs before selecting.',masteredPlaceholder:'Type a mastered concept name, ID, or keyword',learningQuestion:'Learning question',questionHelp:'Example: If I want to learn Boolean algebra, what should I study first?',questionPlaceholder:'Enter one natural-language question',identifying:'Identifying...',identifyTarget:'Identify from question',generatePathPending:'Generating path...',recommendPath:'Generate learning path',generateExplanationPending:'Generating explanation...',generateExplanation:'Generate explanation',targetSnapshot:'Target snapshot',pickTarget:'Choose a target concept',targetSnapshotPlaceholder:'Basic information will appear here after you choose a target.',internalId:'Internal ID',chapter:'Chapter',plannerInterpretation:'Question interpretation',plannerInterpretationIdle:'You have not parsed a learning question yet.',pathResult:'Path result',recommendationSummary:'Recommendation summary',pathPlaceholder:'Click “Generate learning path” to see the result here.',reasoningSteps:'Reasoning steps',graphRagAnswer:'Written explanation',naturalLanguageExplanation:'Natural-language explanation',graphRagPlaceholder:'Click “Generate explanation” to see the answer here.',clearSelection:'Clear',removeMasteredAria:'Remove mastered concept',online:'Online',checkRequired:'Check required',backendUnavailable:'Backend unavailable',conceptNotFound:'Concept not found',requestFailed:'Request failed',chooseTargetFirst:'Please choose a target concept first.',stepTargetTitle:'Choose a target',stepTargetDescription:'Start with the concept you want to learn.',stepQuestionTitle:'Add context',stepQuestionDescription:'Tell the system what you already know, or ask a question.',stepResultTitle:'Read the result',stepResultDescription:'Generate the path and explanation.',hintSelectTarget:'Start by searching for a target concept.',hintAddBackground:'The target is ready. Now add mastered concepts or a learning question.',hintGeneratePath:'You have enough context. Generate the learning path next.',hintReadResult:'The path is ready. You can generate the written explanation next.' };
+const zh = { heroEyebrow:'本科毕业设计系统演示',heroTitle:'基于知识图谱的个性化学习路径推荐系统',heroBody:'面向课程知识点学习场景，提供目标识别、先修关系分析、路径生成与可解释结果展示。',guideTitle:'你可以这样开始',hideGuide:'收起',serviceStatus:'服务状态',selectedTarget:'当前目标',notSelected:'未选择',serviceNotice:'服务提示',plannerInput:'路径输入',plannerTitle:'从目标知识点开始规划',plannerDescription:'先选目标，再补充已掌握知识点或学习问题。',refreshData:'刷新数据',targetConcept:'目标知识点',targetPlaceholder:'输入知识点名称、ID 或描述关键词',noDescription:'暂无描述',masteredConcepts:'已掌握知识点',masteredHelp:'这里支持和目标知识点一样的检索下拉，你可以按名称查看对应编号再选择。',masteredPlaceholder:'输入已掌握知识点名称、ID 或描述关键词',learningQuestion:'学习问题',questionHelp:'例如：如果我想学习布尔代数，应该先掌握什么？',questionPlaceholder:'输入一句自然语言问题',identifying:'正在识别...',identifyTarget:'从问题中识别目标',generatePathPending:'正在生成路径...',recommendPath:'生成学习路径',generateExplanationPending:'正在生成解释...',generateExplanation:'生成文字解释',targetSnapshot:'目标概览',pickTarget:'请选择一个目标知识点',targetSnapshotPlaceholder:'选中目标后，这里会显示基础信息。',internalId:'内部 ID',chapter:'章节',plannerInterpretation:'问题识别结果',plannerInterpretationIdle:'你还没有解析学习问题。',pathResult:'路径结果',recommendationSummary:'推荐摘要',pathPlaceholder:'点击“生成学习路径”后，这里会显示推荐结果。',reasoningSteps:'推理步骤',graphRagAnswer:'文字解释',naturalLanguageExplanation:'自然语言说明',graphRagPlaceholder:'点击“生成文字解释”后，这里会显示回答。',clearSelection:'清除',removeMasteredAria:'移除已掌握知识点',online:'在线',checkRequired:'需要检查',backendUnavailable:'后端不可用',conceptNotFound:'未找到知识点',requestFailed:'请求失败',chooseTargetFirst:'请先选择一个目标知识点。',stepTargetTitle:'选定目标',stepTargetDescription:'先确认你想学的知识点。',stepQuestionTitle:'补充背景',stepQuestionDescription:'告诉系统你已经会什么，或直接写问题。',stepResultTitle:'查看结果',stepResultDescription:'生成路径和解释。',hintSelectTarget:'先搜索并选择一个目标知识点。',hintAddBackground:'目标已经选好了，现在可以补充已掌握知识点或学习问题。',hintGeneratePath:'信息已经足够，可以直接生成学习路径。',hintReadResult:'路径已经生成，可以继续生成文字解释。' };
+const en = { heroEyebrow:'Undergraduate Thesis Demo',heroTitle:'Personalized Learning Path Recommendation System Based on Knowledge Graphs',heroBody:'Designed for course-level concept learning, with goal identification, prerequisite analysis, path generation, and explainable result presentation.',guideTitle:'You can start here',hideGuide:'Hide',serviceStatus:'Service',selectedTarget:'Current target',notSelected:'Not selected',serviceNotice:'Service notice',plannerInput:'Path input',plannerTitle:'Start from the concept you want to learn',plannerDescription:'Choose a target, then add mastered concepts or a learning question.',refreshData:'Refresh data',targetConcept:'Target concept',targetPlaceholder:'Type a concept name, ID, or description keyword',noDescription:'No description',masteredConcepts:'Mastered concepts',masteredHelp:'This field now supports the same searchable dropdown as the target field, so you can see names and IDs before selecting.',masteredPlaceholder:'Type a mastered concept name, ID, or keyword',learningQuestion:'Learning question',questionHelp:'Example: If I want to learn Boolean algebra, what should I study first?',questionPlaceholder:'Enter one natural-language question',identifying:'Identifying...',identifyTarget:'Identify from question',generatePathPending:'Generating path...',recommendPath:'Generate learning path',generateExplanationPending:'Generating explanation...',generateExplanation:'Generate explanation',targetSnapshot:'Target snapshot',pickTarget:'Choose a target concept',targetSnapshotPlaceholder:'Basic information will appear here after you choose a target.',internalId:'Internal ID',chapter:'Chapter',plannerInterpretation:'Question interpretation',plannerInterpretationIdle:'You have not parsed a learning question yet.',pathResult:'Path result',recommendationSummary:'Recommendation summary',pathPlaceholder:'Click “Generate learning path” to see the result here.',reasoningSteps:'Reasoning steps',graphRagAnswer:'Written explanation',naturalLanguageExplanation:'Natural-language explanation',graphRagPlaceholder:'Click “Generate explanation” to see the answer here.',clearSelection:'Clear',removeMasteredAria:'Remove mastered concept',online:'Online',checkRequired:'Check required',backendUnavailable:'Backend unavailable',conceptNotFound:'Concept not found',requestFailed:'Request failed',chooseTargetFirst:'Please choose a target concept first.',stepTargetTitle:'Choose a target',stepTargetDescription:'Start with the concept you want to learn.',stepQuestionTitle:'Add context',stepQuestionDescription:'Tell the system what you already know, or ask a question.',stepResultTitle:'Read the result',stepResultDescription:'Generate the path and explanation.',hintSelectTarget:'Start by searching for a target concept.',hintAddBackground:'The target is ready. Now add mastered concepts or a learning question.',hintGeneratePath:'You have enough context. Generate the learning path next.',hintReadResult:'The path is ready. You can generate the written explanation next.' };
 const COPY = { zh, en };
 const language = ref('zh');
 const uiError = ref('');
@@ -166,8 +173,10 @@ const plannerPending = ref(false);
 const recommendPending = ref(false);
 const graphragPending = ref(false);
 const showGuide = ref(false);
+const graphSectionRef = ref(null);
 const chartRef = ref(null);
 const chartIns = ref(null);
+const isGraphFullscreen = ref(false);
 const t = (k) => COPY[language.value][k] || k;
 const conceptMap = computed(() => conceptCorpus.value.reduce((acc, item) => ((acc[item.concept_id] = item), acc), {}));
 const selectedTarget = computed(() => conceptMap.value[selectedTargetId.value] || null);
@@ -198,9 +207,29 @@ async function recommendPath() { uiError.value = ''; if (!selectedTargetId.value
 async function runGraphRagQuery() { uiError.value = ''; if (!selectedTargetId.value || graphragPending.value) { if (!selectedTargetId.value) uiError.value = t('chooseTargetFirst'); return; } graphragPending.value = true; const fallbackQuestion = question.value.trim() || (language.value === 'zh' ? `如果我想学习${selectedTarget.value?.name || selectedTargetId.value}，应该先掌握什么？` : `If I want to learn ${selectedTarget.value?.name || selectedTargetId.value}, what should I study first?`); const res = await fetchGraphRagQuery({ question: fallbackQuestion, target_concept_id: selectedTargetId.value, mastered_concepts: masteredIds.value }); graphragPending.value = false; if (res.ok) { graphragResult.value = res.data; return; } uiError.value = mapError(res); }
 function toggleLanguage() { language.value = language.value === 'zh' ? 'en' : 'zh'; }
 function dismissGuide() { showGuide.value = false; window.localStorage.setItem('graph-planner-guide-dismissed', 'true'); }
-function renderChart(path = []) {
+async function toggleGraphFullscreen() {
+  const section = graphSectionRef.value;
+  if (!section) return;
+  if (document.fullscreenElement === section) {
+    await document.exitFullscreen?.();
+  } else if (section.requestFullscreen) {
+    await section.requestFullscreen();
+  }
+  nextTick(() => chartIns.value?.resize());
+}
+function handleFullscreenChange() {
+  isGraphFullscreen.value = document.fullscreenElement === graphSectionRef.value;
+  nextTick(() => chartIns.value?.resize());
+}
+function renderChart(result = {}) {
   if (!chartIns.value) return;
-  if (!Array.isArray(path) || !path.length) {
+  const path = Array.isArray(result) ? result : (Array.isArray(result?.path) ? result.path : []);
+  const graphNodes = Array.isArray(result?.graph_nodes) && result.graph_nodes.length ? result.graph_nodes : path;
+  const graphEdges = Array.isArray(result?.graph_edges) && result.graph_edges.length
+    ? result.graph_edges
+    : path.slice(0, -1).map((source, i) => [source, path[i + 1]]);
+
+  if (!Array.isArray(graphNodes) || !graphNodes.length) {
     chartIns.value.setOption({
       backgroundColor: 'transparent',
       tooltip: {},
@@ -211,27 +240,45 @@ function renderChart(path = []) {
         label: { show: true, color: '#334155', fontWeight: 600 },
         data: [{ id: 'EMPTY', name: 'Generate a path to see the graph', symbolSize: 84, itemStyle: { color: '#E8EDF2', borderColor: '#B8C3D1', borderWidth: 1.5 } }],
         links: [],
-        force: { repulsion: 260 }
+        force: { repulsion: 520, edgeLength: 220, layoutAnimation: true }
       }]
     });
     return;
   }
-  const nodes = path.map((id, index) => ({
-    id,
-    name: displayConceptById(id),
-    symbolSize: index === path.length - 1 ? 88 : 64,
-    itemStyle: {
-      color: index === path.length - 1 ? '#E7D2A8' : '#C9D7E7',
-      borderColor: index === path.length - 1 ? '#8E6D35' : '#58789A',
-      borderWidth: 1.8
-    },
-    label: { color: '#1E293B', fontWeight: 600, width: 150, overflow: 'break' }
-  }));
-  const links = path.slice(0, -1).map((source, i) => ({
-    source,
-    target: path[i + 1],
-    lineStyle: { color: '#8FA6BE', width: 2.2, opacity: 0.8 }
-  }));
+  const pathSet = new Set(path);
+  const masteredSet = new Set(masteredIds.value);
+  const targetId = path.length ? path[path.length - 1] : graphNodes[graphNodes.length - 1];
+  const nodes = graphNodes.map((id) => {
+    const isTarget = id === targetId;
+    const isMastered = masteredSet.has(id);
+    const isPathNode = pathSet.has(id);
+    return {
+      id,
+      name: displayConceptById(id),
+      symbolSize: isTarget ? 88 : (isMastered ? 58 : 64),
+      itemStyle: {
+        color: isTarget ? '#E7D2A8' : (isMastered ? '#DDF8E6' : (isPathNode ? '#C9D7E7' : '#E2E8F0')),
+        borderColor: isTarget ? '#8E6D35' : (isMastered ? '#2F8F5B' : (isPathNode ? '#58789A' : '#94A3B8')),
+        borderWidth: isMastered ? 2 : 1.8
+      },
+      label: { color: '#1E293B', fontWeight: 600, width: 150, overflow: 'break' }
+    };
+  });
+  const links = graphEdges.map(([source, target]) => {
+    const isPathEdge = pathSet.has(source) && pathSet.has(target);
+    const touchesMastered = masteredSet.has(source) || masteredSet.has(target);
+    return {
+      source,
+      target,
+      lineStyle: {
+        color: isPathEdge ? '#8FA6BE' : (touchesMastered ? '#8AB89B' : '#CBD5E1'),
+        width: isPathEdge ? 2.2 : 1.6,
+        opacity: touchesMastered ? 0.72 : 0.85,
+        type: touchesMastered && !isPathEdge ? 'dashed' : 'solid'
+      }
+    };
+  });
+  const spacingBoost = isGraphFullscreen.value ? 1.35 : 1;
   chartIns.value.setOption({
     backgroundColor: 'transparent',
     tooltip: {},
@@ -242,7 +289,12 @@ function renderChart(path = []) {
       draggable: true,
       edgeSymbol: ['none', 'arrow'],
       edgeSymbolSize: [0, 10],
-      force: { repulsion: 340, edgeLength: 150 },
+      force: {
+        repulsion: Math.round((graphNodes.length > 12 ? 720 : 560) * spacingBoost),
+        edgeLength: Math.round((graphNodes.length > 12 ? 210 : 190) * spacingBoost),
+        gravity: 0.045,
+        layoutAnimation: true
+      },
       emphasis: { focus: 'adjacency' },
       label: { show: true },
       data: nodes,
@@ -251,23 +303,27 @@ function renderChart(path = []) {
   });
 }
 function handleDocumentClick(event) { const target = event.target; if (!(target instanceof HTMLElement)) return; if (!target.closest('.field') && !target.closest('.command-bar')) { showTargetDropdown.value = false; showMasteredDropdown.value = false; } }
+watch(isGraphFullscreen, () => { nextTick(() => renderChart(recommendResult.value.path?.length ? recommendResult.value : { path: graphragResult.value.path || [] })); });
 watch(selectedTargetId, async (id) => { if (!id) return; const res = await fetchConceptDetail(id); if (res.ok) selectedConceptDetail.value = res.data; });
-watch(() => recommendResult.value.path, (path) => { nextTick(() => renderChart(path || [])); });
-watch(() => graphragResult.value.path, (path) => { if (!recommendResult.value.path?.length) nextTick(() => renderChart(path || [])); });
+watch(recommendResult, (result) => { nextTick(() => renderChart(result || {})); }, { deep: true });
+watch(() => graphragResult.value.path, (path) => { if (!recommendResult.value.path?.length) nextTick(() => renderChart({ path: path || [] })); });
 onMounted(async () => {
   showGuide.value = window.localStorage.getItem('graph-planner-guide-dismissed') !== 'true';
   document.addEventListener('click', handleDocumentClick);
+  document.addEventListener('fullscreenchange', handleFullscreenChange);
   chartIns.value = echarts.init(chartRef.value);
-  renderChart([]);
+  renderChart({});
   await bootstrap();
 });
 onBeforeUnmount(() => {
   document.removeEventListener('click', handleDocumentClick);
+  document.removeEventListener('fullscreenchange', handleFullscreenChange);
   if (chartIns.value) chartIns.value.dispose();
 });
 </script>
 
 <style scoped>
 .page{width:min(1320px,calc(100% - 48px));margin:0 auto;padding:clamp(24px,4vw,52px) 0 64px}.card{position:relative;overflow:hidden;border:1px solid rgba(15,23,42,.07);background:rgba(255,255,255,.9);border-radius:22px;box-shadow:0 10px 30px rgba(15,23,42,.05)}.hero,.overview-row,.workspace,.results-grid,.graph-section{display:grid;gap:20px;margin-bottom:20px}.hero,.overview-row,.workspace,.graph-section{grid-template-columns:1fr}.hero,.workspace,.graph-section{padding:26px}.hero-topline,.section-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}.section-head.compact{margin-bottom:12px}.eyebrow,.section-kicker,.summary-label{display:inline-flex;color:#7c4a1d;font-size:.74rem;letter-spacing:.14em;text-transform:uppercase}.hero h1,.workspace h2,.graph-section h2,.result-card h2,.overview h2,.guide-box strong,.snapshot h3{margin:0;color:#0f172a;font-family:"Georgia","Times New Roman","Source Han Serif SC","Songti SC",serif;font-weight:600;line-height:1.08}.hero h1{max-width:13ch;font-size:clamp(2.4rem,4vw,4.2rem)}.hero-text,.section-text,.field-hint,.option-desc,.snapshot-copy,.metric small,.guide-box span,.step-card p,.list-block li{color:#475569;line-height:1.7}.guide-box{display:grid;gap:10px;padding:16px 18px;border-radius:18px;border:1px solid rgba(148,163,184,.14);background:rgba(248,250,252,.84)}.hero-actions,.planner-actions,.status-strip,.token-list,.chip-list{display:flex;gap:12px;flex-wrap:wrap}.overview{padding:22px}.hero-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.metric,.step-card,.snapshot{display:grid;gap:8px;padding:14px 16px;border-radius:16px;background:rgba(255,255,255,.72);border:1px solid rgba(148,163,184,.12)}.metric strong{color:#0f172a;font-size:clamp(1.7rem,3vw,2.5rem);font-family:"Georgia","Times New Roman","Source Han Serif SC","Songti SC",serif}.error-banner{display:flex;gap:10px;align-items:flex-start;padding:18px 22px;color:#9a3412;background:rgba(255,247,237,.96);border-color:rgba(234,88,12,.12)}.primary-button,.secondary-button,.ghost-button,.lang-toggle,.search-option,.token-remove,.chip-button{border:none;cursor:pointer;font:inherit}.primary-button,.secondary-button,.ghost-button,.lang-toggle,.chip-button{min-height:44px;padding:0 18px;border-radius:999px;transition:transform .18s ease,box-shadow .18s ease,background-color .18s ease,color .18s ease}.primary-button{color:#f8fafc;background:#1e3a5f}.secondary-button,.lang-toggle,.chip-button{color:#35506f;background:rgba(226,232,240,.8)}.ghost-button{color:#334155;background:rgba(241,245,249,.78)}.primary-button:hover,.secondary-button:hover,.ghost-button:hover,.lang-toggle:hover,.search-option:hover,.token-remove:hover,.chip-button:hover{transform:translateY(-1px)}.primary-button:focus-visible,.secondary-button:focus-visible,.ghost-button:focus-visible,.lang-toggle:focus-visible,.text-input:focus,.text-area:focus,.search-option:focus-visible,.token-remove:focus-visible,.chip-button:focus-visible{outline:none;box-shadow:0 0 0 4px rgba(37,99,235,.14)}.status-chip{display:inline-flex;align-items:center;min-height:38px;padding:0 14px;border-radius:999px;background:rgba(248,250,252,.9);color:#334155;border:1px solid rgba(148,163,184,.16)}.status-chip.ok{background:rgba(240,253,244,.92);color:#166534}.status-chip.warning{background:rgba(255,247,237,.92);color:#9a3412}.planner-flow{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.72fr);gap:22px;margin-top:18px}.planner-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.step-card{grid-template-columns:auto 1fr;align-items:flex-start}.step-card.active{border-color:rgba(30,58,95,.28)}.step-card.done{background:rgba(245,248,251,.92)}.step-index{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:999px;background:#e8eef4;color:#1e3a5f;font-weight:700;font-size:.88rem}.command-bar,.field{position:relative}.command-bar{margin-top:22px;padding:18px 0;border-top:1px solid rgba(148,163,184,.16);border-bottom:1px solid rgba(148,163,184,.16);display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center}.command-label,.field label{color:#1e293b;font-weight:600}.planner-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(280px,.7fr);gap:28px;margin-top:24px}.planner-main{display:grid;gap:22px}.text-input,.text-area{width:100%;padding:15px 17px;border-radius:14px;border:1px solid rgba(148,163,184,.18);background:rgba(255,255,255,.94);color:#0f172a;transition:border-color .18s ease,box-shadow .18s ease}.command-input{min-height:52px}.text-area{min-height:120px;resize:vertical}.text-input::placeholder,.text-area::placeholder{color:#94a3b8}.search-panel{position:absolute;inset:calc(100% + 10px) 0 auto;z-index:12;max-height:300px;overflow:auto;padding:10px;border-radius:18px;border:1px solid rgba(148,163,184,.14);background:rgba(255,255,255,.98);box-shadow:0 16px 40px rgba(15,23,42,.08)}.search-option{width:100%;text-align:left;display:grid;gap:5px;margin-bottom:8px;padding:12px 14px;border-radius:18px;background:transparent;transition:background-color .18s ease,transform .18s ease}.search-option:last-child{margin-bottom:0}.search-option:hover{background:rgba(241,245,249,.92)}.option-title{color:#0f172a;font-weight:600}.option-meta,.info-stack span{color:#64748b}.token{display:inline-flex;align-items:center;gap:8px;min-height:38px;padding:0 12px;border-radius:999px;background:rgba(241,245,249,.95);color:#0f172a}.token-remove{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:999px;background:rgba(255,255,255,.9);color:#1e3a8a}.snapshot-list{display:grid;gap:14px;margin-top:12px}.info-stack{display:grid;gap:6px;padding-top:14px;border-top:1px solid rgba(148,163,184,.16)}.result-card{padding:22px}.chart{min-height:460px;border-radius:18px;background:linear-gradient(180deg,rgba(251,252,253,.98) 0%,rgba(243,246,249,.96) 100%)}.summary-tag{display:inline-flex;align-items:center;min-height:36px;padding:0 12px;border-radius:999px;background:rgba(241,245,249,.95);color:#334155}.summary-tag.soft{background:rgba(255,247,237,.9);color:#9a3412}.list-block ul{margin:8px 0 0;padding-left:18px}.results-grid{grid-template-columns:repeat(2,minmax(0,1fr))}@media (max-width:1200px){.planner-flow,.planner-grid,.hero-metrics,.command-bar,.planner-steps,.results-grid{grid-template-columns:1fr}.hero h1{max-width:none}}@media (max-width:720px){.page{width:min(100% - 20px,1320px);padding-top:18px}.hero,.workspace,.graph-section,.overview,.result-card{padding:20px;border-radius:18px}.hero-topline,.section-head,.guide-box{display:grid}}
+.graph-toolbar{display:flex;justify-content:space-between;align-items:center;gap:16px}.graph-fullscreen-button{white-space:nowrap}.chart{min-height:540px}.graph-section:fullscreen{width:100vw;height:100vh;margin:0;padding:28px;background:#f8fafc;border-radius:0;overflow:hidden}.graph-section.fullscreen{grid-template-rows:auto minmax(0,1fr)}.graph-section.fullscreen .chart{height:calc(100vh - 150px);min-height:0}@media (max-width:720px){.graph-toolbar{display:grid}.graph-section.fullscreen .chart{height:calc(100vh - 190px)}}
 </style>
 

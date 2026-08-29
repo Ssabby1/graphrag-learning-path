@@ -10,6 +10,8 @@ class PathRecommendResponse(BaseModel):
     target_concept_id: str
     path: list[str] = Field(default_factory=list)
     evidence: list[str] = Field(default_factory=list)
+    graph_nodes: list[str] = Field(default_factory=list)
+    graph_edges: list[tuple[str, str]] = Field(default_factory=list)
     reasoning_steps: list[str] = Field(default_factory=list)
     explanation: str
     has_cycle: bool = False

@@ -5,6 +5,7 @@ frontend/.env
 # Python
 backend/.venv/
 backend/.pytest_cache/
+backend/pytest-cache-files-*/
 backend/__pycache__/
 backend/app/**/__pycache__/
 backend/tests/**/__pycache__/
@@ -23,11 +24,30 @@ neo4j/
 
 # Local tooling
 .codex/
+.codex-tmp/
 .impeccable.md
+.obsidian/
+
+# Generated work products and temporary files
+output/
+projects/
+tmp/
+tmp-*/
+tmp_*
 
 # Private research / thesis assets
 章节数据/
+计算机学院本科毕业论文规定及附件/
+docs/05_论文与附件/
+docs/毕业论文大纲_*.md
 启动文档.txt
+
+# Keep the public repository focused on runtime/data scripts
+/scripts/*
+!/scripts/demo_data_reset.py
+!/scripts/import_data.py
+!/scripts/init_db.cypher
+!/scripts/validate_graph.py
 
 # OS / editor
 .DS_Store

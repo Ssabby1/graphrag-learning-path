@@ -6,7 +6,11 @@ $neo4jBat = Join-Path $neo4jBin "neo4j.bat"
 $backendDir = Join-Path $root "backend"
 $backendPython = Join-Path $backendDir ".venv\Scripts\python.exe"
 $backendRun = Join-Path $backendDir "run.py"
+$backendEnv = Join-Path $backendDir ".env"
+$backendEnvExample = Join-Path $backendDir ".env.example"
 $frontendDir = Join-Path $root "frontend"
+$frontendEnv = Join-Path $frontendDir ".env"
+$frontendEnvExample = Join-Path $frontendDir ".env.example"
 $npmCmd = "npm.cmd"
 
 function Assert-Exists {
@@ -21,9 +25,20 @@ function Assert-Exists {
 }
 
 Assert-Exists -Path $neo4jBat -Label "Neo4j launcher"
-Assert-Exists -Path $backendPython -Label "Backend Python"
+if (-not (Test-Path $backendPython)) {
+    throw "Backend Python virtual environment not found. Please run .\setup.ps1 first."
+}
 Assert-Exists -Path $backendRun -Label "Backend entry"
 Assert-Exists -Path $frontendDir -Label "Frontend directory"
+
+if (-not (Test-Path $backendEnv)) {
+    Copy-Item -LiteralPath $backendEnvExample -Destination $backendEnv
+    Write-Host "Created backend\.env from backend\.env.example. If Neo4j auth fails, update NEO4J_PASSWORD in backend\.env." -ForegroundColor Yellow
+}
+
+if (-not (Test-Path $frontendEnv)) {
+    Copy-Item -LiteralPath $frontendEnvExample -Destination $frontendEnv
+}
 
 Write-Host ""
 Write-Host "[1/3] Starting Neo4j..." -ForegroundColor Cyan

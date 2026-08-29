@@ -10,15 +10,29 @@ LlmCallable = Callable[[str, list[str], list[str]], dict]
 
 
 def _get_llm_api_key() -> str:
-    return os.getenv("MINIMAX_API_KEY", "").strip() or os.getenv("OPENAI_API_KEY", "").strip()
+    return (
+        os.getenv("DEEPSEEK_API_KEY", "").strip()
+        or os.getenv("OPENAI_API_KEY", "").strip()
+        or os.getenv("MINIMAX_API_KEY", "").strip()
+    )
 
 
 def _get_llm_base_url() -> str:
-    return os.getenv("MINIMAX_BASE_URL", "").strip() or os.getenv("OPENAI_BASE_URL", "https://api.minimaxi.com/v1")
+    return (
+        os.getenv("DEEPSEEK_BASE_URL", "").strip()
+        or os.getenv("OPENAI_BASE_URL", "").strip()
+        or os.getenv("MINIMAX_BASE_URL", "").strip()
+        or "https://api.deepseek.com"
+    )
 
 
 def _get_llm_model() -> str:
-    return os.getenv("MINIMAX_MODEL", "").strip() or os.getenv("OPENAI_MODEL", "MiniMax-M2.7")
+    return (
+        os.getenv("DEEPSEEK_MODEL", "").strip()
+        or os.getenv("OPENAI_MODEL", "").strip()
+        or os.getenv("MINIMAX_MODEL", "").strip()
+        or "deepseek-chat"
+    )
 
 
 def get_fallback_reasoning_and_explanation(has_cycle: bool) -> tuple[list[str], str]:

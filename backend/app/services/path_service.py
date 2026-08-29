@@ -12,6 +12,8 @@ def recommend_path(target_concept_id: str, mastered_concepts: list[str], repo: G
             "target_concept_id": target_concept_id,
             "path": [],
             "evidence": [f"{target_concept_id} already in mastered_concepts"],
+            "graph_nodes": [],
+            "graph_edges": [],
             "reasoning_steps": ["Target concept already mastered"],
             "explanation": "目标知识点已掌握，无需额外学习路径。",
         }
@@ -22,15 +24,23 @@ def recommend_path(target_concept_id: str, mastered_concepts: list[str], repo: G
             "target_concept_id": target_concept_id,
             "path": [],
             "evidence": [],
+            "graph_nodes": [],
+            "graph_edges": [],
             "reasoning_steps": ["Target concept is not found in the graph"],
             "explanation": "目标知识点不存在，无法生成学习路径。",
         }
 
     raw_nodes = set(subgraph.get("node_ids", []))
+    raw_nodes.add(target_concept_id)
+    raw_edges = [
+        (source, target)
+        for source, target in subgraph.get("edges", [])
+        if source in raw_nodes and target in raw_nodes
+    ]
+
     required_nodes = {node for node in raw_nodes if node not in mastered_set}
     required_nodes.add(target_concept_id)
 
-    raw_edges = subgraph.get("edges", [])
     filtered_edges = [
         (source, target)
         for source, target in raw_edges
@@ -42,12 +52,19 @@ def recommend_path(target_concept_id: str, mastered_concepts: list[str], repo: G
         ordered_path = [node for node in ordered_path if node != target_concept_id] + [target_concept_id]
 
     missing_prerequisites = [node for node in ordered_path if node != target_concept_id]
+    graph_nodes, _ = _topo_sort(raw_nodes, raw_edges)
+    if target_concept_id in graph_nodes:
+        graph_nodes = [node for node in graph_nodes if node != target_concept_id] + [target_concept_id]
+
+    graph_edges = _sort_graph_edges(raw_edges, graph_nodes)
     reasoning_steps, explanation = get_fallback_reasoning_and_explanation(has_cycle)
 
     return {
         "target_concept_id": target_concept_id,
         "path": ordered_path,
         "evidence": missing_prerequisites,
+        "graph_nodes": graph_nodes,
+        "graph_edges": graph_edges,
         "reasoning_steps": reasoning_steps,
         "explanation": explanation,
         "has_cycle": has_cycle,
@@ -82,3 +99,16 @@ def _topo_sort(nodes: set[str], edges: list[tuple[str, str]]) -> tuple[list[str]
 
     unresolved = sorted(node for node in nodes if node not in set(ordered))
     return ordered + unresolved, True
+
+
+def _sort_graph_edges(edges: list[tuple[str, str]], ordered_nodes: list[str]) -> list[tuple[str, str]]:
+    index_lookup = {node: idx for idx, node in enumerate(ordered_nodes)}
+    return sorted(
+        set(edges),
+        key=lambda edge: (
+            index_lookup.get(edge[0], len(ordered_nodes)),
+            index_lookup.get(edge[1], len(ordered_nodes)),
+            edge[0],
+            edge[1],
+        ),
+    )

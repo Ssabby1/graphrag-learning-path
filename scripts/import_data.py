@@ -33,7 +33,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--password", default=os.getenv("NEO4J_PASSWORD"))
     parser.add_argument("--database", default=os.getenv("NEO4J_DATABASE", "neo4j"))
     parser.add_argument("--course-id", default="digital-logic")
-    parser.add_argument("--course-name", default="Digital Logic")
+    parser.add_argument("--course-name", default="数字逻辑")
     parser.add_argument("--concepts-csv", default=str(DEFAULT_CONCEPTS))
     parser.add_argument("--relations-csv", default=str(DEFAULT_RELATIONS))
     parser.add_argument("--batch-size", type=int, default=1000)
@@ -81,7 +81,7 @@ def load_concepts(path: Path) -> list[dict[str, Any]]:
                     "alias": split_multi(row.get("alias")),
                     "description": (row.get("description") or "").strip(),
                     "difficulty": (row.get("difficulty") or "").strip(),
-                    "source_chapters": split_multi(row.get("source_chapters")),
+                    "source_chapters": split_multi(row.get("source_chapters")) or ["未分章"],
                     "source_images": split_multi(row.get("source_images")),
                     "confidence_max": to_float(row.get("confidence_max"), 0.0),
                 }

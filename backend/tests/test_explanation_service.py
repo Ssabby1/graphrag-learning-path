@@ -8,6 +8,7 @@
 
 def test_explanation_service_fallback_when_llm_disabled(monkeypatch) -> None:
     monkeypatch.delenv("LLM_ENABLED", raising=False)
+    monkeypatch.delenv("DEEPSEEK_API_KEY", raising=False)
     monkeypatch.delenv("OPENAI_API_KEY", raising=False)
 
     steps, explanation = generate_reasoning_and_explanation(
@@ -23,7 +24,7 @@ def test_explanation_service_fallback_when_llm_disabled(monkeypatch) -> None:
 
 def test_explanation_service_uses_llm_output(monkeypatch) -> None:
     monkeypatch.setenv("LLM_ENABLED", "true")
-    monkeypatch.setenv("OPENAI_API_KEY", "test-key")
+    monkeypatch.setenv("DEEPSEEK_API_KEY", "test-key")
 
     def fake_llm(_target: str, _path: list[str], _evidence: list[str]) -> dict:
         return {
@@ -45,7 +46,7 @@ def test_explanation_service_uses_llm_output(monkeypatch) -> None:
 
 def test_explanation_service_fallback_when_llm_raises(monkeypatch) -> None:
     monkeypatch.setenv("LLM_ENABLED", "true")
-    monkeypatch.setenv("OPENAI_API_KEY", "test-key")
+    monkeypatch.setenv("DEEPSEEK_API_KEY", "test-key")
 
     def bad_llm(_target: str, _path: list[str], _evidence: list[str]) -> dict:
         raise RuntimeError("boom")
@@ -64,7 +65,7 @@ def test_explanation_service_fallback_when_llm_raises(monkeypatch) -> None:
 
 def test_generate_reasoning_payload_marks_llm_source(monkeypatch) -> None:
     monkeypatch.setenv("LLM_ENABLED", "true")
-    monkeypatch.setenv("OPENAI_API_KEY", "test-key")
+    monkeypatch.setenv("DEEPSEEK_API_KEY", "test-key")
 
     def fake_llm(_target: str, _path: list[str], _evidence: list[str]) -> dict:
         return {
@@ -86,6 +87,7 @@ def test_generate_reasoning_payload_marks_llm_source(monkeypatch) -> None:
 
 def test_generate_reasoning_payload_falls_back_when_llm_disabled(monkeypatch) -> None:
     monkeypatch.delenv("LLM_ENABLED", raising=False)
+    monkeypatch.delenv("DEEPSEEK_API_KEY", raising=False)
     monkeypatch.delenv("OPENAI_API_KEY", raising=False)
 
     payload = generate_reasoning_payload(
@@ -100,13 +102,13 @@ def test_generate_reasoning_payload_falls_back_when_llm_disabled(monkeypatch) ->
 
 
 def test_candidate_base_urls_appends_or_strips_v1() -> None:
-    assert _candidate_base_urls("https://api.scnet.cn/api/llm") == [
-        "https://api.scnet.cn/api/llm",
-        "https://api.scnet.cn/api/llm/v1",
+    assert _candidate_base_urls("https://api.deepseek.com") == [
+        "https://api.deepseek.com",
+        "https://api.deepseek.com/v1",
     ]
-    assert _candidate_base_urls("https://api.scnet.cn/api/llm/v1") == [
-        "https://api.scnet.cn/api/llm/v1",
-        "https://api.scnet.cn/api/llm",
+    assert _candidate_base_urls("https://api.deepseek.com/v1") == [
+        "https://api.deepseek.com/v1",
+        "https://api.deepseek.com",
     ]
 
 
