@@ -72,6 +72,8 @@
 
 根据目标知识点和已掌握知识点生成推荐学习路径。
 
+路径由完整 `PREREQUISITE_OF` 祖先闭包决定，不再设置固定 8 层查询上限。默认把已掌握节点及其全部祖先从待学习路径中跳过，但这些节点仍保留在 `graph_nodes` / `graph_edges` 图上下文中。
+
 请求示例：
 
 ```json
@@ -86,10 +88,32 @@
 - `target_concept_id`
 - `path`
 - `evidence`
+- `graph_nodes`
+- `graph_edges`
 - `reasoning_steps`
 - `explanation`
 - `has_cycle`
+- `truncated`：图安全限制是否触发；为 `true` 时路径不得视为完整
+- `max_depth`：目标在当前先修闭包中的最长祖先深度
+- `meta`：节点/边数量、省略数量、缓存策略和数据集哈希
 - `explanation_source`
+
+`meta` 结构示例：
+
+```json
+{
+  "has_cycle": false,
+  "truncated": false,
+  "max_depth": 16,
+  "node_count": 42,
+  "edge_count": 87,
+  "omitted_node_count": 0,
+  "omitted_edge_count": 0,
+  "skipped_mastered_count": 0,
+  "planner_strategy": "cached_graph_ancestor_closure",
+  "dataset_hash": "sha256..."
+}
+```
 
 ### POST `/path/explain`
 
@@ -165,6 +189,10 @@
   ],
   "meta": {
     "has_cycle": false,
+    "truncated": false,
+    "max_depth": 2,
+    "planner_strategy": "cached_graph_ancestor_closure",
+    "dataset_hash": "sha256...",
     "source": "path_service+hybrid_retrieval",
     "model": "template-grounded-answer",
     "retrieval_strategy": "graph+vector+rrf+rerank",

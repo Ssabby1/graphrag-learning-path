@@ -4,7 +4,22 @@ import re
 
 
 def _tokens(text: str) -> set[str]:
-    return set(re.findall(r"[a-zA-Z0-9_]+", (text or "").lower()))
+    lowered = (text or "").lower()
+    return set(re.findall(r"[a-zA-Z0-9_]+", lowered)) | {
+        character for character in lowered if "\u3400" <= character <= "\u9fff"
+    }
+
+
+class TokenOverlapReranker:
+    @property
+    def model_id(self) -> str:
+        return "token-overlap-v2"
+
+    def rerank(self, query: str, hits: list[dict], top_k: int) -> list[dict]:
+        rescored = rerank_hits(query, hits, top_k)
+        for rank, hit in enumerate(rescored, start=1):
+            hit["rank"] = rank
+        return rescored
 
 
 def rerank_hits(question: str, hits: list[dict], top_k: int = 6) -> list[dict]:
@@ -17,7 +32,7 @@ def rerank_hits(question: str, hits: list[dict], top_k: int = 6) -> list[dict]:
         text = hit.get("text", "")
         h_tokens = _tokens(text)
         overlap = len(q_tokens & h_tokens)
-        base = float(hit.get("score", 0.0))
+        base = float(hit.get("rrf_score", hit.get("score", 0.0)) or 0.0)
         final_score = base + 0.05 * overlap
 
         merged = dict(hit)

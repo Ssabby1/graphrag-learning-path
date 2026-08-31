@@ -11,6 +11,7 @@ from app.services.explanation_service import (
     _get_llm_model,
     _llm_enabled,
 )
+from app.services.target_resolver import resolve_target
 
 MASTERED_HINTS = [
     "已经学过",
@@ -35,9 +36,36 @@ TARGET_HINTS = [
 ]
 
 
-def interpret_learning_request(question: str, repo: GraphRepository) -> dict:
+def interpret_learning_request(
+    question: str,
+    repo: GraphRepository,
+    top_k: int = 5,
+    response_language: str = "auto",
+) -> dict:
     corpus = repo.get_concept_corpus(limit=2000)
     fallback = _fallback_interpretation(question, corpus)
+    resolution = resolve_target(question, repo, top_k=top_k, response_language=response_language)
+    fallback.update(
+        {
+            "target_concept_id": resolution["target_concept_id"],
+            "matched_concepts": _unique(
+                [
+                    *fallback.get("matched_concepts", []),
+                    *(item["concept_id"] for item in resolution["candidates"]),
+                ]
+            ),
+            "candidates": resolution["candidates"],
+            "resolution_source": resolution["resolution_source"],
+            "query_language": resolution["query_language"],
+            "rejected": resolution["rejected"],
+            "rejection_reason": resolution["rejection_reason"],
+            "resolver_meta": resolution["resolver_meta"],
+        }
+    )
+    if resolution["target_concept_id"]:
+        fallback["summary"] = f"目标知识点识别为 {resolution['target_concept_id']}"
+    elif resolution["rejected"]:
+        fallback["summary"] = "未能稳定识别目标知识点，请补充信息或手动选择。"
 
     if not _llm_enabled():
         return fallback
@@ -250,6 +278,12 @@ def _normalize_interpretation(payload: dict, corpus: list[dict], fallback: dict)
         "matched_concepts": matched,
         "summary": summary.strip(),
         "interpretation_source": "llm",
+        "candidates": fallback.get("candidates", []),
+        "resolution_source": fallback.get("resolution_source", "fallback"),
+        "query_language": fallback.get("query_language", "zh"),
+        "rejected": target is None,
+        "rejection_reason": fallback.get("rejection_reason") if target is None else None,
+        "resolver_meta": fallback.get("resolver_meta", {}),
     }
 
 

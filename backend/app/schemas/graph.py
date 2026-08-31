@@ -21,7 +21,15 @@ class ConceptDetailResponse(BaseModel):
 class ConceptSummary(BaseModel):
     concept_id: str
     name: str = ""
+    name_en: str = ""
+    aliases: list[str] = Field(default_factory=list)
+    aliases_en: list[str] = Field(default_factory=list)
     description: str = ""
+    description_en: str = ""
+    difficulty: str = ""
+    source_chapters: list[str] = Field(default_factory=list)
+    predecessor_names: list[str] = Field(default_factory=list)
+    successor_names: list[str] = Field(default_factory=list)
 
 
 class ConceptCorpusResponse(BaseModel):

@@ -64,14 +64,15 @@ def test_recommend_path_topological_order_and_mastered_filter() -> None:
 
     assert result["path"][-1] == "C4"
     assert "C2" not in result["path"]
-    assert result["path"] == ["C1", "C3", "C4"]
-    assert result["evidence"] == ["C1", "C3"]
+    assert result["path"] == ["C3", "C4"]
+    assert result["evidence"] == ["C3"]
     assert result["graph_nodes"] == ["C1", "C2", "C3", "C4"]
     assert result["graph_edges"] == [("C1", "C2"), ("C2", "C4"), ("C3", "C4")]
+    assert result["meta"]["skipped_mastered_count"] == 2
     assert result["explanation_source"] == "fallback"
 
 
-def test_recommend_path_keeps_mastered_bridge_in_graph_context() -> None:
+def test_recommend_path_skips_mastered_ancestors_but_keeps_graph_context() -> None:
     repo = FakeGraphRepository(
         payload={
             "target_exists": True,
@@ -87,10 +88,33 @@ def test_recommend_path_keeps_mastered_bridge_in_graph_context() -> None:
         repo=repo,
     )
 
-    assert result["path"] == ["A", "B", "T"]
+    assert result["path"] == ["B", "T"]
     assert "M" not in result["evidence"]
     assert result["graph_nodes"] == ["A", "M", "B", "T"]
     assert result["graph_edges"] == [("A", "M"), ("M", "B"), ("B", "T")]
+    assert result["meta"]["skipped_mastered_count"] == 2
+
+
+def test_recommend_path_reports_explicit_truncation() -> None:
+    repo = FakeGraphRepository(
+        payload={
+            "target_exists": True,
+            "target_concept_id": "T",
+            "node_ids": ["A", "T"],
+            "edges": [("A", "T")],
+            "truncated": True,
+            "omitted_node_count": 2,
+            "omitted_edge_count": 1,
+            "max_depth": 1,
+            "planner_strategy": "cached_graph_ancestor_closure",
+        }
+    )
+
+    result = recommend_path("T", [], repo)
+
+    assert result["truncated"] is True
+    assert result["meta"]["omitted_node_count"] == 2
+    assert "路径不完整" in result["explanation"]
 
 
 def test_recommend_path_cycle_fallback_order() -> None:

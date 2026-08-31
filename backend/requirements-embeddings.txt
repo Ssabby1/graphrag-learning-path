@@ -1,0 +1,3 @@
+# Optional real multilingual embedding runtime (Python 3.10-3.13 recommended).
+-r requirements.txt
+sentence-transformers==6.0.0

@@ -107,6 +107,24 @@ def test_path_recommend_returns_503_when_repo_unavailable() -> None:
     app.dependency_overrides.clear()
 
 
+def test_path_recommend_returns_complete_meta_contract() -> None:
+    app.dependency_overrides[get_graph_repository] = _override_with(HealthyRepo())
+    client = TestClient(app)
+
+    response = client.post(
+        "/path/recommend",
+        json={"target_concept_id": "C1", "mastered_concepts": []},
+    )
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["truncated"] is False
+    assert payload["max_depth"] == 0
+    assert payload["meta"]["node_count"] == 1
+    assert payload["meta"]["planner_strategy"] == "legacy_repository_subgraph"
+    app.dependency_overrides.clear()
+
+
 def test_path_explain_returns_fallback_payload(monkeypatch) -> None:
     monkeypatch.delenv("LLM_ENABLED", raising=False)
     client = TestClient(app)

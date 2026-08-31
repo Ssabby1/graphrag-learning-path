@@ -24,6 +24,7 @@ from neo4j import GraphDatabase
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CONCEPTS = ROOT / "章节数据" / "数据汇总" / "outputs" / "fixed" / "concepts_all.csv"
 DEFAULT_RELATIONS = ROOT / "章节数据" / "数据汇总" / "outputs" / "fixed" / "relations_all.csv"
+DEFAULT_I18N = ROOT / "data" / "metadata" / "concept_i18n.csv"
 
 
 def parse_args() -> argparse.Namespace:
@@ -36,6 +37,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--course-name", default="数字逻辑")
     parser.add_argument("--concepts-csv", default=str(DEFAULT_CONCEPTS))
     parser.add_argument("--relations-csv", default=str(DEFAULT_RELATIONS))
+    parser.add_argument(
+        "--concept-i18n-csv",
+        default=str(DEFAULT_I18N),
+        help="Optional curated bilingual metadata overlay; use an empty value to disable.",
+    )
     parser.add_argument("--batch-size", type=int, default=1000)
     parser.add_argument(
         "--clear-target",
@@ -66,7 +72,15 @@ def chunked(items: list[dict[str, Any]], size: int) -> Iterable[list[dict[str, A
         yield items[i : i + size]
 
 
-def load_concepts(path: Path) -> list[dict[str, Any]]:
+def load_concepts(path: Path, i18n_path: Path | None = None) -> list[dict[str, Any]]:
+    overlays: dict[str, dict[str, str]] = {}
+    if i18n_path is not None and i18n_path.exists():
+        with i18n_path.open("r", encoding="utf-8-sig", newline="") as overlay_file:
+            overlays = {
+                (row.get("concept_id") or "").strip(): row
+                for row in csv.DictReader(overlay_file)
+                if (row.get("concept_id") or "").strip()
+            }
     rows: list[dict[str, Any]] = []
     with path.open("r", encoding="utf-8-sig", newline="") as f:
         reader = csv.DictReader(f)
@@ -74,12 +88,16 @@ def load_concepts(path: Path) -> list[dict[str, Any]]:
             concept_id = (row.get("concept_id") or "").strip()
             if not concept_id:
                 continue
+            overlay = overlays.get(concept_id, {})
             rows.append(
                 {
                     "concept_id": concept_id,
                     "name": (row.get("name") or "").strip(),
-                    "alias": split_multi(row.get("alias")),
+                    "name_en": (overlay.get("name_en") or row.get("name_en") or "").strip(),
+                    "alias": sorted(set(split_multi(row.get("alias")) + split_multi(overlay.get("alias")))),
+                    "aliases_en": sorted(set(split_multi(row.get("aliases_en")) + split_multi(overlay.get("aliases_en")))),
                     "description": (row.get("description") or "").strip(),
+                    "description_en": (overlay.get("description_en") or row.get("description_en") or "").strip(),
                     "difficulty": (row.get("difficulty") or "").strip(),
                     "source_chapters": split_multi(row.get("source_chapters")) or ["未分章"],
                     "source_images": split_multi(row.get("source_images")),
@@ -107,6 +125,7 @@ def load_relations(path: Path) -> list[dict[str, Any]]:
                     "evidence_text": (row.get("evidence_text") or "").strip(),
                     "source_images": split_multi(row.get("source_images")),
                     "confidence_max": to_float(row.get("confidence_max"), 0.0),
+                    "verification_status": (row.get("verification_status") or "unreviewed").strip(),
                 }
             )
     return rows
@@ -163,8 +182,11 @@ def import_concepts_and_chapters(session, course_id: str, batch: list[dict[str, 
         UNWIND $rows AS row
         MERGE (c:Concept {concept_id: row.concept_id})
         SET c.name = row.name,
+            c.name_en = row.name_en,
             c.alias = row.alias,
+            c.aliases_en = row.aliases_en,
             c.description = row.description,
+            c.description_en = row.description_en,
             c.difficulty = row.difficulty,
             c.source_images = row.source_images,
             c.confidence_max = row.confidence_max
@@ -190,7 +212,8 @@ def import_relation_type(session, rel_type: str, rows: list[dict[str, Any]]) -> 
     MERGE (a)-[r:{rel_type}]->(b)
     SET r.evidence_text = row.evidence_text,
         r.source_images = row.source_images,
-        r.confidence_max = row.confidence_max
+        r.confidence_max = row.confidence_max,
+        r.verification_status = row.verification_status
     """
     session.run(query, rows=rows)
 
@@ -210,7 +233,8 @@ def main() -> int:
         print(f"ERROR: relations csv not found: {relations_path}")
         return 2
 
-    concepts = load_concepts(concepts_path)
+    i18n_path = Path(args.concept_i18n_csv) if args.concept_i18n_csv else None
+    concepts = load_concepts(concepts_path, i18n_path)
     relations = load_relations(relations_path)
 
     print(f"Loaded concepts: {len(concepts)}")

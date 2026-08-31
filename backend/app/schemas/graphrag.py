@@ -16,10 +16,18 @@ class GraphRagCitation(BaseModel):
 
 class GraphRagMeta(BaseModel):
     has_cycle: bool = False
+    truncated: bool = False
+    max_depth: int = 0
+    planner_strategy: str = "cached_graph_ancestor_closure"
+    dataset_hash: str | None = None
     source: str = "path_service"
     model: str = "fallback"
     retrieval_strategy: str = "graph_only"
     vector_backend: str = "none"
+    embedding_model: str = "none"
+    embedding_degraded: bool = False
+    embedding_degradation_reason: str | None = None
+    embedding_cache_status: str = "not_used"
     fusion: str = "none"
     reranker: str = "none"
 

@@ -1,0 +1,5 @@
+concept_id,name_en,alias,aliases_en,description_en,verification_status
+G000020,Numeral System Conversion,二进制转换|Binary 二进制转换,Binary conversion|number system conversion,Conversion between numeral systems,project_curated
+G000054,Priority Encoder,,priority encoder,An encoder that assigns priority to active inputs,project_curated
+G000079,Karnaugh Map Construction,,Karnaugh map construction|K-map construction,Structure and construction of a Karnaugh map,project_curated
+G000119,Standard Form of Boolean Expressions,,Boolean expression|standard form of Boolean expression,Canonical forms of Boolean expressions,project_curated

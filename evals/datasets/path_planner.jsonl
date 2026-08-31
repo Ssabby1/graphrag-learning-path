@@ -1,0 +1,11 @@
+{"case_id":"path-001","target_concept_id":"G000079","mastered_concepts":[],"human_required_prerequisite_ids":[],"human_forbidden_ids":[],"review_status":"pending_human_review","tags":["kmap","closure"]}
+{"case_id":"path-002","target_concept_id":"G000084","mastered_concepts":[],"human_required_prerequisite_ids":[],"human_forbidden_ids":[],"review_status":"pending_human_review","tags":["long_chain"]}
+{"case_id":"path-003","target_concept_id":"G000150","mastered_concepts":[],"human_required_prerequisite_ids":[],"human_forbidden_ids":[],"review_status":"pending_human_review","tags":["counter","closure"]}
+{"case_id":"path-004","target_concept_id":"G000040","mastered_concepts":[],"human_required_prerequisite_ids":["G000039"],"human_forbidden_ids":[],"review_status":"human_verified","tags":["hamming"]}
+{"case_id":"path-005","target_concept_id":"G000028","mastered_concepts":[],"human_required_prerequisite_ids":["G000026","G000027"],"human_forbidden_ids":[],"review_status":"human_verified","tags":["signed_number"]}
+{"case_id":"path-006","target_concept_id":"G000028","mastered_concepts":["G000027"],"human_required_prerequisite_ids":[],"human_forbidden_ids":["G000026","G000027"],"review_status":"product_rule_fixture","tags":["mastered_ancestor_skip"]}
+{"case_id":"path-007","target_concept_id":"G000138","mastered_concepts":[],"human_required_prerequisite_ids":["G000128"],"human_forbidden_ids":[],"review_status":"human_verified","tags":["flip_flop"]}
+{"case_id":"path-008","target_concept_id":"G000163","mastered_concepts":[],"human_required_prerequisite_ids":[],"human_forbidden_ids":[],"review_status":"pending_human_review","tags":["adder","merge"]}
+{"case_id":"path-009","target_concept_id":"G999999","mastered_concepts":[],"human_required_prerequisite_ids":[],"human_forbidden_ids":[],"review_status":"structural_fixture","tags":["missing_target"]}
+{"case_id":"path-010","target_concept_id":"G000009","mastered_concepts":["G000009"],"human_required_prerequisite_ids":[],"human_forbidden_ids":["G000009"],"review_status":"product_rule_fixture","tags":["target_mastered"]}
+

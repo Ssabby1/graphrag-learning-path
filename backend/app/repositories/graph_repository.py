@@ -1,12 +1,15 @@
+import threading
+import time
 from typing import Any
 
 try:
-    from neo4j import Driver, GraphDatabase
+    from neo4j import Driver, GraphDatabase, Query
     from neo4j.exceptions import AuthError, Neo4jError, ServiceUnavailable
     _NEO4J_IMPORT_ERROR = None
 except ModuleNotFoundError as exc:  # pragma: no cover - depends on local env
     Driver = Any
     GraphDatabase = None
+    Query = None
 
     class _Neo4jDependencyError(Exception):
         pass
@@ -16,11 +19,15 @@ except ModuleNotFoundError as exc:  # pragma: no cover - depends on local env
 
 from app.core.config import settings
 from app.core.errors import RepositoryUnavailableError
-
-MAX_PREREQUISITE_DEPTH = 8
+from app.graph.graph_snapshot import GraphSnapshot
+from app.graph.prerequisite_index import PrerequisiteGraphIndex
 
 
 class GraphRepository:
+    _snapshot_cache: GraphSnapshot | None = None
+    _snapshot_cached_at: float = 0.0
+    _snapshot_lock = threading.Lock()
+
     def __init__(self) -> None:
         self._driver: Driver | None = None
 
@@ -110,74 +117,142 @@ class GraphRepository:
         }
 
     def get_learning_path(self, target_concept_id: str, mastered_concepts: list[str]) -> dict:
-        query = """
-        MATCH (target:Concept {concept_id: $target_concept_id})
-        OPTIONAL MATCH (pre:Concept)-[:PREREQUISITE_OF*1..]->(target)
-        WHERE NOT pre.concept_id IN $mastered_concepts
-        WITH target, collect(DISTINCT pre.concept_id) AS missing_prerequisites
-        RETURN target.concept_id AS target_concept_id, missing_prerequisites
-        """
-
-        record = self._run_single(
-            query,
-            {
-                "target_concept_id": target_concept_id,
-                "mastered_concepts": mastered_concepts,
-            },
-        )
-        if record is None:
+        subgraph = self.get_prerequisite_subgraph(target_concept_id)
+        if not subgraph["target_exists"]:
             return {
                 "target_concept_id": target_concept_id,
                 "missing_prerequisites": [],
             }
-
+        nodes = set(subgraph["node_ids"])
+        reverse = {node: set() for node in nodes}
+        for source, target in subgraph["edges"]:
+            reverse[target].add(source)
+        skipped = set(mastered_concepts) & nodes
+        stack = list(skipped)
+        while stack:
+            node = stack.pop()
+            for predecessor in reverse[node]:
+                if predecessor not in skipped:
+                    skipped.add(predecessor)
+                    stack.append(predecessor)
         return {
-            "target_concept_id": record["target_concept_id"],
-            "missing_prerequisites": [x for x in (record["missing_prerequisites"] or []) if x],
+            "target_concept_id": target_concept_id,
+            "missing_prerequisites": [
+                node for node in subgraph["node_ids"] if node != target_concept_id and node not in skipped
+            ],
+            "truncated": subgraph["truncated"],
         }
 
     def get_prerequisite_subgraph(self, target_concept_id: str) -> dict:
-        # Bound traversal depth so recommendation queries stay responsive even when
-        # the prerequisite graph is dense or contains cycles.
-        query = f"""
-        MATCH (target:Concept {{concept_id: $target_concept_id}})
-        OPTIONAL MATCH p=(pre:Concept)-[:PREREQUISITE_OF*1..{MAX_PREREQUISITE_DEPTH}]->(target)
-        WITH target, collect(DISTINCT pre.concept_id) + [target.concept_id] AS node_ids, collect(DISTINCT p) AS paths
-        UNWIND CASE WHEN size(paths) = 0 THEN [NULL] ELSE paths END AS one_path
-        UNWIND CASE WHEN one_path IS NULL THEN [NULL] ELSE relationships(one_path) END AS rel
-        WITH
-          target,
-          [nid IN node_ids WHERE nid IS NOT NULL] AS node_ids,
-          collect(DISTINCT [
-            CASE WHEN rel IS NULL THEN NULL ELSE startNode(rel).concept_id END,
-            CASE WHEN rel IS NULL THEN NULL ELSE endNode(rel).concept_id END
-          ]) AS raw_edges
-        RETURN
-          target.concept_id AS target_concept_id,
-          node_ids,
-          [e IN raw_edges WHERE e[0] IS NOT NULL AND e[1] IS NOT NULL] AS edges
-        """
-
-        record = self._run_single(query, {"target_concept_id": target_concept_id})
-        if record is None:
-            return {
-                "target_exists": False,
-                "target_concept_id": target_concept_id,
-                "node_ids": [],
-                "edges": [],
-            }
-
+        snapshot = self.get_prerequisite_snapshot()
+        closure = PrerequisiteGraphIndex(snapshot).closure(
+            target=target_concept_id,
+            max_nodes=settings.graph_max_nodes,
+            max_edges=settings.graph_max_edges,
+        )
         return {
-            "target_exists": True,
-            "target_concept_id": record["target_concept_id"],
-            "node_ids": [x for x in (record["node_ids"] or []) if x],
-            "edges": [tuple(edge) for edge in (record["edges"] or []) if edge],
+            "target_exists": closure.target_exists,
+            "target_concept_id": target_concept_id,
+            "node_ids": list(closure.node_ids),
+            "edges": list(closure.edges),
+            "has_cycle": closure.has_cycle,
+            "truncated": closure.truncated,
+            "max_depth": closure.max_depth,
+            "omitted_node_count": closure.omitted_node_count,
+            "omitted_edge_count": closure.omitted_edge_count,
+            "dataset_hash": closure.content_hash,
+            "planner_strategy": "cached_graph_ancestor_closure",
         }
+
+    def get_prerequisite_snapshot(self, force_refresh: bool = False) -> GraphSnapshot:
+        now = time.monotonic()
+        cached = type(self)._snapshot_cache
+        cache_age = now - type(self)._snapshot_cached_at
+        if (
+            not force_refresh
+            and cached is not None
+            and settings.graph_cache_ttl_seconds > 0
+            and cache_age < settings.graph_cache_ttl_seconds
+        ):
+            return cached
+
+        with type(self)._snapshot_lock:
+            now = time.monotonic()
+            cached = type(self)._snapshot_cache
+            cache_age = now - type(self)._snapshot_cached_at
+            if (
+                not force_refresh
+                and cached is not None
+                and settings.graph_cache_ttl_seconds > 0
+                and cache_age < settings.graph_cache_ttl_seconds
+            ):
+                return cached
+            snapshot = self._load_prerequisite_snapshot()
+            type(self)._snapshot_cache = snapshot
+            type(self)._snapshot_cached_at = time.monotonic()
+            return snapshot
+
+    @classmethod
+    def clear_snapshot_cache(cls) -> None:
+        with cls._snapshot_lock:
+            cls._snapshot_cache = None
+            cls._snapshot_cached_at = 0.0
+
+    def _load_prerequisite_snapshot(self) -> GraphSnapshot:
+        concept_query = """
+        MATCH (c:Concept)
+        WHERE c.concept_id IS NOT NULL AND trim(toString(c.concept_id)) <> ''
+        RETURN c.concept_id AS concept_id
+        ORDER BY concept_id
+        """
+        edge_query = """
+        MATCH (source:Concept)-[:PREREQUISITE_OF]->(target:Concept)
+        WHERE source.concept_id IS NOT NULL AND target.concept_id IS NOT NULL
+        RETURN source.concept_id AS source_id, target.concept_id AS target_id
+        ORDER BY source_id, target_id
+        """
+        driver = self._get_driver()
+        try:
+            with driver.session(database=settings.neo4j_database) as session:
+                concepts = [
+                    record.get("concept_id")
+                    for record in session.run(self._timed_query(concept_query))
+                    if record.get("concept_id")
+                ]
+                edges = [
+                    (record.get("source_id"), record.get("target_id"))
+                    for record in session.run(self._timed_query(edge_query))
+                    if record.get("source_id") and record.get("target_id")
+                ]
+            return GraphSnapshot.build(concepts, edges)
+        except (AuthError, ServiceUnavailable, Neo4jError) as exc:
+            raise RepositoryUnavailableError(f"Neo4j query failed: {exc}") from exc
+
+    @staticmethod
+    def _timed_query(query: str):
+        if Query is None:
+            return query
+        return Query(query, timeout=settings.graph_query_timeout_seconds)
 
     def get_concept_corpus(self, limit: int = 2000) -> list[dict]:
         query = """
         MATCH (c:Concept)
-        RETURN c.concept_id AS concept_id, c.name AS name, c.description AS description
+        OPTIONAL MATCH (chapter:Chapter)-[:HAS_CONCEPT]->(c)
+        WITH c, collect(DISTINCT chapter.name) AS source_chapters
+        OPTIONAL MATCH (predecessor:Concept)-[:PREREQUISITE_OF]->(c)
+        WITH c, source_chapters, collect(DISTINCT predecessor.name) AS predecessor_names
+        OPTIONAL MATCH (c)-[:PREREQUISITE_OF]->(successor:Concept)
+        RETURN c.concept_id AS concept_id,
+               c.name AS name,
+               c.name_en AS name_en,
+               c.alias AS aliases,
+               c.aliases_en AS aliases_en,
+               c.description AS description,
+               c.description_en AS description_en,
+               c.difficulty AS difficulty,
+               source_chapters,
+               predecessor_names,
+               collect(DISTINCT successor.name) AS successor_names
         ORDER BY c.concept_id
         LIMIT $limit
         """
@@ -189,10 +264,66 @@ class GraphRepository:
                     {
                         "concept_id": record.get("concept_id"),
                         "name": record.get("name") or "",
+                        "name_en": record.get("name_en") or "",
+                        "aliases": record.get("aliases") or [],
+                        "aliases_en": record.get("aliases_en") or [],
                         "description": record.get("description") or "",
+                        "description_en": record.get("description_en") or "",
+                        "difficulty": record.get("difficulty") or "",
+                        "source_chapters": [item for item in (record.get("source_chapters") or []) if item],
+                        "predecessor_names": [item for item in (record.get("predecessor_names") or []) if item],
+                        "successor_names": [item for item in (record.get("successor_names") or []) if item],
                     }
                     for record in records
                     if record.get("concept_id")
+                ]
+        except (AuthError, ServiceUnavailable, Neo4jError) as exc:
+            raise RepositoryUnavailableError(f"Neo4j query failed: {exc}") from exc
+
+    def get_relation_corpus(
+        self, relation_types: tuple[str, ...] = ("PREREQUISITE_OF", "RELATED_TO")
+    ) -> list[dict]:
+        query = """
+        MATCH (source:Concept)-[r]->(target:Concept)
+        WHERE type(r) IN $relation_types
+        OPTIONAL MATCH (source_chapter:Chapter)-[:HAS_CONCEPT]->(source)
+        WITH source, target, r, collect(DISTINCT source_chapter.name) AS source_side_chapters
+        OPTIONAL MATCH (target_chapter:Chapter)-[:HAS_CONCEPT]->(target)
+        RETURN source.concept_id AS from_concept_id,
+               source.name AS from_name,
+               target.concept_id AS to_concept_id,
+               target.name AS to_name,
+               type(r) AS relation_type,
+               r.evidence_text AS evidence_text,
+               r.source_images AS source_images,
+               r.confidence_max AS confidence_max,
+               r.verification_status AS verification_status,
+               source_side_chapters + collect(DISTINCT target_chapter.name) AS source_chapters
+        ORDER BY relation_type, from_concept_id, to_concept_id
+        """
+        driver = self._get_driver()
+        try:
+            with driver.session(database=settings.neo4j_database) as session:
+                records = session.run(query, {"relation_types": list(relation_types)})
+                return [
+                    {
+                        "from_concept_id": record.get("from_concept_id"),
+                        "from_name": record.get("from_name") or "",
+                        "to_concept_id": record.get("to_concept_id"),
+                        "to_name": record.get("to_name") or "",
+                        "relation_type": record.get("relation_type") or "",
+                        "evidence_text": record.get("evidence_text") or "",
+                        "source_images": record.get("source_images") or [],
+                        "confidence_max": record.get("confidence_max"),
+                        "verification_status": record.get("verification_status") or "unreviewed",
+                        "source_chapters": list(
+                            dict.fromkeys(
+                                item for item in (record.get("source_chapters") or []) if item
+                            )
+                        ),
+                    }
+                    for record in records
+                    if record.get("from_concept_id") and record.get("to_concept_id")
                 ]
         except (AuthError, ServiceUnavailable, Neo4jError) as exc:
             raise RepositoryUnavailableError(f"Neo4j query failed: {exc}") from exc

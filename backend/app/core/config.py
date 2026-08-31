@@ -19,6 +19,23 @@ class Settings:
     neo4j_user: str = "neo4j"
     neo4j_password: str = ""
     neo4j_database: str = "neo4j"
+    graph_max_nodes: int = 2000
+    graph_max_edges: int = 10000
+    graph_query_timeout_seconds: float = 10.0
+    graph_cache_ttl_seconds: float = 60.0
+    embedding_backend: str = "sentence_transformers"
+    embedding_model: str = "intfloat/multilingual-e5-small"
+    embedding_allow_download: bool = False
+    embedding_fallback_backend: str = "unicode_hashing"
+    embedding_normalize: bool = True
+    embedding_cache_dir: str = str(BACKEND_ROOT / ".cache" / "embeddings")
+    retrieval_mode: str = "hybrid_rrf"
+    retrieval_top_k_vector: int = 8
+    retrieval_top_k_final: int = 6
+    retrieval_rrf_k: int = 60
+    target_resolver_top_k: int = 5
+    target_resolver_min_score: float = 0.8
+    target_resolver_min_margin: float = 0.01
 
     @classmethod
     def from_env(cls) -> "Settings":
@@ -34,7 +51,75 @@ class Settings:
             neo4j_user=os.getenv("NEO4J_USER", cls.neo4j_user),
             neo4j_password=os.getenv("NEO4J_PASSWORD", ""),
             neo4j_database=os.getenv("NEO4J_DATABASE", cls.neo4j_database),
+            graph_max_nodes=_positive_int("GRAPH_MAX_NODES", cls.graph_max_nodes),
+            graph_max_edges=_positive_int("GRAPH_MAX_EDGES", cls.graph_max_edges),
+            graph_query_timeout_seconds=_positive_float(
+                "GRAPH_QUERY_TIMEOUT_SECONDS", cls.graph_query_timeout_seconds
+            ),
+            graph_cache_ttl_seconds=_non_negative_float(
+                "GRAPH_CACHE_TTL_SECONDS", cls.graph_cache_ttl_seconds
+            ),
+            embedding_backend=os.getenv("EMBEDDING_BACKEND", cls.embedding_backend).strip(),
+            embedding_model=os.getenv("EMBEDDING_MODEL", cls.embedding_model).strip(),
+            embedding_allow_download=_bool_env(
+                "EMBEDDING_ALLOW_DOWNLOAD", cls.embedding_allow_download
+            ),
+            embedding_fallback_backend=os.getenv(
+                "EMBEDDING_FALLBACK_BACKEND", cls.embedding_fallback_backend
+            ).strip(),
+            embedding_normalize=_bool_env("EMBEDDING_NORMALIZE", cls.embedding_normalize),
+            embedding_cache_dir=os.getenv(
+                "EMBEDDING_CACHE_DIR", cls.embedding_cache_dir
+            ).strip(),
+            retrieval_mode=os.getenv("RETRIEVAL_MODE", cls.retrieval_mode).strip(),
+            retrieval_top_k_vector=_positive_int(
+                "RETRIEVAL_TOP_K_VECTOR", cls.retrieval_top_k_vector
+            ),
+            retrieval_top_k_final=_positive_int(
+                "RETRIEVAL_TOP_K_FINAL", cls.retrieval_top_k_final
+            ),
+            retrieval_rrf_k=_positive_int("RETRIEVAL_RRF_K", cls.retrieval_rrf_k),
+            target_resolver_top_k=_positive_int(
+                "TARGET_RESOLVER_TOP_K", cls.target_resolver_top_k
+            ),
+            target_resolver_min_score=_non_negative_float(
+                "TARGET_RESOLVER_MIN_SCORE", cls.target_resolver_min_score
+            ),
+            target_resolver_min_margin=_non_negative_float(
+                "TARGET_RESOLVER_MIN_MARGIN", cls.target_resolver_min_margin
+            ),
         )
+
+
+def _positive_int(name: str, default: int) -> int:
+    try:
+        value = int(os.getenv(name, str(default)))
+    except ValueError:
+        return default
+    return value if value > 0 else default
+
+
+def _positive_float(name: str, default: float) -> float:
+    try:
+        value = float(os.getenv(name, str(default)))
+    except ValueError:
+        return default
+    return value if value > 0 else default
+
+
+def _non_negative_float(name: str, default: float) -> float:
+    try:
+        value = float(os.getenv(name, str(default)))
+    except ValueError:
+        return default
+    return value if value >= 0 else default
+
+
+def _bool_env(name: str, default: bool) -> bool:
+    raw = os.getenv(name)
+    if raw is None:
+        return default
+    return raw.strip().lower() in {"1", "true", "yes", "on"}
 
 
 settings = Settings.from_env()

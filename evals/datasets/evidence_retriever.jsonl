@@ -1,0 +1,7 @@
+{"case_id":"evidence-001","question":"为什么学习补码前要掌握反码？","target_concept_id":"G000028","path":["G000027","G000028"],"relevant_evidence_ids":["prereq:G000027:G000028"],"graded_relevance":{"prereq:G000027:G000028":3},"review_status":"human_verified"}
+{"case_id":"evidence-002","question":"Why is sign-magnitude needed before ones' complement?","target_concept_id":"G000027","path":["G000026","G000027"],"relevant_evidence_ids":["prereq:G000026:G000027"],"graded_relevance":{"prereq:G000026:G000027":3},"review_status":"human_verified"}
+{"case_id":"evidence-003","question":"海明码为什么需要奇偶校验码？","target_concept_id":"G000040","path":["G000039","G000040"],"relevant_evidence_ids":["prereq:G000039:G000040"],"graded_relevance":{"prereq:G000039:G000040":3},"review_status":"human_verified"}
+{"case_id":"evidence-004","question":"逻辑变量如何支撑逻辑函数的表示方法？","target_concept_id":"G000063","path":["G000006","G000063"],"relevant_evidence_ids":["prereq:G000006:G000063"],"graded_relevance":{"prereq:G000006:G000063":3},"review_status":"human_verified"}
+{"case_id":"evidence-005","question":"Why learn basic RS flip-flops before an edge-triggered D flip-flop?","target_concept_id":"G000138","path":["G000128","G000138"],"relevant_evidence_ids":["prereq:G000128:G000138"],"graded_relevance":{"prereq:G000128:G000138":3},"review_status":"human_verified"}
+{"case_id":"evidence-006","question":"编码器为什么依赖组合逻辑电路设计？","target_concept_id":"G000046","path":["G000045","G000046"],"relevant_evidence_ids":["prereq:G000045:G000046"],"graded_relevance":{"prereq:G000045:G000046":3},"review_status":"human_verified"}
+

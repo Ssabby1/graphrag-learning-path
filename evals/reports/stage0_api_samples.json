@@ -1,0 +1,210 @@
+{
+  "note": "Service-level samples use a deterministic CSV repository that emulates the current Neo4j depth-8 query.",
+  "planner_interpret": [
+    {
+      "question": "想学卡诺图构成，应该先掌握什么？",
+      "response": {
+        "target_concept_id": "G000079",
+        "mastered_concepts": [],
+        "matched_concepts": [
+          "G000071",
+          "G000079"
+        ],
+        "summary": "目标知识点识别为 G000079",
+        "interpretation_source": "fallback"
+      }
+    },
+    {
+      "question": "What should I learn before studying Binary?",
+      "response": {
+        "target_concept_id": null,
+        "mastered_concepts": [],
+        "matched_concepts": [],
+        "summary": "未能稳定识别目标知识点，请手动选择后继续。",
+        "interpretation_source": "fallback"
+      }
+    },
+    {
+      "question": "Binary 二进制转换怎么入门？",
+      "response": {
+        "target_concept_id": "G000009",
+        "mastered_concepts": [],
+        "matched_concepts": [
+          "G000009"
+        ],
+        "summary": "目标知识点识别为 G000009",
+        "interpretation_source": "fallback"
+      }
+    },
+    {
+      "question": "今天天气怎么样？",
+      "response": {
+        "target_concept_id": null,
+        "mastered_concepts": [],
+        "matched_concepts": [],
+        "summary": "未能稳定识别目标知识点，请手动选择后继续。",
+        "interpretation_source": "fallback"
+      }
+    }
+  ],
+  "path_recommend": {
+    "target_concept_id": "G000079",
+    "path": [
+      "G000011",
+      "G000009",
+      "G000005",
+      "G000013",
+      "G000019",
+      "G000012",
+      "G000006",
+      "G000062",
+      "G000079"
+    ],
+    "evidence": [
+      "G000011",
+      "G000009",
+      "G000005",
+      "G000013",
+      "G000019",
+      "G000012",
+      "G000006",
+      "G000062"
+    ],
+    "graph_nodes": [
+      "G000011",
+      "G000009",
+      "G000005",
+      "G000013",
+      "G000019",
+      "G000012",
+      "G000006",
+      "G000062",
+      "G000079"
+    ],
+    "graph_edges": [
+      [
+        "G000011",
+        "G000009"
+      ],
+      [
+        "G000009",
+        "G000005"
+      ],
+      [
+        "G000005",
+        "G000013"
+      ],
+      [
+        "G000005",
+        "G000012"
+      ],
+      [
+        "G000013",
+        "G000012"
+      ],
+      [
+        "G000019",
+        "G000012"
+      ],
+      [
+        "G000012",
+        "G000006"
+      ],
+      [
+        "G000012",
+        "G000062"
+      ],
+      [
+        "G000012",
+        "G000079"
+      ],
+      [
+        "G000006",
+        "G000062"
+      ],
+      [
+        "G000062",
+        "G000079"
+      ]
+    ],
+    "reasoning_steps": [
+      "Retrieve prerequisite closure for the target concept",
+      "Filter out mastered concepts from candidate nodes",
+      "Apply deterministic topological sort on prerequisite graph"
+    ],
+    "explanation": "已基于前驱闭包和拓扑排序生成学习路径。",
+    "has_cycle": false,
+    "explanation_source": "fallback"
+  },
+  "graphrag_query": {
+    "answer": "Question: 想学卡诺图构成，应该先掌握什么？\nPath: G000011 -> G000009 -> G000005 -> G000013 -> G000019 -> G000012 -> G000006 -> G000062 -> G000079\nEvidence concepts: G000005, G000006, G000011, G000001, G000009\nExplanation: 已基于前驱闭包和拓扑排序生成学习路径。\nAnswer:",
+    "path": [
+      "G000011",
+      "G000009",
+      "G000005",
+      "G000013",
+      "G000019",
+      "G000012",
+      "G000006",
+      "G000062",
+      "G000079"
+    ],
+    "evidence": [
+      "G000011",
+      "G000009",
+      "G000005",
+      "G000013",
+      "G000019",
+      "G000012",
+      "G000006",
+      "G000062"
+    ],
+    "citations": [
+      {
+        "concept_id": "G000005",
+        "kind": "concept",
+        "score": 0.03125763125763126,
+        "source": "graph+vector"
+      },
+      {
+        "concept_id": "G000006",
+        "kind": "concept",
+        "score": 0.03007688828584351,
+        "source": "graph+vector"
+      },
+      {
+        "concept_id": "G000011",
+        "kind": "concept",
+        "score": 0.01639344262295082,
+        "source": "graph"
+      },
+      {
+        "concept_id": "G000001",
+        "kind": "concept",
+        "score": 0.01639344262295082,
+        "source": "vector"
+      },
+      {
+        "concept_id": "G000009",
+        "kind": "concept",
+        "score": 0.016129032258064516,
+        "source": "graph"
+      },
+      {
+        "concept_id": "G000002",
+        "kind": "concept",
+        "score": 0.016129032258064516,
+        "source": "vector"
+      }
+    ],
+    "meta": {
+      "has_cycle": false,
+      "source": "path_service+hybrid_retrieval",
+      "model": "template-grounded-answer",
+      "retrieval_strategy": "graph+vector+rrf+rerank",
+      "vector_backend": "hashing-fallback",
+      "fusion": "rrf",
+      "reranker": "token-overlap"
+    }
+  }
+}

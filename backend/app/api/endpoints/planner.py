@@ -15,7 +15,12 @@ def planner_interpret(
     repo: GraphRepository = Depends(get_graph_repository),
 ) -> PlannerInterpretResponse:
     try:
-        result = interpret_learning_request(payload.question, repo)
+        result = interpret_learning_request(
+            payload.question,
+            repo,
+            top_k=payload.top_k,
+            response_language=payload.response_language,
+        )
     except RepositoryUnavailableError as exc:
         raise HTTPException(status_code=503, detail=str(exc)) from exc
 

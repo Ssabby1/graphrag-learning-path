@@ -61,8 +61,13 @@ def test_graphrag_query_returns_contract() -> None:
     assert "citations" in payload
     assert "meta" in payload
     assert payload["path"][-1] == "C3"
-    assert payload["meta"]["retrieval_strategy"] == "graph+vector+rrf+rerank"
+    assert payload["meta"]["retrieval_strategy"] == "hybrid_rrf"
+    assert payload["meta"]["reranker"] == "none"
+    assert payload["meta"]["embedding_model"]
     assert payload["meta"]["model"] == "template-grounded-answer"
+    assert payload["meta"]["truncated"] is False
+    assert payload["meta"]["max_depth"] == 2
+    assert payload["path"][-1] == "C3"
     app.dependency_overrides.clear()
 
 

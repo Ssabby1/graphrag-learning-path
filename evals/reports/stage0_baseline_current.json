@@ -1,0 +1,1944 @@
+{
+  "report_version": "1.0",
+  "baseline_name": "stage0-pre-refactor-hashing-token-overlap",
+  "run": {
+    "generated_at": "2026-08-30T12:13:04.580104+00:00",
+    "dataset_profile": "full_local",
+    "concepts_csv": "章节数据/数据汇总/outputs/fixed/concepts_all.csv",
+    "relations_csv": "章节数据/数据汇总/outputs/fixed/relations_all.csv",
+    "concept_count": 190,
+    "prerequisite_relation_count": 409,
+    "file_hashes": {
+      "concepts_csv": "48ee9cfea35e8b2a3ac1c4621d3bd5fd77f7fb7769edc59045f73e6bc207c836",
+      "relations_csv": "bd859c82d12beda99f600343b0aa0845e7206584afddf7be118f4c4f15c12d04",
+      "target_resolver": "d5269a25d37ad6f76c50d931ecfefbc3fda84b56c6768686644590522bec0834",
+      "path_planner": "f9d8a5b340d04ec14a6f06f09c07da3b7b116191e08eb0d343272a56129e6efe",
+      "evidence_retriever": "da7d05f9f0f7d753cf5afab4d664558f30a829df58b4b3e9de174cf7da5c026f",
+      "answer_generator": "4ecae2d344170685ac1af885547b0af8df6698f1adba5d122933b9ee038b96d2"
+    },
+    "git_commit": "dfe94a51119c3e62f92dc9ebd0bd3fe1788cf480",
+    "git_status": "?? IMPLEMENTATION_ROADMAP.md\n?? backend/tests/test_eval_contracts.py\n?? evals/",
+    "python": "3.14.7",
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "python_hash_seed": "0",
+    "network_calls": false,
+    "llm_enabled": false
+  },
+  "modules": {
+    "target_resolver": {
+      "implementation": {
+        "planner": "exact concept-id/name fallback",
+        "vector_backend": "hashing-fallback",
+        "reranker": "token-overlap",
+        "aliases_indexed": false
+      },
+      "metrics": {
+        "planner_top_1_accuracy": {
+          "numerator": 20,
+          "denominator": 30,
+          "value": 0.6666666666666666
+        },
+        "planner_rejection_accuracy": {
+          "numerator": 5,
+          "denominator": 6,
+          "value": 0.8333333333333334
+        },
+        "planner_false_rejection_rate": {
+          "numerator": 8,
+          "denominator": 30,
+          "value": 0.26666666666666666
+        },
+        "vector_top_1_accuracy": {
+          "numerator": 1,
+          "denominator": 30,
+          "value": 0.03333333333333333
+        },
+        "vector_recall_at_5": {
+          "numerator": 2,
+          "denominator": 30,
+          "value": 0.06666666666666667
+        },
+        "vector_mrr_at_5": 0.05,
+        "by_language": {
+          "en": {
+            "planner_top_1_accuracy": {
+              "numerator": 0,
+              "denominator": 7,
+              "value": 0.0
+            },
+            "vector_top_1_accuracy": {
+              "numerator": 1,
+              "denominator": 7,
+              "value": 0.14285714285714285
+            },
+            "vector_recall_at_5": {
+              "numerator": 1,
+              "denominator": 7,
+              "value": 0.14285714285714285
+            }
+          },
+          "mixed": {
+            "planner_top_1_accuracy": {
+              "numerator": 1,
+              "denominator": 3,
+              "value": 0.3333333333333333
+            },
+            "vector_top_1_accuracy": {
+              "numerator": 0,
+              "denominator": 3,
+              "value": 0.0
+            },
+            "vector_recall_at_5": {
+              "numerator": 0,
+              "denominator": 3,
+              "value": 0.0
+            }
+          },
+          "zh": {
+            "planner_top_1_accuracy": {
+              "numerator": 19,
+              "denominator": 20,
+              "value": 0.95
+            },
+            "vector_top_1_accuracy": {
+              "numerator": 0,
+              "denominator": 20,
+              "value": 0.0
+            },
+            "vector_recall_at_5": {
+              "numerator": 1,
+              "denominator": 20,
+              "value": 0.05
+            }
+          }
+        },
+        "latency": {
+          "count": 36,
+          "p50_ms": 1.171,
+          "p95_ms": 1.586
+        }
+      },
+      "failures": [
+        {
+          "case_id": "target-001",
+          "query_language": "zh",
+          "should_reject": false,
+          "planner_target": "G000079",
+          "planner_correct": true,
+          "rejected": false,
+          "vector_top_5": [
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004",
+            "G000005"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.399
+        },
+        {
+          "case_id": "target-002",
+          "query_language": "zh",
+          "should_reject": false,
+          "planner_target": "G000064",
+          "planner_correct": true,
+          "rejected": false,
+          "vector_top_5": [
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004",
+            "G000005"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.305
+        },
+        {
+          "case_id": "target-003",
+          "query_language": "zh",
+          "should_reject": false,
+          "planner_target": "G000009",
+          "planner_correct": true,
+          "rejected": false,
+          "vector_top_5": [
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004",
+            "G000005"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.262
+        },
+        {
+          "case_id": "target-004",
+          "query_language": "zh",
+          "should_reject": false,
+          "planner_target": "G000028",
+          "planner_correct": true,
+          "rejected": false,
+          "vector_top_5": [
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004",
+            "G000005"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.152
+        },
+        {
+          "case_id": "target-005",
+          "query_language": "zh",
+          "should_reject": false,
+          "planner_target": "G000040",
+          "planner_correct": true,
+          "rejected": false,
+          "vector_top_5": [
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004",
+            "G000005"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.159
+        },
+        {
+          "case_id": "target-006",
+          "query_language": "zh",
+          "should_reject": false,
+          "planner_target": "G000054",
+          "planner_correct": true,
+          "rejected": false,
+          "vector_top_5": [
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004",
+            "G000005"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.184
+        },
+        {
+          "case_id": "target-007",
+          "query_language": "zh",
+          "should_reject": false,
+          "planner_target": "G000084",
+          "planner_correct": true,
+          "rejected": false,
+          "vector_top_5": [
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004",
+            "G000005"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.201
+        },
+        {
+          "case_id": "target-008",
+          "query_language": "zh",
+          "should_reject": false,
+          "planner_target": "G000138",
+          "planner_correct": true,
+          "rejected": false,
+          "vector_top_5": [
+            "G000131",
+            "G000138",
+            "G000140",
+            "G000141",
+            "G000142"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.5,
+          "latency_ms": 1.173
+        },
+        {
+          "case_id": "target-009",
+          "query_language": "zh",
+          "should_reject": false,
+          "planner_target": "G000043",
+          "planner_correct": false,
+          "rejected": false,
+          "vector_top_5": [
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004",
+            "G000005"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.171
+        },
+        {
+          "case_id": "target-010",
+          "query_language": "zh",
+          "should_reject": false,
+          "planner_target": "G000059",
+          "planner_correct": true,
+          "rejected": false,
+          "vector_top_5": [
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004",
+            "G000005"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.164
+        },
+        {
+          "case_id": "target-011",
+          "query_language": "zh",
+          "should_reject": false,
+          "planner_target": "G000045",
+          "planner_correct": true,
+          "rejected": false,
+          "vector_top_5": [
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004",
+            "G000005"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.171
+        },
+        {
+          "case_id": "target-012",
+          "query_language": "zh",
+          "should_reject": false,
+          "planner_target": "G000008",
+          "planner_correct": true,
+          "rejected": false,
+          "vector_top_5": [
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004",
+            "G000005"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.166
+        },
+        {
+          "case_id": "target-013",
+          "query_language": "zh",
+          "should_reject": false,
+          "planner_target": "G000038",
+          "planner_correct": true,
+          "rejected": false,
+          "vector_top_5": [
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004",
+            "G000005"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.175
+        },
+        {
+          "case_id": "target-014",
+          "query_language": "zh",
+          "should_reject": false,
+          "planner_target": "G000122",
+          "planner_correct": true,
+          "rejected": false,
+          "vector_top_5": [
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004",
+            "G000005"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.178
+        },
+        {
+          "case_id": "target-015",
+          "query_language": "zh",
+          "should_reject": false,
+          "planner_target": "G000083",
+          "planner_correct": true,
+          "rejected": false,
+          "vector_top_5": [
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004",
+            "G000005"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.17
+        },
+        {
+          "case_id": "target-016",
+          "query_language": "zh",
+          "should_reject": false,
+          "planner_target": "G000027",
+          "planner_correct": true,
+          "rejected": false,
+          "vector_top_5": [
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004",
+            "G000005"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.271
+        },
+        {
+          "case_id": "target-017",
+          "query_language": "zh",
+          "should_reject": false,
+          "planner_target": "G000163",
+          "planner_correct": true,
+          "rejected": false,
+          "vector_top_5": [
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004",
+            "G000005"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.684
+        },
+        {
+          "case_id": "target-018",
+          "query_language": "zh",
+          "should_reject": false,
+          "planner_target": "G000012",
+          "planner_correct": true,
+          "rejected": false,
+          "vector_top_5": [
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004",
+            "G000005"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.583
+        },
+        {
+          "case_id": "target-019",
+          "query_language": "zh",
+          "should_reject": false,
+          "planner_target": "G000139",
+          "planner_correct": true,
+          "rejected": false,
+          "vector_top_5": [
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004",
+            "G000005"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.594
+        },
+        {
+          "case_id": "target-020",
+          "query_language": "zh",
+          "should_reject": false,
+          "planner_target": "G000170",
+          "planner_correct": true,
+          "rejected": false,
+          "vector_top_5": [
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004",
+            "G000005"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.548
+        },
+        {
+          "case_id": "target-021",
+          "query_language": "en",
+          "should_reject": false,
+          "planner_target": null,
+          "planner_correct": false,
+          "rejected": true,
+          "vector_top_5": [
+            "G000101",
+            "G000104",
+            "G000180",
+            "G000100",
+            "G000137"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.54
+        },
+        {
+          "case_id": "target-022",
+          "query_language": "en",
+          "should_reject": false,
+          "planner_target": null,
+          "planner_correct": false,
+          "rejected": true,
+          "vector_top_5": [
+            "G000089",
+            "G000104",
+            "G000117",
+            "G000147",
+            "G000157"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.471
+        },
+        {
+          "case_id": "target-023",
+          "query_language": "en",
+          "should_reject": false,
+          "planner_target": null,
+          "planner_correct": false,
+          "rejected": true,
+          "vector_top_5": [
+            "G000040",
+            "G000039",
+            "G000104",
+            "G000139",
+            "G000151"
+          ],
+          "vector_top_1_correct": true,
+          "vector_reciprocal_rank": 1.0,
+          "latency_ms": 1.269
+        },
+        {
+          "case_id": "target-024",
+          "query_language": "en",
+          "should_reject": false,
+          "planner_target": null,
+          "planner_correct": false,
+          "rejected": true,
+          "vector_top_5": [
+            "G000036",
+            "G000002",
+            "G000005",
+            "G000078",
+            "G000126"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.13
+        },
+        {
+          "case_id": "target-025",
+          "query_language": "en",
+          "should_reject": false,
+          "planner_target": null,
+          "planner_correct": false,
+          "rejected": true,
+          "vector_top_5": [
+            "G000031",
+            "G000011",
+            "G000047",
+            "G000065",
+            "G000158"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.133
+        },
+        {
+          "case_id": "target-026",
+          "query_language": "en",
+          "should_reject": false,
+          "planner_target": null,
+          "planner_correct": false,
+          "rejected": true,
+          "vector_top_5": [
+            "G000099",
+            "G000104",
+            "G000110",
+            "G000055",
+            "G000166"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.13
+        },
+        {
+          "case_id": "target-027",
+          "query_language": "en",
+          "should_reject": false,
+          "planner_target": null,
+          "planner_correct": false,
+          "rejected": true,
+          "vector_top_5": [
+            "G000012",
+            "G000089",
+            "G000104",
+            "G000109",
+            "G000117"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.117
+        },
+        {
+          "case_id": "target-028",
+          "query_language": "mixed",
+          "should_reject": false,
+          "planner_target": "G000071",
+          "planner_correct": true,
+          "rejected": false,
+          "vector_top_5": [
+            "G000041",
+            "G000162",
+            "G000036",
+            "G000001",
+            "G000002"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.136
+        },
+        {
+          "case_id": "target-029",
+          "query_language": "mixed",
+          "should_reject": false,
+          "planner_target": null,
+          "planner_correct": false,
+          "rejected": true,
+          "vector_top_5": [
+            "G000165",
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.264
+        },
+        {
+          "case_id": "target-030",
+          "query_language": "mixed",
+          "should_reject": false,
+          "planner_target": "G000009",
+          "planner_correct": false,
+          "rejected": false,
+          "vector_top_5": [
+            "G000101",
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.159
+        },
+        {
+          "case_id": "target-036",
+          "query_language": "zh",
+          "should_reject": true,
+          "planner_target": "G000040",
+          "planner_correct": false,
+          "rejected": false,
+          "vector_top_5": [
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004",
+            "G000005"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.158
+        }
+      ],
+      "cases": [
+        {
+          "case_id": "target-001",
+          "query_language": "zh",
+          "should_reject": false,
+          "planner_target": "G000079",
+          "planner_correct": true,
+          "rejected": false,
+          "vector_top_5": [
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004",
+            "G000005"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.399
+        },
+        {
+          "case_id": "target-002",
+          "query_language": "zh",
+          "should_reject": false,
+          "planner_target": "G000064",
+          "planner_correct": true,
+          "rejected": false,
+          "vector_top_5": [
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004",
+            "G000005"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.305
+        },
+        {
+          "case_id": "target-003",
+          "query_language": "zh",
+          "should_reject": false,
+          "planner_target": "G000009",
+          "planner_correct": true,
+          "rejected": false,
+          "vector_top_5": [
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004",
+            "G000005"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.262
+        },
+        {
+          "case_id": "target-004",
+          "query_language": "zh",
+          "should_reject": false,
+          "planner_target": "G000028",
+          "planner_correct": true,
+          "rejected": false,
+          "vector_top_5": [
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004",
+            "G000005"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.152
+        },
+        {
+          "case_id": "target-005",
+          "query_language": "zh",
+          "should_reject": false,
+          "planner_target": "G000040",
+          "planner_correct": true,
+          "rejected": false,
+          "vector_top_5": [
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004",
+            "G000005"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.159
+        },
+        {
+          "case_id": "target-006",
+          "query_language": "zh",
+          "should_reject": false,
+          "planner_target": "G000054",
+          "planner_correct": true,
+          "rejected": false,
+          "vector_top_5": [
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004",
+            "G000005"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.184
+        },
+        {
+          "case_id": "target-007",
+          "query_language": "zh",
+          "should_reject": false,
+          "planner_target": "G000084",
+          "planner_correct": true,
+          "rejected": false,
+          "vector_top_5": [
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004",
+            "G000005"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.201
+        },
+        {
+          "case_id": "target-008",
+          "query_language": "zh",
+          "should_reject": false,
+          "planner_target": "G000138",
+          "planner_correct": true,
+          "rejected": false,
+          "vector_top_5": [
+            "G000131",
+            "G000138",
+            "G000140",
+            "G000141",
+            "G000142"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.5,
+          "latency_ms": 1.173
+        },
+        {
+          "case_id": "target-009",
+          "query_language": "zh",
+          "should_reject": false,
+          "planner_target": "G000043",
+          "planner_correct": false,
+          "rejected": false,
+          "vector_top_5": [
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004",
+            "G000005"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.171
+        },
+        {
+          "case_id": "target-010",
+          "query_language": "zh",
+          "should_reject": false,
+          "planner_target": "G000059",
+          "planner_correct": true,
+          "rejected": false,
+          "vector_top_5": [
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004",
+            "G000005"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.164
+        },
+        {
+          "case_id": "target-011",
+          "query_language": "zh",
+          "should_reject": false,
+          "planner_target": "G000045",
+          "planner_correct": true,
+          "rejected": false,
+          "vector_top_5": [
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004",
+            "G000005"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.171
+        },
+        {
+          "case_id": "target-012",
+          "query_language": "zh",
+          "should_reject": false,
+          "planner_target": "G000008",
+          "planner_correct": true,
+          "rejected": false,
+          "vector_top_5": [
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004",
+            "G000005"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.166
+        },
+        {
+          "case_id": "target-013",
+          "query_language": "zh",
+          "should_reject": false,
+          "planner_target": "G000038",
+          "planner_correct": true,
+          "rejected": false,
+          "vector_top_5": [
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004",
+            "G000005"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.175
+        },
+        {
+          "case_id": "target-014",
+          "query_language": "zh",
+          "should_reject": false,
+          "planner_target": "G000122",
+          "planner_correct": true,
+          "rejected": false,
+          "vector_top_5": [
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004",
+            "G000005"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.178
+        },
+        {
+          "case_id": "target-015",
+          "query_language": "zh",
+          "should_reject": false,
+          "planner_target": "G000083",
+          "planner_correct": true,
+          "rejected": false,
+          "vector_top_5": [
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004",
+            "G000005"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.17
+        },
+        {
+          "case_id": "target-016",
+          "query_language": "zh",
+          "should_reject": false,
+          "planner_target": "G000027",
+          "planner_correct": true,
+          "rejected": false,
+          "vector_top_5": [
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004",
+            "G000005"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.271
+        },
+        {
+          "case_id": "target-017",
+          "query_language": "zh",
+          "should_reject": false,
+          "planner_target": "G000163",
+          "planner_correct": true,
+          "rejected": false,
+          "vector_top_5": [
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004",
+            "G000005"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.684
+        },
+        {
+          "case_id": "target-018",
+          "query_language": "zh",
+          "should_reject": false,
+          "planner_target": "G000012",
+          "planner_correct": true,
+          "rejected": false,
+          "vector_top_5": [
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004",
+            "G000005"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.583
+        },
+        {
+          "case_id": "target-019",
+          "query_language": "zh",
+          "should_reject": false,
+          "planner_target": "G000139",
+          "planner_correct": true,
+          "rejected": false,
+          "vector_top_5": [
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004",
+            "G000005"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.594
+        },
+        {
+          "case_id": "target-020",
+          "query_language": "zh",
+          "should_reject": false,
+          "planner_target": "G000170",
+          "planner_correct": true,
+          "rejected": false,
+          "vector_top_5": [
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004",
+            "G000005"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.548
+        },
+        {
+          "case_id": "target-021",
+          "query_language": "en",
+          "should_reject": false,
+          "planner_target": null,
+          "planner_correct": false,
+          "rejected": true,
+          "vector_top_5": [
+            "G000101",
+            "G000104",
+            "G000180",
+            "G000100",
+            "G000137"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.54
+        },
+        {
+          "case_id": "target-022",
+          "query_language": "en",
+          "should_reject": false,
+          "planner_target": null,
+          "planner_correct": false,
+          "rejected": true,
+          "vector_top_5": [
+            "G000089",
+            "G000104",
+            "G000117",
+            "G000147",
+            "G000157"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.471
+        },
+        {
+          "case_id": "target-023",
+          "query_language": "en",
+          "should_reject": false,
+          "planner_target": null,
+          "planner_correct": false,
+          "rejected": true,
+          "vector_top_5": [
+            "G000040",
+            "G000039",
+            "G000104",
+            "G000139",
+            "G000151"
+          ],
+          "vector_top_1_correct": true,
+          "vector_reciprocal_rank": 1.0,
+          "latency_ms": 1.269
+        },
+        {
+          "case_id": "target-024",
+          "query_language": "en",
+          "should_reject": false,
+          "planner_target": null,
+          "planner_correct": false,
+          "rejected": true,
+          "vector_top_5": [
+            "G000036",
+            "G000002",
+            "G000005",
+            "G000078",
+            "G000126"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.13
+        },
+        {
+          "case_id": "target-025",
+          "query_language": "en",
+          "should_reject": false,
+          "planner_target": null,
+          "planner_correct": false,
+          "rejected": true,
+          "vector_top_5": [
+            "G000031",
+            "G000011",
+            "G000047",
+            "G000065",
+            "G000158"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.133
+        },
+        {
+          "case_id": "target-026",
+          "query_language": "en",
+          "should_reject": false,
+          "planner_target": null,
+          "planner_correct": false,
+          "rejected": true,
+          "vector_top_5": [
+            "G000099",
+            "G000104",
+            "G000110",
+            "G000055",
+            "G000166"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.13
+        },
+        {
+          "case_id": "target-027",
+          "query_language": "en",
+          "should_reject": false,
+          "planner_target": null,
+          "planner_correct": false,
+          "rejected": true,
+          "vector_top_5": [
+            "G000012",
+            "G000089",
+            "G000104",
+            "G000109",
+            "G000117"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.117
+        },
+        {
+          "case_id": "target-028",
+          "query_language": "mixed",
+          "should_reject": false,
+          "planner_target": "G000071",
+          "planner_correct": true,
+          "rejected": false,
+          "vector_top_5": [
+            "G000041",
+            "G000162",
+            "G000036",
+            "G000001",
+            "G000002"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.136
+        },
+        {
+          "case_id": "target-029",
+          "query_language": "mixed",
+          "should_reject": false,
+          "planner_target": null,
+          "planner_correct": false,
+          "rejected": true,
+          "vector_top_5": [
+            "G000165",
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.264
+        },
+        {
+          "case_id": "target-030",
+          "query_language": "mixed",
+          "should_reject": false,
+          "planner_target": "G000009",
+          "planner_correct": false,
+          "rejected": false,
+          "vector_top_5": [
+            "G000101",
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.159
+        },
+        {
+          "case_id": "target-031",
+          "query_language": "zh",
+          "should_reject": true,
+          "planner_target": null,
+          "planner_correct": true,
+          "rejected": true,
+          "vector_top_5": [
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004",
+            "G000005"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.147
+        },
+        {
+          "case_id": "target-032",
+          "query_language": "zh",
+          "should_reject": true,
+          "planner_target": null,
+          "planner_correct": true,
+          "rejected": true,
+          "vector_top_5": [
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004",
+            "G000005"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.146
+        },
+        {
+          "case_id": "target-033",
+          "query_language": "en",
+          "should_reject": true,
+          "planner_target": null,
+          "planner_correct": true,
+          "rejected": true,
+          "vector_top_5": [
+            "G000019",
+            "G000048",
+            "G000060",
+            "G000071",
+            "G000093"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.126
+        },
+        {
+          "case_id": "target-034",
+          "query_language": "en",
+          "should_reject": true,
+          "planner_target": null,
+          "planner_correct": true,
+          "rejected": true,
+          "vector_top_5": [
+            "G000069",
+            "G000104",
+            "G000139",
+            "G000137",
+            "G000001"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.126
+        },
+        {
+          "case_id": "target-035",
+          "query_language": "zh",
+          "should_reject": true,
+          "planner_target": null,
+          "planner_correct": true,
+          "rejected": true,
+          "vector_top_5": [
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004",
+            "G000005"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.149
+        },
+        {
+          "case_id": "target-036",
+          "query_language": "zh",
+          "should_reject": true,
+          "planner_target": "G000040",
+          "planner_correct": false,
+          "rejected": false,
+          "vector_top_5": [
+            "G000001",
+            "G000002",
+            "G000003",
+            "G000004",
+            "G000005"
+          ],
+          "vector_top_1_correct": false,
+          "vector_reciprocal_rank": 0.0,
+          "latency_ms": 1.158
+        }
+      ]
+    },
+    "path_planner": {
+      "implementation": {
+        "repository_traversal": "Neo4j variable path limited to 8 edges (CSV emulation)",
+        "planner": "deterministic topological sort",
+        "mastered_rule": "removes mastered node only; does not skip its ancestors"
+      },
+      "metrics": {
+        "all_target_structural_closure_recall": {
+          "numerator": 1503,
+          "denominator": 1514,
+          "value": 0.9927344782034346
+        },
+        "targets_with_truncated_closure": {
+          "numerator": 11,
+          "denominator": 190,
+          "value": 0.05789473684210526
+        },
+        "topological_violation_rate": {
+          "numerator": 0,
+          "denominator": 2573,
+          "value": 0.0
+        },
+        "human_reviewed_required_recall": {
+          "numerator": 4,
+          "denominator": 4,
+          "value": 1.0
+        }
+      },
+      "truncated_target_ids": [
+        "G000015",
+        "G000016",
+        "G000130",
+        "G000131",
+        "G000132",
+        "G000133",
+        "G000134",
+        "G000136",
+        "G000137",
+        "G000138",
+        "G000152"
+      ],
+      "cases": [
+        {
+          "case_id": "path-001",
+          "review_status": "pending_human_review",
+          "path": [
+            "G000011",
+            "G000009",
+            "G000005",
+            "G000013",
+            "G000019",
+            "G000012",
+            "G000006",
+            "G000062",
+            "G000079"
+          ],
+          "required_recall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null
+          },
+          "forbidden_absent": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null
+          },
+          "has_cycle": false
+        },
+        {
+          "case_id": "path-002",
+          "review_status": "pending_human_review",
+          "path": [
+            "G000011",
+            "G000009",
+            "G000005",
+            "G000013",
+            "G000019",
+            "G000012",
+            "G000006",
+            "G000062",
+            "G000065",
+            "G000063",
+            "G000084"
+          ],
+          "required_recall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null
+          },
+          "forbidden_absent": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null
+          },
+          "has_cycle": false
+        },
+        {
+          "case_id": "path-003",
+          "review_status": "pending_human_review",
+          "path": [
+            "G000001",
+            "G000004",
+            "G000002",
+            "G000127",
+            "G000150"
+          ],
+          "required_recall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null
+          },
+          "forbidden_absent": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null
+          },
+          "has_cycle": false
+        },
+        {
+          "case_id": "path-004",
+          "review_status": "human_verified",
+          "path": [
+            "G000034",
+            "G000038",
+            "G000039",
+            "G000040"
+          ],
+          "required_recall": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1.0
+          },
+          "forbidden_absent": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null
+          },
+          "has_cycle": false
+        },
+        {
+          "case_id": "path-005",
+          "review_status": "human_verified",
+          "path": [
+            "G000020",
+            "G000026",
+            "G000027",
+            "G000028"
+          ],
+          "required_recall": {
+            "numerator": 2,
+            "denominator": 2,
+            "value": 1.0
+          },
+          "forbidden_absent": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null
+          },
+          "has_cycle": false
+        },
+        {
+          "case_id": "path-006",
+          "review_status": "product_rule_fixture",
+          "path": [
+            "G000020",
+            "G000026",
+            "G000028"
+          ],
+          "required_recall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null
+          },
+          "forbidden_absent": {
+            "numerator": 1,
+            "denominator": 2,
+            "value": 0.5
+          },
+          "has_cycle": false
+        },
+        {
+          "case_id": "path-007",
+          "review_status": "human_verified",
+          "path": [
+            "G000001",
+            "G000004",
+            "G000002",
+            "G000009",
+            "G000005",
+            "G000013",
+            "G000019",
+            "G000012",
+            "G000006",
+            "G000065",
+            "G000066",
+            "G000089",
+            "G000090",
+            "G000091",
+            "G000099",
+            "G000189",
+            "G000017",
+            "G000100",
+            "G000128",
+            "G000138"
+          ],
+          "required_recall": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1.0
+          },
+          "forbidden_absent": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null
+          },
+          "has_cycle": false
+        },
+        {
+          "case_id": "path-008",
+          "review_status": "pending_human_review",
+          "path": [
+            "G000001",
+            "G000004",
+            "G000002",
+            "G000060",
+            "G000163"
+          ],
+          "required_recall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null
+          },
+          "forbidden_absent": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null
+          },
+          "has_cycle": false
+        },
+        {
+          "case_id": "path-009",
+          "review_status": "structural_fixture",
+          "path": [],
+          "required_recall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null
+          },
+          "forbidden_absent": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null
+          },
+          "has_cycle": false
+        },
+        {
+          "case_id": "path-010",
+          "review_status": "product_rule_fixture",
+          "path": [],
+          "required_recall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null
+          },
+          "forbidden_absent": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1.0
+          },
+          "has_cycle": false
+        }
+      ]
+    },
+    "evidence_retriever": {
+      "implementation": {
+        "relationship_evidence_supported": false,
+        "current_evidence_type": "concept_id",
+        "current_citation_type": "concept"
+      },
+      "metrics": {
+        "evidence_recall_at_k": {
+          "numerator": 0,
+          "denominator": 6,
+          "value": 0.0
+        },
+        "citation_integrity": {
+          "numerator": 0,
+          "denominator": 0,
+          "value": null,
+          "status": "not_measurable"
+        },
+        "invalid_evidence_id_count": 0
+      },
+      "failures": [
+        {
+          "case_id": "evidence-001",
+          "expected_evidence_ids": [
+            "prereq:G000027:G000028"
+          ],
+          "returned_evidence_ids": [],
+          "status": "unsupported_current_baseline",
+          "reason": "Current evidence and citations are concept IDs, not relationship evidence IDs."
+        },
+        {
+          "case_id": "evidence-002",
+          "expected_evidence_ids": [
+            "prereq:G000026:G000027"
+          ],
+          "returned_evidence_ids": [],
+          "status": "unsupported_current_baseline",
+          "reason": "Current evidence and citations are concept IDs, not relationship evidence IDs."
+        },
+        {
+          "case_id": "evidence-003",
+          "expected_evidence_ids": [
+            "prereq:G000039:G000040"
+          ],
+          "returned_evidence_ids": [],
+          "status": "unsupported_current_baseline",
+          "reason": "Current evidence and citations are concept IDs, not relationship evidence IDs."
+        },
+        {
+          "case_id": "evidence-004",
+          "expected_evidence_ids": [
+            "prereq:G000006:G000063"
+          ],
+          "returned_evidence_ids": [],
+          "status": "unsupported_current_baseline",
+          "reason": "Current evidence and citations are concept IDs, not relationship evidence IDs."
+        },
+        {
+          "case_id": "evidence-005",
+          "expected_evidence_ids": [
+            "prereq:G000128:G000138"
+          ],
+          "returned_evidence_ids": [],
+          "status": "unsupported_current_baseline",
+          "reason": "Current evidence and citations are concept IDs, not relationship evidence IDs."
+        },
+        {
+          "case_id": "evidence-006",
+          "expected_evidence_ids": [
+            "prereq:G000045:G000046"
+          ],
+          "returned_evidence_ids": [],
+          "status": "unsupported_current_baseline",
+          "reason": "Current evidence and citations are concept IDs, not relationship evidence IDs."
+        }
+      ],
+      "cases": [
+        {
+          "case_id": "evidence-001",
+          "expected_evidence_ids": [
+            "prereq:G000027:G000028"
+          ],
+          "returned_evidence_ids": [],
+          "status": "unsupported_current_baseline",
+          "reason": "Current evidence and citations are concept IDs, not relationship evidence IDs."
+        },
+        {
+          "case_id": "evidence-002",
+          "expected_evidence_ids": [
+            "prereq:G000026:G000027"
+          ],
+          "returned_evidence_ids": [],
+          "status": "unsupported_current_baseline",
+          "reason": "Current evidence and citations are concept IDs, not relationship evidence IDs."
+        },
+        {
+          "case_id": "evidence-003",
+          "expected_evidence_ids": [
+            "prereq:G000039:G000040"
+          ],
+          "returned_evidence_ids": [],
+          "status": "unsupported_current_baseline",
+          "reason": "Current evidence and citations are concept IDs, not relationship evidence IDs."
+        },
+        {
+          "case_id": "evidence-004",
+          "expected_evidence_ids": [
+            "prereq:G000006:G000063"
+          ],
+          "returned_evidence_ids": [],
+          "status": "unsupported_current_baseline",
+          "reason": "Current evidence and citations are concept IDs, not relationship evidence IDs."
+        },
+        {
+          "case_id": "evidence-005",
+          "expected_evidence_ids": [
+            "prereq:G000128:G000138"
+          ],
+          "returned_evidence_ids": [],
+          "status": "unsupported_current_baseline",
+          "reason": "Current evidence and citations are concept IDs, not relationship evidence IDs."
+        },
+        {
+          "case_id": "evidence-006",
+          "expected_evidence_ids": [
+            "prereq:G000045:G000046"
+          ],
+          "returned_evidence_ids": [],
+          "status": "unsupported_current_baseline",
+          "reason": "Current evidence and citations are concept IDs, not relationship evidence IDs."
+        }
+      ]
+    },
+    "answer_generator": {
+      "implementation": {
+        "generator": "PromptTemplate formatter",
+        "structured_output": false,
+        "relationship_citations": false,
+        "response_language_control": false
+      },
+      "metrics": {
+        "structured_output_success_rate": {
+          "numerator": 0,
+          "denominator": 6,
+          "value": 0.0
+        },
+        "answer_source_field_rate": {
+          "numerator": 0,
+          "denominator": 6,
+          "value": 0.0
+        },
+        "answer_language_field_rate": {
+          "numerator": 0,
+          "denominator": 6,
+          "value": 0.0
+        },
+        "prompt_template_leak_rate": {
+          "numerator": 6,
+          "denominator": 6,
+          "value": 1.0
+        },
+        "answer_language_match_rate_heuristic": {
+          "numerator": 3,
+          "denominator": 6,
+          "value": 0.5
+        },
+        "required_citation_completeness": {
+          "numerator": 0,
+          "denominator": 5,
+          "value": 0.0
+        },
+        "latency": {
+          "count": 6,
+          "p50_ms": 0.033,
+          "p95_ms": 0.477
+        }
+      },
+      "failures": [
+        {
+          "case_id": "answer-001",
+          "expected_answer_language": "zh",
+          "answer_preview": "Question: 为什么学习补码前要掌握反码？\nPath: G000027 -> G000028\nEvidence concepts: G000027\nExplanation: 已基于前驱闭包和拓扑排序生成学习路径。\nAnswer:",
+          "structured_output_success": false,
+          "answer_source_present": false,
+          "answer_language_present": false,
+          "language_match_heuristic": true,
+          "prompt_template_leak": true,
+          "valid_required_citations": 0,
+          "required_citations": 1,
+          "latency_ms": 0.6
+        },
+        {
+          "case_id": "answer-002",
+          "expected_answer_language": "en",
+          "answer_preview": "Question: Why should I learn sign-magnitude before ones' complement?\nPath: G000026 -> G000027\nEvidence concepts: G000026\nExplanation: 已基于前驱闭包和拓扑排序生成学习路径。\nAnswer:",
+          "structured_output_success": false,
+          "answer_source_present": false,
+          "answer_language_present": false,
+          "language_match_heuristic": false,
+          "prompt_template_leak": true,
+          "valid_required_citations": 0,
+          "required_citations": 1,
+          "latency_ms": 0.045
+        },
+        {
+          "case_id": "answer-003",
+          "expected_answer_language": "zh",
+          "answer_preview": "Question: 海明码之前为什么要学奇偶校验码？\nPath: G000039 -> G000040\nEvidence concepts: G000039\nExplanation: 已基于前驱闭包和拓扑排序生成学习路径。\nAnswer:",
+          "structured_output_success": false,
+          "answer_source_present": false,
+          "answer_language_present": false,
+          "language_match_heuristic": true,
+          "prompt_template_leak": true,
+          "valid_required_citations": 0,
+          "required_citations": 1,
+          "latency_ms": 0.015
+        },
+        {
+          "case_id": "answer-004",
+          "expected_answer_language": "en",
+          "answer_preview": "Question: Explain the prerequisite path for an edge-triggered D flip-flop.\nPath: G000128 -> G000138\nEvidence concepts: G000128\nExplanation: 已基于前驱闭包和拓扑排序生成学习路径。\nAnswer:",
+          "structured_output_success": false,
+          "answer_source_present": false,
+          "answer_language_present": false,
+          "language_match_heuristic": false,
+          "prompt_template_leak": true,
+          "valid_required_citations": 0,
+          "required_citations": 1,
+          "latency_ms": 0.01
+        },
+        {
+          "case_id": "answer-005",
+          "expected_answer_language": "zh",
+          "answer_preview": "Question: 逻辑变量到逻辑函数表示的学习顺序是什么？\nPath: G000006 -> G000063\nEvidence concepts: G000006\nExplanation: 已基于前驱闭包和拓扑排序生成学习路径。\nAnswer:",
+          "structured_output_success": false,
+          "answer_source_present": false,
+          "answer_language_present": false,
+          "language_match_heuristic": true,
+          "prompt_template_leak": true,
+          "valid_required_citations": 0,
+          "required_citations": 1,
+          "latency_ms": 0.022
+        },
+        {
+          "case_id": "answer-006",
+          "expected_answer_language": "en",
+          "answer_preview": "Question: What is the learning order?\nPath: G000009\nEvidence concepts: none\nExplanation: 已基于前驱闭包和拓扑排序生成学习路径。\nAnswer:",
+          "structured_output_success": false,
+          "answer_source_present": false,
+          "answer_language_present": false,
+          "language_match_heuristic": false,
+          "prompt_template_leak": true,
+          "valid_required_citations": 0,
+          "required_citations": 0,
+          "latency_ms": 0.106
+        }
+      ],
+      "cases": [
+        {
+          "case_id": "answer-001",
+          "expected_answer_language": "zh",
+          "answer_preview": "Question: 为什么学习补码前要掌握反码？\nPath: G000027 -> G000028\nEvidence concepts: G000027\nExplanation: 已基于前驱闭包和拓扑排序生成学习路径。\nAnswer:",
+          "structured_output_success": false,
+          "answer_source_present": false,
+          "answer_language_present": false,
+          "language_match_heuristic": true,
+          "prompt_template_leak": true,
+          "valid_required_citations": 0,
+          "required_citations": 1,
+          "latency_ms": 0.6
+        },
+        {
+          "case_id": "answer-002",
+          "expected_answer_language": "en",
+          "answer_preview": "Question: Why should I learn sign-magnitude before ones' complement?\nPath: G000026 -> G000027\nEvidence concepts: G000026\nExplanation: 已基于前驱闭包和拓扑排序生成学习路径。\nAnswer:",
+          "structured_output_success": false,
+          "answer_source_present": false,
+          "answer_language_present": false,
+          "language_match_heuristic": false,
+          "prompt_template_leak": true,
+          "valid_required_citations": 0,
+          "required_citations": 1,
+          "latency_ms": 0.045
+        },
+        {
+          "case_id": "answer-003",
+          "expected_answer_language": "zh",
+          "answer_preview": "Question: 海明码之前为什么要学奇偶校验码？\nPath: G000039 -> G000040\nEvidence concepts: G000039\nExplanation: 已基于前驱闭包和拓扑排序生成学习路径。\nAnswer:",
+          "structured_output_success": false,
+          "answer_source_present": false,
+          "answer_language_present": false,
+          "language_match_heuristic": true,
+          "prompt_template_leak": true,
+          "valid_required_citations": 0,
+          "required_citations": 1,
+          "latency_ms": 0.015
+        },
+        {
+          "case_id": "answer-004",
+          "expected_answer_language": "en",
+          "answer_preview": "Question: Explain the prerequisite path for an edge-triggered D flip-flop.\nPath: G000128 -> G000138\nEvidence concepts: G000128\nExplanation: 已基于前驱闭包和拓扑排序生成学习路径。\nAnswer:",
+          "structured_output_success": false,
+          "answer_source_present": false,
+          "answer_language_present": false,
+          "language_match_heuristic": false,
+          "prompt_template_leak": true,
+          "valid_required_citations": 0,
+          "required_citations": 1,
+          "latency_ms": 0.01
+        },
+        {
+          "case_id": "answer-005",
+          "expected_answer_language": "zh",
+          "answer_preview": "Question: 逻辑变量到逻辑函数表示的学习顺序是什么？\nPath: G000006 -> G000063\nEvidence concepts: G000006\nExplanation: 已基于前驱闭包和拓扑排序生成学习路径。\nAnswer:",
+          "structured_output_success": false,
+          "answer_source_present": false,
+          "answer_language_present": false,
+          "language_match_heuristic": true,
+          "prompt_template_leak": true,
+          "valid_required_citations": 0,
+          "required_citations": 1,
+          "latency_ms": 0.022
+        },
+        {
+          "case_id": "answer-006",
+          "expected_answer_language": "en",
+          "answer_preview": "Question: What is the learning order?\nPath: G000009\nEvidence concepts: none\nExplanation: 已基于前驱闭包和拓扑排序生成学习路径。\nAnswer:",
+          "structured_output_success": false,
+          "answer_source_present": false,
+          "answer_language_present": false,
+          "language_match_heuristic": false,
+          "prompt_template_leak": true,
+          "valid_required_citations": 0,
+          "required_citations": 0,
+          "latency_ms": 0.106
+        }
+      ]
+    }
+  }
+}

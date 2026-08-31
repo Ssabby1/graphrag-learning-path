@@ -1,4 +1,4 @@
-﻿concept_id,name,description,difficulty
-c_001,逻辑门基础,与非或非门及性质,1
-c_002,组合逻辑设计,组合电路分析与设计,2
-c_003,时序逻辑基础,触发器与时序电路,3
+concept_id,name,name_en,alias,aliases_en,description,description_en,difficulty,source_chapters,source_images,confidence_max
+c_001,逻辑门基础,Logic Gate Fundamentals,基本逻辑门,logic gates|basic gates,与非或非门及性质,"AND, OR, and NOT gates and their properties",1,第一章,,0.98
+c_002,组合逻辑设计,Combinational Logic Design,组合电路设计,combinational circuit design,组合电路分析与设计,"Analysis and design of combinational circuits",2,第二章,,0.95
+c_003,时序逻辑基础,Sequential Logic Fundamentals,时序电路基础,sequential circuits|sequential logic,触发器与时序电路,"Flip-flops and sequential circuits",3,第三章,,0.93

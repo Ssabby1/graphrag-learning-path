@@ -1,0 +1,255 @@
+{
+  "report_version": "1.0",
+  "generated_at": "2026-08-30T12:30:00.626469+00:00",
+  "input_profile": "csv",
+  "depth_threshold": 8,
+  "metrics": {
+    "labels": [
+      "Concept"
+    ],
+    "relationship_types": [
+      "CONTAINS",
+      "PREREQUISITE_OF",
+      "RELATED_TO"
+    ],
+    "has_expected_schema": true,
+    "concept_count": 190,
+    "node_count": 190,
+    "edge_count": 827,
+    "prerequisite_edge_count": 409,
+    "concept_missing_id_count": 0,
+    "duplicate_concept_id_count": 0,
+    "orphan_concept_count": "not_available_in_csv_profile",
+    "isolated_concept_count": "not_available_in_csv_profile",
+    "relation_type_dist": [
+      {
+        "relation_type": "PREREQUISITE_OF",
+        "cnt": 409
+      },
+      {
+        "relation_type": "RELATED_TO",
+        "cnt": 299
+      },
+      {
+        "relation_type": "CONTAINS",
+        "cnt": 119
+      }
+    ],
+    "dataset_hash": "b679cc2133f4531fc023e65fd7ae1ecf76ce67aa8fdfd227a79ac9b98501b264",
+    "full_dag_check": true,
+    "cycle_example_count": 0,
+    "cycle_examples": [],
+    "self_loop_count": 0,
+    "duplicate_prerequisite_pair_count": 0,
+    "duplicate_prerequisite_examples": [],
+    "longest_path_edges": 16,
+    "depth_distribution": [
+      {
+        "depth": 0,
+        "target_count": 35
+      },
+      {
+        "depth": 1,
+        "target_count": 11
+      },
+      {
+        "depth": 2,
+        "target_count": 8
+      },
+      {
+        "depth": 3,
+        "target_count": 16
+      },
+      {
+        "depth": 4,
+        "target_count": 20
+      },
+      {
+        "depth": 5,
+        "target_count": 9
+      },
+      {
+        "depth": 6,
+        "target_count": 3
+      },
+      {
+        "depth": 7,
+        "target_count": 12
+      },
+      {
+        "depth": 8,
+        "target_count": 28
+      },
+      {
+        "depth": 9,
+        "target_count": 13
+      },
+      {
+        "depth": 10,
+        "target_count": 6
+      },
+      {
+        "depth": 11,
+        "target_count": 3
+      },
+      {
+        "depth": 12,
+        "target_count": 13
+      },
+      {
+        "depth": 13,
+        "target_count": 4
+      },
+      {
+        "depth": 14,
+        "target_count": 5
+      },
+      {
+        "depth": 15,
+        "target_count": 3
+      },
+      {
+        "depth": 16,
+        "target_count": 1
+      }
+    ],
+    "targets_above_depth_threshold": 48,
+    "closure_stats": {
+      "target_count": 190,
+      "total_ancestor_references": 1514,
+      "min_ancestors": 0,
+      "max_ancestors": 51,
+      "average_ancestors": 7.968
+    },
+    "oracle_closure_match_count": 190,
+    "oracle_closure_target_count": 190,
+    "structural_closure_recall_numerator": 1514,
+    "structural_closure_recall_denominator": 1514,
+    "evidence_text_present_count": 409,
+    "source_images_present_count": 409,
+    "confidence_present_count": 409,
+    "human_verified_relation_count": 0,
+    "sample_targets": [
+      {
+        "target_concept_id": "G000001",
+        "target_name": "数字逻辑基础",
+        "prerequisite_count": 0,
+        "max_depth": 0
+      },
+      {
+        "target_concept_id": "G000002",
+        "target_name": "逻辑门电路",
+        "prerequisite_count": 2,
+        "max_depth": 2
+      },
+      {
+        "target_concept_id": "G000003",
+        "target_name": "异步时序电路",
+        "prerequisite_count": 41,
+        "max_depth": 16
+      },
+      {
+        "target_concept_id": "G000004",
+        "target_name": "逻辑代数基础",
+        "prerequisite_count": 1,
+        "max_depth": 1
+      },
+      {
+        "target_concept_id": "G000005",
+        "target_name": "数字逻辑系统",
+        "prerequisite_count": 2,
+        "max_depth": 2
+      },
+      {
+        "target_concept_id": "G000006",
+        "target_name": "逻辑变量",
+        "prerequisite_count": 6,
+        "max_depth": 5
+      },
+      {
+        "target_concept_id": "G000007",
+        "target_name": "八进制",
+        "prerequisite_count": 0,
+        "max_depth": 0
+      },
+      {
+        "target_concept_id": "G000008",
+        "target_name": "十六进制",
+        "prerequisite_count": 0,
+        "max_depth": 0
+      },
+      {
+        "target_concept_id": "G000009",
+        "target_name": "二进制",
+        "prerequisite_count": 1,
+        "max_depth": 1
+      },
+      {
+        "target_concept_id": "G000010",
+        "target_name": "计数体制",
+        "prerequisite_count": 3,
+        "max_depth": 3
+      },
+      {
+        "target_concept_id": "G000011",
+        "target_name": "十进制",
+        "prerequisite_count": 0,
+        "max_depth": 0
+      },
+      {
+        "target_concept_id": "G000012",
+        "target_name": "逻辑代数的基本概念",
+        "prerequisite_count": 5,
+        "max_depth": 4
+      },
+      {
+        "target_concept_id": "G000013",
+        "target_name": "计算机系统",
+        "prerequisite_count": 3,
+        "max_depth": 3
+      },
+      {
+        "target_concept_id": "G000014",
+        "target_name": "加法器",
+        "prerequisite_count": 4,
+        "max_depth": 4
+      },
+      {
+        "target_concept_id": "G000015",
+        "target_name": "寄存器",
+        "prerequisite_count": 17,
+        "max_depth": 12
+      },
+      {
+        "target_concept_id": "G000016",
+        "target_name": "计数器",
+        "prerequisite_count": 17,
+        "max_depth": 12
+      },
+      {
+        "target_concept_id": "G000017",
+        "target_name": "分立元件逻辑门电路",
+        "prerequisite_count": 13,
+        "max_depth": 9
+      },
+      {
+        "target_concept_id": "G000018",
+        "target_name": "数字逻辑及数字电路",
+        "prerequisite_count": 4,
+        "max_depth": 4
+      },
+      {
+        "target_concept_id": "G000019",
+        "target_name": "数制与码制",
+        "prerequisite_count": 0,
+        "max_depth": 0
+      },
+      {
+        "target_concept_id": "G000020",
+        "target_name": "数制之间的转换",
+        "prerequisite_count": 0,
+        "max_depth": 0
+      }
+    ]
+  }
+}

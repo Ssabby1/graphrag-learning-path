@@ -1,64 +1,45 @@
 from __future__ import annotations
 
-from app.retrieval.reranker import rerank_hits
-from app.retrieval.vector_store import VectorStore, rrf_fuse
-
-
-def _as_text(record: dict) -> str:
-    concept_id = record.get("concept_id", "")
-    name = record.get("name", "")
-    description = record.get("description", "")
-    return f"{concept_id} {name} {description}".strip()
+from app.core.config import settings
+from app.retrieval.concept_retriever import ConceptRetriever
+from app.retrieval.corpus_builder import build_concept_documents
+from app.retrieval.embedding_backend import get_embedding_backend
+from app.retrieval.embedding_cache import EmbeddingCache
+from app.retrieval.reranker import TokenOverlapReranker
 
 
 def hybrid_retrieve(
     question: str,
     repo,
     graph_ids: list[str],
-    top_k_vector: int = 8,
-    top_k_final: int = 6,
+    top_k_vector: int | None = None,
+    top_k_final: int | None = None,
+    mode: str | None = None,
 ) -> dict:
-    corpus = []
-    if hasattr(repo, "get_concept_corpus"):
-        corpus = repo.get_concept_corpus()
-
-    docs = [{
-        "concept_id": row.get("concept_id", ""),
-        "text": _as_text(row),
-    } for row in corpus]
-
-    vector_store = VectorStore(docs)
-    vector_hits = vector_store.search(question, top_k=top_k_vector)
-
-    graph_rank = [item for item in graph_ids if item]
-    vector_rank = [item.get("concept_id", "") for item in vector_hits]
-
-    fused = rrf_fuse([graph_rank, vector_rank], k=60)
-    fused_map = {concept_id: score for concept_id, score in fused}
-
-    by_id = {doc.get("concept_id", ""): doc for doc in docs}
-    merged_hits: list[dict] = []
-    for concept_id, rrf_score in fused:
-        text = by_id.get(concept_id, {}).get("text", concept_id)
-        source = "graph+vector"
-        if concept_id in graph_rank and concept_id not in vector_rank:
-            source = "graph"
-        elif concept_id in vector_rank and concept_id not in graph_rank:
-            source = "vector"
-
-        merged_hits.append({
-            "concept_id": concept_id,
-            "text": text,
-            "score": rrf_score,
-            "source": source,
-        })
-
-    reranked = rerank_hits(question=question, hits=merged_hits, top_k=top_k_final)
+    corpus = repo.get_concept_corpus() if hasattr(repo, "get_concept_corpus") else []
+    documents = build_concept_documents(corpus)
+    backend, degraded, degradation_reason = get_embedding_backend()
+    selected_mode = mode or settings.retrieval_mode
+    reranker = TokenOverlapReranker() if selected_mode == "hybrid_rrf_rerank" else None
+    result = ConceptRetriever(
+        backend, cache=EmbeddingCache(), reranker=reranker
+    ).search(
+        query=question,
+        documents=documents,
+        graph_ids=graph_ids,
+        mode=selected_mode,
+        top_k_vector=top_k_vector or settings.retrieval_top_k_vector,
+        top_k_final=top_k_final or settings.retrieval_top_k_final,
+        rrf_k=settings.retrieval_rrf_k,
+    )
     return {
-        "hits": reranked,
-        "vector_backend": "hashing-fallback",
-        "fusion": "rrf",
-        "rrf_k": 60,
-        "reranker": "token-overlap",
-        "raw_rrf_scores": fused_map,
+        **result,
+        "retrieval_mode": selected_mode,
+        "vector_backend": backend.model_id,
+        "embedding_model": backend.model_id,
+        "embedding_degraded": degraded,
+        "embedding_degradation_reason": degradation_reason,
+        "fusion": "rrf" if selected_mode.startswith("hybrid") else "none",
+        "rrf_k": settings.retrieval_rrf_k if selected_mode.startswith("hybrid") else None,
+        "reranker": reranker.model_id if reranker is not None else "none",
     }

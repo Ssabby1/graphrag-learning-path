@@ -1,0 +1,37 @@
+{"case_id":"target-001","question":"想学卡诺图构成，应该先掌握什么？","acceptable_target_ids":["G000079"],"should_reject":false,"query_language":"zh","tags":["exact_name","kmap"]}
+{"case_id":"target-002","question":"我准备学习逻辑函数化简","acceptable_target_ids":["G000064"],"should_reject":false,"query_language":"zh","tags":["exact_name"]}
+{"case_id":"target-003","question":"二进制要怎么入门？","acceptable_target_ids":["G000009"],"should_reject":false,"query_language":"zh","tags":["short_query"]}
+{"case_id":"target-004","question":"我想了解补码","acceptable_target_ids":["G000028"],"should_reject":false,"query_language":"zh","tags":["short_query"]}
+{"case_id":"target-005","question":"如何学习海明码？","acceptable_target_ids":["G000040"],"should_reject":false,"query_language":"zh","tags":["exact_name"]}
+{"case_id":"target-006","question":"想学优先编码器，需要哪些基础？","acceptable_target_ids":["G000054"],"should_reject":false,"query_language":"zh","tags":["exact_name"]}
+{"case_id":"target-007","question":"我想掌握带无关项的逻辑函数化简","acceptable_target_ids":["G000084"],"should_reject":false,"query_language":"zh","tags":["overlapping_name"]}
+{"case_id":"target-008","question":"边沿D触发器之前学什么？","acceptable_target_ids":["G000138"],"should_reject":false,"query_language":"zh","tags":["exact_name"]}
+{"case_id":"target-009","question":"如何分析同步时序逻辑电路？","acceptable_target_ids":["G000048"],"should_reject":false,"query_language":"zh","tags":["natural_language"]}
+{"case_id":"target-010","question":"我要学习用数据选择器实现逻辑函数","acceptable_target_ids":["G000059"],"should_reject":false,"query_language":"zh","tags":["exact_name"]}
+{"case_id":"target-011","question":"想了解组合逻辑电路设计","acceptable_target_ids":["G000045"],"should_reject":false,"query_language":"zh","tags":["exact_name"]}
+{"case_id":"target-012","question":"十六进制怎么学？","acceptable_target_ids":["G000008"],"should_reject":false,"query_language":"zh","tags":["exact_name"]}
+{"case_id":"target-013","question":"我想学习格雷码","acceptable_target_ids":["G000038"],"should_reject":false,"query_language":"zh","tags":["exact_name"]}
+{"case_id":"target-014","question":"什么是最小项表达式，学习顺序是什么？","acceptable_target_ids":["G000122"],"should_reject":false,"query_language":"zh","tags":["natural_language"]}
+{"case_id":"target-015","question":"怎样学习卡诺图化简法？","acceptable_target_ids":["G000083"],"should_reject":false,"query_language":"zh","tags":["exact_name","kmap"]}
+{"case_id":"target-016","question":"我已学过原码，现在想学反码","acceptable_target_ids":["G000027"],"should_reject":false,"query_language":"zh","tags":["mastered_context"]}
+{"case_id":"target-017","question":"想学一位全加器","acceptable_target_ids":["G000163"],"should_reject":false,"query_language":"zh","tags":["exact_name"]}
+{"case_id":"target-018","question":"逻辑代数的基本概念应该怎么学？","acceptable_target_ids":["G000012"],"should_reject":false,"query_language":"zh","tags":["overlapping_name"]}
+{"case_id":"target-019","question":"触发器功能转换需要什么基础？","acceptable_target_ids":["G000139"],"should_reject":false,"query_language":"zh","tags":["exact_name"]}
+{"case_id":"target-020","question":"我想学静态险象","acceptable_target_ids":["G000170"],"should_reject":false,"query_language":"zh","tags":["exact_name"]}
+{"case_id":"target-021","question":"What should I learn before studying Binary?","acceptable_target_ids":["G000009"],"should_reject":false,"query_language":"en","tags":["cross_lingual","alias"]}
+{"case_id":"target-022","question":"How do I learn Hexadecimal?","acceptable_target_ids":["G000008"],"should_reject":false,"query_language":"en","tags":["cross_lingual","alias"]}
+{"case_id":"target-023","question":"I want to understand Hamming Code prerequisites","acceptable_target_ids":["G000040"],"should_reject":false,"query_language":"en","tags":["cross_lingual","alias"]}
+{"case_id":"target-024","question":"What comes before Karnaugh map construction?","acceptable_target_ids":["G000079"],"should_reject":false,"query_language":"en","tags":["cross_lingual","natural_language"]}
+{"case_id":"target-025","question":"Teach me Two's Complement","acceptable_target_ids":["G000028"],"should_reject":false,"query_language":"en","tags":["cross_lingual","alias"]}
+{"case_id":"target-026","question":"I need a path for sign-magnitude representation","acceptable_target_ids":["G000026"],"should_reject":false,"query_language":"en","tags":["cross_lingual","alias"]}
+{"case_id":"target-027","question":"How should I study a priority encoder?","acceptable_target_ids":["G000054"],"should_reject":false,"query_language":"en","tags":["cross_lingual"]}
+{"case_id":"target-028","question":"卡诺图 K-map 的前置知识是什么？","acceptable_target_ids":["G000071","G000079"],"should_reject":false,"query_language":"mixed","tags":["mixed","ambiguous"]}
+{"case_id":"target-029","question":"我想学 Boolean expression 的标准形式","acceptable_target_ids":["G000119"],"should_reject":false,"query_language":"mixed","tags":["mixed","cross_lingual"]}
+{"case_id":"target-030","question":"Binary 二进制转换怎么入门？","acceptable_target_ids":["G000020"],"should_reject":false,"query_language":"mixed","tags":["mixed","natural_language"]}
+{"case_id":"target-031","question":"今天天气怎么样？","acceptable_target_ids":[],"should_reject":true,"query_language":"zh","tags":["reject","unrelated"]}
+{"case_id":"target-032","question":"帮我写一封求职邮件","acceptable_target_ids":[],"should_reject":true,"query_language":"zh","tags":["reject","unrelated"]}
+{"case_id":"target-033","question":"What is the weather tomorrow?","acceptable_target_ids":[],"should_reject":true,"query_language":"en","tags":["reject","unrelated"]}
+{"case_id":"target-034","question":"I want to learn something","acceptable_target_ids":[],"should_reject":true,"query_language":"en","tags":["reject","insufficient"]}
+{"case_id":"target-035","question":"这个怎么学？","acceptable_target_ids":[],"should_reject":true,"query_language":"zh","tags":["reject","insufficient"]}
+{"case_id":"target-036","question":"比较补码和海明码","acceptable_target_ids":["G000028","G000040"],"should_reject":true,"query_language":"zh","tags":["reject","multi_target_ambiguous"]}
+
