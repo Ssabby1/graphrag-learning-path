@@ -1,0 +1,5054 @@
+{
+  "run": {
+    "generated_at": "2026-08-31T03:39:58.777859+00:00",
+    "dataset_profile": "full_local",
+    "git_commit": "bf1e63a77ca00b8501d3e02a8c2953561aeb95ef",
+    "git_dirty": true,
+    "python": "3.13.15",
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "target_dataset_sha256": "d5269a25d37ad6f76c50d931ecfefbc3fda84b56c6768686644590522bec0834",
+    "concept_corpus_hash": "bf7d22c23d8723c19bf3302f08dfeeb5860ad913ba0dcdfba17c6b9ee6328d2d"
+  },
+  "models": {
+    "embedding": "intfloat/multilingual-e5-small",
+    "cross_encoder": "cross-encoder/mmarco-mMiniLMv2-L12-H384-v1",
+    "cross_encoder_device": "mps:0",
+    "cross_encoder_load_ms": 2487.622,
+    "cross_encoder_license": "apache-2.0",
+    "cross_encoder_languages": [
+      "zh",
+      "en",
+      "multilingual (15 languages in model card)"
+    ],
+    "cross_encoder_score_activation": "sigmoid"
+  },
+  "evaluation": {
+    "candidate_count": 8,
+    "final_count": 5,
+    "evaluated_positive_cases": 30,
+    "retrieval_latency": {
+      "count": 30,
+      "p50_ms": 19.424,
+      "p95_ms": 119.788
+    },
+    "embedding_cache": {
+      "rebuilt": 0,
+      "hits": 30
+    },
+    "strategies": {
+      "none": {
+        "metrics": {
+          "top_1_accuracy": {
+            "numerator": 26,
+            "denominator": 30,
+            "value": 0.8666666666666667
+          },
+          "recall_at_k": {
+            "numerator": 30,
+            "denominator": 30,
+            "value": 1.0
+          },
+          "mrr_at_k": 0.925,
+          "by_language": {
+            "zh": {
+              "top_1_accuracy": {
+                "numerator": 16,
+                "denominator": 20,
+                "value": 0.8
+              },
+              "recall_at_k": {
+                "numerator": 20,
+                "denominator": 20,
+                "value": 1.0
+              },
+              "mrr_at_k": 0.8875
+            },
+            "en": {
+              "top_1_accuracy": {
+                "numerator": 7,
+                "denominator": 7,
+                "value": 1.0
+              },
+              "recall_at_k": {
+                "numerator": 7,
+                "denominator": 7,
+                "value": 1.0
+              },
+              "mrr_at_k": 1.0
+            },
+            "mixed": {
+              "top_1_accuracy": {
+                "numerator": 3,
+                "denominator": 3,
+                "value": 1.0
+              },
+              "recall_at_k": {
+                "numerator": 3,
+                "denominator": 3,
+                "value": 1.0
+              },
+              "mrr_at_k": 1.0
+            }
+          }
+        },
+        "latency": {
+          "rerank_only": {
+            "count": 30,
+            "p50_ms": 0.001,
+            "p95_ms": 0.002
+          },
+          "retrieval_plus_rerank": {
+            "count": 30,
+            "p50_ms": 19.425,
+            "p95_ms": 119.789
+          }
+        },
+        "failures": [
+          {
+            "case_id": "target-002",
+            "question": "我准备学习逻辑函数化简",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000064"
+            ],
+            "ranked_ids": [
+              "G000084",
+              "G000064",
+              "G000102",
+              "G000083",
+              "G000052"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000084",
+                "vector_score": 0.9065781114734573,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000064",
+                "vector_score": 0.8987889425051238,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000102",
+                "vector_score": 0.8949000622696806,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000083",
+                "vector_score": 0.8933246547772071,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000052",
+                "vector_score": 0.890092144125471,
+                "rerank_score": null
+              }
+            ],
+            "top_1_correct": false,
+            "reciprocal_rank": 0.5,
+            "retrieval_latency_ms": 120.813,
+            "rerank_latency_ms": 0.002
+          },
+          {
+            "case_id": "target-014",
+            "question": "什么是最小项表达式，学习顺序是什么？",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000122"
+            ],
+            "ranked_ids": [
+              "G000074",
+              "G000122",
+              "G000078",
+              "G000123",
+              "G000075"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000074",
+                "vector_score": 0.9048085201481003,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000122",
+                "vector_score": 0.9041296712278387,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000078",
+                "vector_score": 0.8978822342128445,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000123",
+                "vector_score": 0.8963959876455553,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000075",
+                "vector_score": 0.8947437002407502,
+                "rerank_score": null
+              }
+            ],
+            "top_1_correct": false,
+            "reciprocal_rank": 0.5,
+            "retrieval_latency_ms": 19.428,
+            "rerank_latency_ms": 0.001
+          },
+          {
+            "case_id": "target-016",
+            "question": "我已学过原码，现在想学反码",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000027"
+            ],
+            "ranked_ids": [
+              "G000026",
+              "G000027",
+              "G000028",
+              "G000116",
+              "G000117"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000026",
+                "vector_score": 0.888394342273456,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000027",
+                "vector_score": 0.8867360586084685,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000028",
+                "vector_score": 0.878380050885133,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000116",
+                "vector_score": 0.8681129346278446,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000117",
+                "vector_score": 0.864410317992724,
+                "rerank_score": null
+              }
+            ],
+            "top_1_correct": false,
+            "reciprocal_rank": 0.5,
+            "retrieval_latency_ms": 19.473,
+            "rerank_latency_ms": 0.002
+          },
+          {
+            "case_id": "target-018",
+            "question": "逻辑代数的基本概念应该怎么学？",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000012"
+            ],
+            "ranked_ids": [
+              "G000067",
+              "G000006",
+              "G000101",
+              "G000012",
+              "G000085"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000067",
+                "vector_score": 0.9085431044325873,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000006",
+                "vector_score": 0.9084614851767308,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000101",
+                "vector_score": 0.9032754650201308,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000012",
+                "vector_score": 0.9027606786853867,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000085",
+                "vector_score": 0.9013497434531274,
+                "rerank_score": null
+              }
+            ],
+            "top_1_correct": false,
+            "reciprocal_rank": 0.25,
+            "retrieval_latency_ms": 19.215,
+            "rerank_latency_ms": 0.001
+          }
+        ],
+        "cases": [
+          {
+            "case_id": "target-001",
+            "question": "想学卡诺图构成，应该先掌握什么？",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000079"
+            ],
+            "ranked_ids": [
+              "G000079",
+              "G000071",
+              "G000082",
+              "G000081",
+              "G000175"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000079",
+                "vector_score": 0.9038798554828872,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000071",
+                "vector_score": 0.8913992645179415,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000082",
+                "vector_score": 0.8890181446299539,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000081",
+                "vector_score": 0.8831956108938968,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000175",
+                "vector_score": 0.8827936555530089,
+                "rerank_score": null
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 1090.504,
+            "rerank_latency_ms": 0.001
+          },
+          {
+            "case_id": "target-002",
+            "question": "我准备学习逻辑函数化简",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000064"
+            ],
+            "ranked_ids": [
+              "G000084",
+              "G000064",
+              "G000102",
+              "G000083",
+              "G000052"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000084",
+                "vector_score": 0.9065781114734573,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000064",
+                "vector_score": 0.8987889425051238,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000102",
+                "vector_score": 0.8949000622696806,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000083",
+                "vector_score": 0.8933246547772071,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000052",
+                "vector_score": 0.890092144125471,
+                "rerank_score": null
+              }
+            ],
+            "top_1_correct": false,
+            "reciprocal_rank": 0.5,
+            "retrieval_latency_ms": 120.813,
+            "rerank_latency_ms": 0.002
+          },
+          {
+            "case_id": "target-003",
+            "question": "二进制要怎么入门？",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000009"
+            ],
+            "ranked_ids": [
+              "G000009",
+              "G000020",
+              "G000149",
+              "G000011",
+              "G000086"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000009",
+                "vector_score": 0.8840832418232745,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000020",
+                "vector_score": 0.8735950493744148,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000149",
+                "vector_score": 0.8698909885754786,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000011",
+                "vector_score": 0.8690798154609728,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000086",
+                "vector_score": 0.8673665851248604,
+                "rerank_score": null
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 117.213,
+            "rerank_latency_ms": 0.002
+          },
+          {
+            "case_id": "target-004",
+            "question": "我想了解补码",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000028"
+            ],
+            "ranked_ids": [
+              "G000028",
+              "G000027",
+              "G000030",
+              "G000031",
+              "G000109"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000028",
+                "vector_score": 0.8973600865206269,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000027",
+                "vector_score": 0.8834752740853262,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000030",
+                "vector_score": 0.8723914272113416,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000031",
+                "vector_score": 0.8686597718802743,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000109",
+                "vector_score": 0.8627674319949936,
+                "rerank_score": null
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 113.672,
+            "rerank_latency_ms": 0.001
+          },
+          {
+            "case_id": "target-005",
+            "question": "如何学习海明码？",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000040"
+            ],
+            "ranked_ids": [
+              "G000040",
+              "G000034",
+              "G000038",
+              "G000039",
+              "G000026"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000040",
+                "vector_score": 0.8943769528296235,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000034",
+                "vector_score": 0.8795412020587099,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000038",
+                "vector_score": 0.877304666078792,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000039",
+                "vector_score": 0.8703457570321155,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000026",
+                "vector_score": 0.8687861770122419,
+                "rerank_score": null
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 18.966,
+            "rerank_latency_ms": 0.002
+          },
+          {
+            "case_id": "target-006",
+            "question": "想学优先编码器，需要哪些基础？",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000054"
+            ],
+            "ranked_ids": [
+              "G000054",
+              "G000167",
+              "G000041",
+              "G000042",
+              "G000166"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000054",
+                "vector_score": 0.9200138100971338,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000167",
+                "vector_score": 0.8994038137084043,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000041",
+                "vector_score": 0.898450430370621,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000042",
+                "vector_score": 0.8983290196694719,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000166",
+                "vector_score": 0.8978436572739098,
+                "rerank_score": null
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 23.321,
+            "rerank_latency_ms": 0.001
+          },
+          {
+            "case_id": "target-007",
+            "question": "我想掌握带无关项的逻辑函数化简",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000084"
+            ],
+            "ranked_ids": [
+              "G000084",
+              "G000064",
+              "G000062",
+              "G000063",
+              "G000075"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000084",
+                "vector_score": 0.9213926623237034,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000064",
+                "vector_score": 0.8937464219665056,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000062",
+                "vector_score": 0.8869765801021224,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000063",
+                "vector_score": 0.8858690873087225,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000075",
+                "vector_score": 0.8835888076068356,
+                "rerank_score": null
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 19.926,
+            "rerank_latency_ms": 0.001
+          },
+          {
+            "case_id": "target-008",
+            "question": "边沿D触发器之前学什么？",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000138"
+            ],
+            "ranked_ids": [
+              "G000138",
+              "G000136",
+              "G000140",
+              "G000131",
+              "G000137"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000138",
+                "vector_score": 0.9160277940220797,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000136",
+                "vector_score": 0.8968727114922302,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000140",
+                "vector_score": 0.8925408707522171,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000131",
+                "vector_score": 0.8888421730534789,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000137",
+                "vector_score": 0.8866085016483951,
+                "rerank_score": null
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 23.686,
+            "rerank_latency_ms": 0.002
+          },
+          {
+            "case_id": "target-009",
+            "question": "如何分析同步时序逻辑电路？",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000048"
+            ],
+            "ranked_ids": [
+              "G000048",
+              "G000151",
+              "G000184",
+              "G000053",
+              "G000043"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000048",
+                "vector_score": 0.9146651965733247,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000151",
+                "vector_score": 0.9027112134875142,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000184",
+                "vector_score": 0.8999247073765736,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000053",
+                "vector_score": 0.893282031020092,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000043",
+                "vector_score": 0.8921533112023834,
+                "rerank_score": null
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 118.535,
+            "rerank_latency_ms": 0.001
+          },
+          {
+            "case_id": "target-010",
+            "question": "我要学习用数据选择器实现逻辑函数",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000059"
+            ],
+            "ranked_ids": [
+              "G000059",
+              "G000058",
+              "G000161",
+              "G000004",
+              "G000125"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000059",
+                "vector_score": 0.9141607918308824,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000058",
+                "vector_score": 0.9093262693819045,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000161",
+                "vector_score": 0.8890242093174877,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000004",
+                "vector_score": 0.8837249354150837,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000125",
+                "vector_score": 0.8832314807479962,
+                "rerank_score": null
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 19.358,
+            "rerank_latency_ms": 0.001
+          },
+          {
+            "case_id": "target-011",
+            "question": "想了解组合逻辑电路设计",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000045"
+            ],
+            "ranked_ids": [
+              "G000045",
+              "G000044",
+              "G000058",
+              "G000002",
+              "G000004"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000045",
+                "vector_score": 0.9090700179787832,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000044",
+                "vector_score": 0.9048472525439276,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000058",
+                "vector_score": 0.8968157694720158,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000002",
+                "vector_score": 0.8918915637773334,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000004",
+                "vector_score": 0.8901422807829905,
+                "rerank_score": null
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 19.424,
+            "rerank_latency_ms": 0.001
+          },
+          {
+            "case_id": "target-012",
+            "question": "十六进制怎么学？",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000008"
+            ],
+            "ranked_ids": [
+              "G000008",
+              "G000009",
+              "G000011",
+              "G000007",
+              "G000019"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000008",
+                "vector_score": 0.8845641032629908,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000009",
+                "vector_score": 0.8665496217020777,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000011",
+                "vector_score": 0.8625688951789164,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000007",
+                "vector_score": 0.8585298300250656,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000019",
+                "vector_score": 0.8578213739876781,
+                "rerank_score": null
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 18.875,
+            "rerank_latency_ms": 0.001
+          },
+          {
+            "case_id": "target-013",
+            "question": "我想学习格雷码",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000038"
+            ],
+            "ranked_ids": [
+              "G000038",
+              "G000040",
+              "G000026",
+              "G000027",
+              "G000028"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000038",
+                "vector_score": 0.8934623786563319,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000040",
+                "vector_score": 0.8806803414610516,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000026",
+                "vector_score": 0.8731037153450693,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000027",
+                "vector_score": 0.8720857180234384,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000028",
+                "vector_score": 0.8714265761955091,
+                "rerank_score": null
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 115.216,
+            "rerank_latency_ms": 0.002
+          },
+          {
+            "case_id": "target-014",
+            "question": "什么是最小项表达式，学习顺序是什么？",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000122"
+            ],
+            "ranked_ids": [
+              "G000074",
+              "G000122",
+              "G000078",
+              "G000123",
+              "G000075"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000074",
+                "vector_score": 0.9048085201481003,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000122",
+                "vector_score": 0.9041296712278387,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000078",
+                "vector_score": 0.8978822342128445,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000123",
+                "vector_score": 0.8963959876455553,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000075",
+                "vector_score": 0.8947437002407502,
+                "rerank_score": null
+              }
+            ],
+            "top_1_correct": false,
+            "reciprocal_rank": 0.5,
+            "retrieval_latency_ms": 19.428,
+            "rerank_latency_ms": 0.001
+          },
+          {
+            "case_id": "target-015",
+            "question": "怎样学习卡诺图化简法？",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000083"
+            ],
+            "ranked_ids": [
+              "G000083",
+              "G000082",
+              "G000071",
+              "G000079",
+              "G000175"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000083",
+                "vector_score": 0.9139700223681596,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000082",
+                "vector_score": 0.9033063911486456,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000071",
+                "vector_score": 0.894269790538424,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000079",
+                "vector_score": 0.886488561223087,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000175",
+                "vector_score": 0.8847250242722373,
+                "rerank_score": null
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 18.743,
+            "rerank_latency_ms": 0.001
+          },
+          {
+            "case_id": "target-016",
+            "question": "我已学过原码，现在想学反码",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000027"
+            ],
+            "ranked_ids": [
+              "G000026",
+              "G000027",
+              "G000028",
+              "G000116",
+              "G000117"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000026",
+                "vector_score": 0.888394342273456,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000027",
+                "vector_score": 0.8867360586084685,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000028",
+                "vector_score": 0.878380050885133,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000116",
+                "vector_score": 0.8681129346278446,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000117",
+                "vector_score": 0.864410317992724,
+                "rerank_score": null
+              }
+            ],
+            "top_1_correct": false,
+            "reciprocal_rank": 0.5,
+            "retrieval_latency_ms": 19.473,
+            "rerank_latency_ms": 0.002
+          },
+          {
+            "case_id": "target-017",
+            "question": "想学一位全加器",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000163"
+            ],
+            "ranked_ids": [
+              "G000163",
+              "G000060",
+              "G000164",
+              "G000014",
+              "G000165"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000163",
+                "vector_score": 0.8976622687039724,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000060",
+                "vector_score": 0.8885524756364811,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000164",
+                "vector_score": 0.875032391175227,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000014",
+                "vector_score": 0.874906337648192,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000165",
+                "vector_score": 0.8674597369448199,
+                "rerank_score": null
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 19.022,
+            "rerank_latency_ms": 0.001
+          },
+          {
+            "case_id": "target-018",
+            "question": "逻辑代数的基本概念应该怎么学？",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000012"
+            ],
+            "ranked_ids": [
+              "G000067",
+              "G000006",
+              "G000101",
+              "G000012",
+              "G000085"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000067",
+                "vector_score": 0.9085431044325873,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000006",
+                "vector_score": 0.9084614851767308,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000101",
+                "vector_score": 0.9032754650201308,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000012",
+                "vector_score": 0.9027606786853867,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000085",
+                "vector_score": 0.9013497434531274,
+                "rerank_score": null
+              }
+            ],
+            "top_1_correct": false,
+            "reciprocal_rank": 0.25,
+            "retrieval_latency_ms": 19.215,
+            "rerank_latency_ms": 0.001
+          },
+          {
+            "case_id": "target-019",
+            "question": "触发器功能转换需要什么基础？",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000139"
+            ],
+            "ranked_ids": [
+              "G000139",
+              "G000098",
+              "G000097",
+              "G000131",
+              "G000132"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000139",
+                "vector_score": 0.8999145610150111,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000098",
+                "vector_score": 0.8951515916592142,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000097",
+                "vector_score": 0.890887153715099,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000131",
+                "vector_score": 0.8908091714710724,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000132",
+                "vector_score": 0.8892834911214329,
+                "rerank_score": null
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 18.893,
+            "rerank_latency_ms": 0.001
+          },
+          {
+            "case_id": "target-020",
+            "question": "我想学静态险象",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000170"
+            ],
+            "ranked_ids": [
+              "G000170",
+              "G000176",
+              "G000174",
+              "G000169",
+              "G000171"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000170",
+                "vector_score": 0.9057252780764081,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000176",
+                "vector_score": 0.8933292500120884,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000174",
+                "vector_score": 0.8908907353944816,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000169",
+                "vector_score": 0.8881203945740735,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000171",
+                "vector_score": 0.8861235088811185,
+                "rerank_score": null
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 19.424,
+            "rerank_latency_ms": 0.001
+          },
+          {
+            "case_id": "target-021",
+            "question": "What should I learn before studying Binary?",
+            "query_language": "en",
+            "acceptable_target_ids": [
+              "G000009"
+            ],
+            "ranked_ids": [
+              "G000009",
+              "G000020",
+              "G000008",
+              "G000019",
+              "G000054"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000009",
+                "vector_score": 0.8091838270989702,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000020",
+                "vector_score": 0.8081386462835555,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000008",
+                "vector_score": 0.7932762979667869,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000019",
+                "vector_score": 0.7921206722076408,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000054",
+                "vector_score": 0.7914694320430753,
+                "rerank_score": null
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 19.259,
+            "rerank_latency_ms": 0.001
+          },
+          {
+            "case_id": "target-022",
+            "question": "How do I learn Hexadecimal?",
+            "query_language": "en",
+            "acceptable_target_ids": [
+              "G000008"
+            ],
+            "ranked_ids": [
+              "G000008",
+              "G000011",
+              "G000020",
+              "G000026",
+              "G000115"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000008",
+                "vector_score": 0.8336441421509551,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000011",
+                "vector_score": 0.811901539404732,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000020",
+                "vector_score": 0.8010240191233085,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000026",
+                "vector_score": 0.8008242060077929,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000115",
+                "vector_score": 0.8004356316598462,
+                "rerank_score": null
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 117.897,
+            "rerank_latency_ms": 0.001
+          },
+          {
+            "case_id": "target-023",
+            "question": "I want to understand Hamming Code prerequisites",
+            "query_language": "en",
+            "acceptable_target_ids": [
+              "G000040"
+            ],
+            "ranked_ids": [
+              "G000040",
+              "G000026",
+              "G000028",
+              "G000054",
+              "G000115"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000040",
+                "vector_score": 0.8322434634449413,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000026",
+                "vector_score": 0.8112092804221074,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000028",
+                "vector_score": 0.8075943443199574,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000054",
+                "vector_score": 0.8073417415065589,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000115",
+                "vector_score": 0.8066344287425472,
+                "rerank_score": null
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 19.342,
+            "rerank_latency_ms": 0.001
+          },
+          {
+            "case_id": "target-024",
+            "question": "What comes before Karnaugh map construction?",
+            "query_language": "en",
+            "acceptable_target_ids": [
+              "G000079"
+            ],
+            "ranked_ids": [
+              "G000079",
+              "G000109",
+              "G000175",
+              "G000050",
+              "G000159"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000079",
+                "vector_score": 0.7504544167980138,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000109",
+                "vector_score": 0.6934419788480345,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000175",
+                "vector_score": 0.6934089377825472,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000050",
+                "vector_score": 0.6924542517014897,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000159",
+                "vector_score": 0.6912928990383452,
+                "rerank_score": null
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 19.441,
+            "rerank_latency_ms": 0.001
+          },
+          {
+            "case_id": "target-025",
+            "question": "Teach me Two's Complement",
+            "query_language": "en",
+            "acceptable_target_ids": [
+              "G000028"
+            ],
+            "ranked_ids": [
+              "G000028",
+              "G000027",
+              "G000031",
+              "G000020",
+              "G000107"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000028",
+                "vector_score": 0.8276000954204142,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000027",
+                "vector_score": 0.8114449218977927,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000031",
+                "vector_score": 0.8041986871841451,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000020",
+                "vector_score": 0.796897693138041,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000107",
+                "vector_score": 0.7951561784728074,
+                "rerank_score": null
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 18.851,
+            "rerank_latency_ms": 0.001
+          },
+          {
+            "case_id": "target-026",
+            "question": "I need a path for sign-magnitude representation",
+            "query_language": "en",
+            "acceptable_target_ids": [
+              "G000026"
+            ],
+            "ranked_ids": [
+              "G000026",
+              "G000040",
+              "G000034",
+              "G000025",
+              "G000050"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000026",
+                "vector_score": 0.8276074666274894,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000040",
+                "vector_score": 0.7941094619289807,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000034",
+                "vector_score": 0.7917296453717904,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000025",
+                "vector_score": 0.7894415110058969,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000050",
+                "vector_score": 0.7893006054268045,
+                "rerank_score": null
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 19.182,
+            "rerank_latency_ms": 0.001
+          },
+          {
+            "case_id": "target-027",
+            "question": "How should I study a priority encoder?",
+            "query_language": "en",
+            "acceptable_target_ids": [
+              "G000054"
+            ],
+            "ranked_ids": [
+              "G000054",
+              "G000019",
+              "G000107",
+              "G000028",
+              "G000058"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000054",
+                "vector_score": 0.8251683573118411,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000019",
+                "vector_score": 0.7865340377292515,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000107",
+                "vector_score": 0.7807743170331238,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000028",
+                "vector_score": 0.7806471076787853,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000058",
+                "vector_score": 0.7801475264154447,
+                "rerank_score": null
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 19.243,
+            "rerank_latency_ms": 0.001
+          },
+          {
+            "case_id": "target-028",
+            "question": "卡诺图 K-map 的前置知识是什么？",
+            "query_language": "mixed",
+            "acceptable_target_ids": [
+              "G000071",
+              "G000079"
+            ],
+            "ranked_ids": [
+              "G000079",
+              "G000175",
+              "G000071",
+              "G000080",
+              "G000081"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000079",
+                "vector_score": 0.8941735253804316,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000175",
+                "vector_score": 0.8815894900737801,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000071",
+                "vector_score": 0.8815579284019994,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000080",
+                "vector_score": 0.8781615371646533,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000081",
+                "vector_score": 0.8778802954069733,
+                "rerank_score": null
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 19.284,
+            "rerank_latency_ms": 0.001
+          },
+          {
+            "case_id": "target-029",
+            "question": "我想学 Boolean expression 的标准形式",
+            "query_language": "mixed",
+            "acceptable_target_ids": [
+              "G000119"
+            ],
+            "ranked_ids": [
+              "G000119",
+              "G000073",
+              "G000072",
+              "G000102",
+              "G000068"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000119",
+                "vector_score": 0.8961902226754964,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000073",
+                "vector_score": 0.8717146789897052,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000072",
+                "vector_score": 0.8679570167972391,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000102",
+                "vector_score": 0.8666497960119047,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000068",
+                "vector_score": 0.8657051314330791,
+                "rerank_score": null
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 19.532,
+            "rerank_latency_ms": 0.001
+          },
+          {
+            "case_id": "target-030",
+            "question": "Binary 二进制转换怎么入门？",
+            "query_language": "mixed",
+            "acceptable_target_ids": [
+              "G000020"
+            ],
+            "ranked_ids": [
+              "G000020",
+              "G000009",
+              "G000008",
+              "G000023",
+              "G000032"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000020",
+                "vector_score": 0.9037129635568922,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000009",
+                "vector_score": 0.8955623854050119,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000008",
+                "vector_score": 0.8675442823039535,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000023",
+                "vector_score": 0.8667520882766467,
+                "rerank_score": null
+              },
+              {
+                "concept_id": "G000032",
+                "vector_score": 0.8654744155894063,
+                "rerank_score": null
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 18.975,
+            "rerank_latency_ms": 0.001
+          }
+        ]
+      },
+      "token_overlap": {
+        "metrics": {
+          "top_1_accuracy": {
+            "numerator": 25,
+            "denominator": 30,
+            "value": 0.8333333333333334
+          },
+          "recall_at_k": {
+            "numerator": 30,
+            "denominator": 30,
+            "value": 1.0
+          },
+          "mrr_at_k": 0.911111,
+          "by_language": {
+            "zh": {
+              "top_1_accuracy": {
+                "numerator": 16,
+                "denominator": 20,
+                "value": 0.8
+              },
+              "recall_at_k": {
+                "numerator": 20,
+                "denominator": 20,
+                "value": 1.0
+              },
+              "mrr_at_k": 0.891667
+            },
+            "en": {
+              "top_1_accuracy": {
+                "numerator": 6,
+                "denominator": 7,
+                "value": 0.8571428571428571
+              },
+              "recall_at_k": {
+                "numerator": 7,
+                "denominator": 7,
+                "value": 1.0
+              },
+              "mrr_at_k": 0.928571
+            },
+            "mixed": {
+              "top_1_accuracy": {
+                "numerator": 3,
+                "denominator": 3,
+                "value": 1.0
+              },
+              "recall_at_k": {
+                "numerator": 3,
+                "denominator": 3,
+                "value": 1.0
+              },
+              "mrr_at_k": 1.0
+            }
+          }
+        },
+        "latency": {
+          "rerank_only": {
+            "count": 30,
+            "p50_ms": 0.075,
+            "p95_ms": 0.091
+          },
+          "retrieval_plus_rerank": {
+            "count": 30,
+            "p50_ms": 19.494,
+            "p95_ms": 119.87
+          }
+        },
+        "failures": [
+          {
+            "case_id": "target-003",
+            "question": "二进制要怎么入门？",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000009"
+            ],
+            "ranked_ids": [
+              "G000056",
+              "G000009",
+              "G000020",
+              "G000149",
+              "G000011"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000056",
+                "vector_score": 0.8660074007203226,
+                "rerank_score": 0.2
+              },
+              {
+                "concept_id": "G000009",
+                "vector_score": 0.8840832418232745,
+                "rerank_score": 0.15000000000000002
+              },
+              {
+                "concept_id": "G000020",
+                "vector_score": 0.8735950493744148,
+                "rerank_score": 0.15000000000000002
+              },
+              {
+                "concept_id": "G000149",
+                "vector_score": 0.8698909885754786,
+                "rerank_score": 0.15000000000000002
+              },
+              {
+                "concept_id": "G000011",
+                "vector_score": 0.8690798154609728,
+                "rerank_score": 0.15000000000000002
+              }
+            ],
+            "top_1_correct": false,
+            "reciprocal_rank": 0.5,
+            "retrieval_latency_ms": 117.213,
+            "rerank_latency_ms": 0.078
+          },
+          {
+            "case_id": "target-014",
+            "question": "什么是最小项表达式，学习顺序是什么？",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000122"
+            ],
+            "ranked_ids": [
+              "G000074",
+              "G000122",
+              "G000078",
+              "G000123",
+              "G000075"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000074",
+                "vector_score": 0.9048085201481003,
+                "rerank_score": 0.30000000000000004
+              },
+              {
+                "concept_id": "G000122",
+                "vector_score": 0.9041296712278387,
+                "rerank_score": 0.30000000000000004
+              },
+              {
+                "concept_id": "G000078",
+                "vector_score": 0.8978822342128445,
+                "rerank_score": 0.30000000000000004
+              },
+              {
+                "concept_id": "G000123",
+                "vector_score": 0.8963959876455553,
+                "rerank_score": 0.30000000000000004
+              },
+              {
+                "concept_id": "G000075",
+                "vector_score": 0.8947437002407502,
+                "rerank_score": 0.30000000000000004
+              }
+            ],
+            "top_1_correct": false,
+            "reciprocal_rank": 0.5,
+            "retrieval_latency_ms": 19.428,
+            "rerank_latency_ms": 0.076
+          },
+          {
+            "case_id": "target-016",
+            "question": "我已学过原码，现在想学反码",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000027"
+            ],
+            "ranked_ids": [
+              "G000026",
+              "G000027",
+              "G000028",
+              "G000116",
+              "G000033"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000026",
+                "vector_score": 0.888394342273456,
+                "rerank_score": 0.15000000000000002
+              },
+              {
+                "concept_id": "G000027",
+                "vector_score": 0.8867360586084685,
+                "rerank_score": 0.15000000000000002
+              },
+              {
+                "concept_id": "G000028",
+                "vector_score": 0.878380050885133,
+                "rerank_score": 0.1
+              },
+              {
+                "concept_id": "G000116",
+                "vector_score": 0.8681129346278446,
+                "rerank_score": 0.05
+              },
+              {
+                "concept_id": "G000033",
+                "vector_score": 0.8639156719862762,
+                "rerank_score": 0.05
+              }
+            ],
+            "top_1_correct": false,
+            "reciprocal_rank": 0.5,
+            "retrieval_latency_ms": 19.473,
+            "rerank_latency_ms": 0.065
+          },
+          {
+            "case_id": "target-018",
+            "question": "逻辑代数的基本概念应该怎么学？",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000012"
+            ],
+            "ranked_ids": [
+              "G000067",
+              "G000006",
+              "G000012",
+              "G000085",
+              "G000068"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000067",
+                "vector_score": 0.9085431044325873,
+                "rerank_score": 0.45
+              },
+              {
+                "concept_id": "G000006",
+                "vector_score": 0.9084614851767308,
+                "rerank_score": 0.45
+              },
+              {
+                "concept_id": "G000012",
+                "vector_score": 0.9027606786853867,
+                "rerank_score": 0.45
+              },
+              {
+                "concept_id": "G000085",
+                "vector_score": 0.9013497434531274,
+                "rerank_score": 0.45
+              },
+              {
+                "concept_id": "G000068",
+                "vector_score": 0.8918778980314259,
+                "rerank_score": 0.45
+              }
+            ],
+            "top_1_correct": false,
+            "reciprocal_rank": 0.3333333333333333,
+            "retrieval_latency_ms": 19.215,
+            "rerank_latency_ms": 0.088
+          },
+          {
+            "case_id": "target-025",
+            "question": "Teach me Two's Complement",
+            "query_language": "en",
+            "acceptable_target_ids": [
+              "G000028"
+            ],
+            "ranked_ids": [
+              "G000031",
+              "G000028",
+              "G000027",
+              "G000020",
+              "G000107"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000031",
+                "vector_score": 0.8041986871841451,
+                "rerank_score": 0.1
+              },
+              {
+                "concept_id": "G000028",
+                "vector_score": 0.8276000954204142,
+                "rerank_score": 0.05
+              },
+              {
+                "concept_id": "G000027",
+                "vector_score": 0.8114449218977927,
+                "rerank_score": 0.05
+              },
+              {
+                "concept_id": "G000020",
+                "vector_score": 0.796897693138041,
+                "rerank_score": 0.0
+              },
+              {
+                "concept_id": "G000107",
+                "vector_score": 0.7951561784728074,
+                "rerank_score": 0.0
+              }
+            ],
+            "top_1_correct": false,
+            "reciprocal_rank": 0.5,
+            "retrieval_latency_ms": 18.851,
+            "rerank_latency_ms": 0.068
+          }
+        ],
+        "cases": [
+          {
+            "case_id": "target-001",
+            "question": "想学卡诺图构成，应该先掌握什么？",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000079"
+            ],
+            "ranked_ids": [
+              "G000079",
+              "G000071",
+              "G000082",
+              "G000081",
+              "G000175"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000079",
+                "vector_score": 0.9038798554828872,
+                "rerank_score": 0.25
+              },
+              {
+                "concept_id": "G000071",
+                "vector_score": 0.8913992645179415,
+                "rerank_score": 0.15000000000000002
+              },
+              {
+                "concept_id": "G000082",
+                "vector_score": 0.8890181446299539,
+                "rerank_score": 0.15000000000000002
+              },
+              {
+                "concept_id": "G000081",
+                "vector_score": 0.8831956108938968,
+                "rerank_score": 0.15000000000000002
+              },
+              {
+                "concept_id": "G000175",
+                "vector_score": 0.8827936555530089,
+                "rerank_score": 0.15000000000000002
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 1090.504,
+            "rerank_latency_ms": 0.133
+          },
+          {
+            "case_id": "target-002",
+            "question": "我准备学习逻辑函数化简",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000064"
+            ],
+            "ranked_ids": [
+              "G000064",
+              "G000084",
+              "G000102",
+              "G000083",
+              "G000067"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000064",
+                "vector_score": 0.8987889425051238,
+                "rerank_score": 0.35000000000000003
+              },
+              {
+                "concept_id": "G000084",
+                "vector_score": 0.9065781114734573,
+                "rerank_score": 0.30000000000000004
+              },
+              {
+                "concept_id": "G000102",
+                "vector_score": 0.8949000622696806,
+                "rerank_score": 0.30000000000000004
+              },
+              {
+                "concept_id": "G000083",
+                "vector_score": 0.8933246547772071,
+                "rerank_score": 0.30000000000000004
+              },
+              {
+                "concept_id": "G000067",
+                "vector_score": 0.889832247136149,
+                "rerank_score": 0.30000000000000004
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 120.813,
+            "rerank_latency_ms": 0.085
+          },
+          {
+            "case_id": "target-003",
+            "question": "二进制要怎么入门？",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000009"
+            ],
+            "ranked_ids": [
+              "G000056",
+              "G000009",
+              "G000020",
+              "G000149",
+              "G000011"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000056",
+                "vector_score": 0.8660074007203226,
+                "rerank_score": 0.2
+              },
+              {
+                "concept_id": "G000009",
+                "vector_score": 0.8840832418232745,
+                "rerank_score": 0.15000000000000002
+              },
+              {
+                "concept_id": "G000020",
+                "vector_score": 0.8735950493744148,
+                "rerank_score": 0.15000000000000002
+              },
+              {
+                "concept_id": "G000149",
+                "vector_score": 0.8698909885754786,
+                "rerank_score": 0.15000000000000002
+              },
+              {
+                "concept_id": "G000011",
+                "vector_score": 0.8690798154609728,
+                "rerank_score": 0.15000000000000002
+              }
+            ],
+            "top_1_correct": false,
+            "reciprocal_rank": 0.5,
+            "retrieval_latency_ms": 117.213,
+            "rerank_latency_ms": 0.078
+          },
+          {
+            "case_id": "target-004",
+            "question": "我想了解补码",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000028"
+            ],
+            "ranked_ids": [
+              "G000028",
+              "G000027",
+              "G000030",
+              "G000031",
+              "G000109"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000028",
+                "vector_score": 0.8973600865206269,
+                "rerank_score": 0.1
+              },
+              {
+                "concept_id": "G000027",
+                "vector_score": 0.8834752740853262,
+                "rerank_score": 0.1
+              },
+              {
+                "concept_id": "G000030",
+                "vector_score": 0.8723914272113416,
+                "rerank_score": 0.1
+              },
+              {
+                "concept_id": "G000031",
+                "vector_score": 0.8686597718802743,
+                "rerank_score": 0.05
+              },
+              {
+                "concept_id": "G000109",
+                "vector_score": 0.8627674319949936,
+                "rerank_score": 0.05
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 113.672,
+            "rerank_latency_ms": 0.08
+          },
+          {
+            "case_id": "target-005",
+            "question": "如何学习海明码？",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000040"
+            ],
+            "ranked_ids": [
+              "G000040",
+              "G000034",
+              "G000038",
+              "G000039",
+              "G000026"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000040",
+                "vector_score": 0.8943769528296235,
+                "rerank_score": 0.15000000000000002
+              },
+              {
+                "concept_id": "G000034",
+                "vector_score": 0.8795412020587099,
+                "rerank_score": 0.15000000000000002
+              },
+              {
+                "concept_id": "G000038",
+                "vector_score": 0.877304666078792,
+                "rerank_score": 0.15000000000000002
+              },
+              {
+                "concept_id": "G000039",
+                "vector_score": 0.8703457570321155,
+                "rerank_score": 0.15000000000000002
+              },
+              {
+                "concept_id": "G000026",
+                "vector_score": 0.8687861770122419,
+                "rerank_score": 0.05
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 18.966,
+            "rerank_latency_ms": 0.064
+          },
+          {
+            "case_id": "target-006",
+            "question": "想学优先编码器，需要哪些基础？",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000054"
+            ],
+            "ranked_ids": [
+              "G000054",
+              "G000041",
+              "G000042",
+              "G000167",
+              "G000166"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000054",
+                "vector_score": 0.9200138100971338,
+                "rerank_score": 0.35000000000000003
+              },
+              {
+                "concept_id": "G000041",
+                "vector_score": 0.898450430370621,
+                "rerank_score": 0.35000000000000003
+              },
+              {
+                "concept_id": "G000042",
+                "vector_score": 0.8983290196694719,
+                "rerank_score": 0.35000000000000003
+              },
+              {
+                "concept_id": "G000167",
+                "vector_score": 0.8994038137084043,
+                "rerank_score": 0.25
+              },
+              {
+                "concept_id": "G000166",
+                "vector_score": 0.8978436572739098,
+                "rerank_score": 0.25
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 23.321,
+            "rerank_latency_ms": 0.074
+          },
+          {
+            "case_id": "target-007",
+            "question": "我想掌握带无关项的逻辑函数化简",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000084"
+            ],
+            "ranked_ids": [
+              "G000084",
+              "G000064",
+              "G000062",
+              "G000063",
+              "G000075"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000084",
+                "vector_score": 0.9213926623237034,
+                "rerank_score": 0.55
+              },
+              {
+                "concept_id": "G000064",
+                "vector_score": 0.8937464219665056,
+                "rerank_score": 0.55
+              },
+              {
+                "concept_id": "G000062",
+                "vector_score": 0.8869765801021224,
+                "rerank_score": 0.55
+              },
+              {
+                "concept_id": "G000063",
+                "vector_score": 0.8858690873087225,
+                "rerank_score": 0.55
+              },
+              {
+                "concept_id": "G000075",
+                "vector_score": 0.8835888076068356,
+                "rerank_score": 0.4
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 19.926,
+            "rerank_latency_ms": 0.091
+          },
+          {
+            "case_id": "target-008",
+            "question": "边沿D触发器之前学什么？",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000138"
+            ],
+            "ranked_ids": [
+              "G000138",
+              "G000136",
+              "G000137",
+              "G000143",
+              "G000140"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000138",
+                "vector_score": 0.9160277940220797,
+                "rerank_score": 0.35000000000000003
+              },
+              {
+                "concept_id": "G000136",
+                "vector_score": 0.8968727114922302,
+                "rerank_score": 0.30000000000000004
+              },
+              {
+                "concept_id": "G000137",
+                "vector_score": 0.8866085016483951,
+                "rerank_score": 0.30000000000000004
+              },
+              {
+                "concept_id": "G000143",
+                "vector_score": 0.8820874780447908,
+                "rerank_score": 0.30000000000000004
+              },
+              {
+                "concept_id": "G000140",
+                "vector_score": 0.8925408707522171,
+                "rerank_score": 0.25
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 23.686,
+            "rerank_latency_ms": 0.075
+          },
+          {
+            "case_id": "target-009",
+            "question": "如何分析同步时序逻辑电路？",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000048"
+            ],
+            "ranked_ids": [
+              "G000048",
+              "G000151",
+              "G000184",
+              "G000053",
+              "G000179"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000048",
+                "vector_score": 0.9146651965733247,
+                "rerank_score": 0.5
+              },
+              {
+                "concept_id": "G000151",
+                "vector_score": 0.9027112134875142,
+                "rerank_score": 0.5
+              },
+              {
+                "concept_id": "G000184",
+                "vector_score": 0.8999247073765736,
+                "rerank_score": 0.45
+              },
+              {
+                "concept_id": "G000053",
+                "vector_score": 0.893282031020092,
+                "rerank_score": 0.45
+              },
+              {
+                "concept_id": "G000179",
+                "vector_score": 0.891263989423676,
+                "rerank_score": 0.45
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 118.535,
+            "rerank_latency_ms": 0.079
+          },
+          {
+            "case_id": "target-010",
+            "question": "我要学习用数据选择器实现逻辑函数",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000059"
+            ],
+            "ranked_ids": [
+              "G000059",
+              "G000058",
+              "G000004",
+              "G000002",
+              "G000161"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000059",
+                "vector_score": 0.9141607918308824,
+                "rerank_score": 0.55
+              },
+              {
+                "concept_id": "G000058",
+                "vector_score": 0.9093262693819045,
+                "rerank_score": 0.55
+              },
+              {
+                "concept_id": "G000004",
+                "vector_score": 0.8837249354150837,
+                "rerank_score": 0.55
+              },
+              {
+                "concept_id": "G000002",
+                "vector_score": 0.8819336133334633,
+                "rerank_score": 0.55
+              },
+              {
+                "concept_id": "G000161",
+                "vector_score": 0.8890242093174877,
+                "rerank_score": 0.35000000000000003
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 19.358,
+            "rerank_latency_ms": 0.09
+          },
+          {
+            "case_id": "target-011",
+            "question": "想了解组合逻辑电路设计",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000045"
+            ],
+            "ranked_ids": [
+              "G000045",
+              "G000002",
+              "G000004",
+              "G000061",
+              "G000044"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000045",
+                "vector_score": 0.9090700179787832,
+                "rerank_score": 0.4
+              },
+              {
+                "concept_id": "G000002",
+                "vector_score": 0.8918915637773334,
+                "rerank_score": 0.4
+              },
+              {
+                "concept_id": "G000004",
+                "vector_score": 0.8901422807829905,
+                "rerank_score": 0.4
+              },
+              {
+                "concept_id": "G000061",
+                "vector_score": 0.8871397116858858,
+                "rerank_score": 0.4
+              },
+              {
+                "concept_id": "G000044",
+                "vector_score": 0.9048472525439276,
+                "rerank_score": 0.30000000000000004
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 19.424,
+            "rerank_latency_ms": 0.091
+          },
+          {
+            "case_id": "target-012",
+            "question": "十六进制怎么学？",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000008"
+            ],
+            "ranked_ids": [
+              "G000008",
+              "G000009",
+              "G000011",
+              "G000023",
+              "G000007"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000008",
+                "vector_score": 0.8845641032629908,
+                "rerank_score": 0.2
+              },
+              {
+                "concept_id": "G000009",
+                "vector_score": 0.8665496217020777,
+                "rerank_score": 0.2
+              },
+              {
+                "concept_id": "G000011",
+                "vector_score": 0.8625688951789164,
+                "rerank_score": 0.2
+              },
+              {
+                "concept_id": "G000023",
+                "vector_score": 0.8551595525718353,
+                "rerank_score": 0.15000000000000002
+              },
+              {
+                "concept_id": "G000007",
+                "vector_score": 0.8585298300250656,
+                "rerank_score": 0.1
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 18.875,
+            "rerank_latency_ms": 0.075
+          },
+          {
+            "case_id": "target-013",
+            "question": "我想学习格雷码",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000038"
+            ],
+            "ranked_ids": [
+              "G000038",
+              "G000040",
+              "G000026",
+              "G000027",
+              "G000028"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000038",
+                "vector_score": 0.8934623786563319,
+                "rerank_score": 0.15000000000000002
+              },
+              {
+                "concept_id": "G000040",
+                "vector_score": 0.8806803414610516,
+                "rerank_score": 0.15000000000000002
+              },
+              {
+                "concept_id": "G000026",
+                "vector_score": 0.8731037153450693,
+                "rerank_score": 0.05
+              },
+              {
+                "concept_id": "G000027",
+                "vector_score": 0.8720857180234384,
+                "rerank_score": 0.05
+              },
+              {
+                "concept_id": "G000028",
+                "vector_score": 0.8714265761955091,
+                "rerank_score": 0.05
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 115.216,
+            "rerank_latency_ms": 0.066
+          },
+          {
+            "case_id": "target-014",
+            "question": "什么是最小项表达式，学习顺序是什么？",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000122"
+            ],
+            "ranked_ids": [
+              "G000074",
+              "G000122",
+              "G000078",
+              "G000123",
+              "G000075"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000074",
+                "vector_score": 0.9048085201481003,
+                "rerank_score": 0.30000000000000004
+              },
+              {
+                "concept_id": "G000122",
+                "vector_score": 0.9041296712278387,
+                "rerank_score": 0.30000000000000004
+              },
+              {
+                "concept_id": "G000078",
+                "vector_score": 0.8978822342128445,
+                "rerank_score": 0.30000000000000004
+              },
+              {
+                "concept_id": "G000123",
+                "vector_score": 0.8963959876455553,
+                "rerank_score": 0.30000000000000004
+              },
+              {
+                "concept_id": "G000075",
+                "vector_score": 0.8947437002407502,
+                "rerank_score": 0.30000000000000004
+              }
+            ],
+            "top_1_correct": false,
+            "reciprocal_rank": 0.5,
+            "retrieval_latency_ms": 19.428,
+            "rerank_latency_ms": 0.076
+          },
+          {
+            "case_id": "target-015",
+            "question": "怎样学习卡诺图化简法？",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000083"
+            ],
+            "ranked_ids": [
+              "G000083",
+              "G000081",
+              "G000064",
+              "G000072",
+              "G000082"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000083",
+                "vector_score": 0.9139700223681596,
+                "rerank_score": 0.30000000000000004
+              },
+              {
+                "concept_id": "G000081",
+                "vector_score": 0.883869056905413,
+                "rerank_score": 0.30000000000000004
+              },
+              {
+                "concept_id": "G000064",
+                "vector_score": 0.8832781580969119,
+                "rerank_score": 0.30000000000000004
+              },
+              {
+                "concept_id": "G000072",
+                "vector_score": 0.8793923803838894,
+                "rerank_score": 0.30000000000000004
+              },
+              {
+                "concept_id": "G000082",
+                "vector_score": 0.9033063911486456,
+                "rerank_score": 0.25
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 18.743,
+            "rerank_latency_ms": 0.083
+          },
+          {
+            "case_id": "target-016",
+            "question": "我已学过原码，现在想学反码",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000027"
+            ],
+            "ranked_ids": [
+              "G000026",
+              "G000027",
+              "G000028",
+              "G000116",
+              "G000033"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000026",
+                "vector_score": 0.888394342273456,
+                "rerank_score": 0.15000000000000002
+              },
+              {
+                "concept_id": "G000027",
+                "vector_score": 0.8867360586084685,
+                "rerank_score": 0.15000000000000002
+              },
+              {
+                "concept_id": "G000028",
+                "vector_score": 0.878380050885133,
+                "rerank_score": 0.1
+              },
+              {
+                "concept_id": "G000116",
+                "vector_score": 0.8681129346278446,
+                "rerank_score": 0.05
+              },
+              {
+                "concept_id": "G000033",
+                "vector_score": 0.8639156719862762,
+                "rerank_score": 0.05
+              }
+            ],
+            "top_1_correct": false,
+            "reciprocal_rank": 0.5,
+            "retrieval_latency_ms": 19.473,
+            "rerank_latency_ms": 0.065
+          },
+          {
+            "case_id": "target-017",
+            "question": "想学一位全加器",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000163"
+            ],
+            "ranked_ids": [
+              "G000163",
+              "G000060",
+              "G000164",
+              "G000165",
+              "G000014"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000163",
+                "vector_score": 0.8976622687039724,
+                "rerank_score": 0.25
+              },
+              {
+                "concept_id": "G000060",
+                "vector_score": 0.8885524756364811,
+                "rerank_score": 0.25
+              },
+              {
+                "concept_id": "G000164",
+                "vector_score": 0.875032391175227,
+                "rerank_score": 0.25
+              },
+              {
+                "concept_id": "G000165",
+                "vector_score": 0.8674597369448199,
+                "rerank_score": 0.25
+              },
+              {
+                "concept_id": "G000014",
+                "vector_score": 0.874906337648192,
+                "rerank_score": 0.15000000000000002
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 19.022,
+            "rerank_latency_ms": 0.064
+          },
+          {
+            "case_id": "target-018",
+            "question": "逻辑代数的基本概念应该怎么学？",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000012"
+            ],
+            "ranked_ids": [
+              "G000067",
+              "G000006",
+              "G000012",
+              "G000085",
+              "G000068"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000067",
+                "vector_score": 0.9085431044325873,
+                "rerank_score": 0.45
+              },
+              {
+                "concept_id": "G000006",
+                "vector_score": 0.9084614851767308,
+                "rerank_score": 0.45
+              },
+              {
+                "concept_id": "G000012",
+                "vector_score": 0.9027606786853867,
+                "rerank_score": 0.45
+              },
+              {
+                "concept_id": "G000085",
+                "vector_score": 0.9013497434531274,
+                "rerank_score": 0.45
+              },
+              {
+                "concept_id": "G000068",
+                "vector_score": 0.8918778980314259,
+                "rerank_score": 0.45
+              }
+            ],
+            "top_1_correct": false,
+            "reciprocal_rank": 0.3333333333333333,
+            "retrieval_latency_ms": 19.215,
+            "rerank_latency_ms": 0.088
+          },
+          {
+            "case_id": "target-019",
+            "question": "触发器功能转换需要什么基础？",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000139"
+            ],
+            "ranked_ids": [
+              "G000139",
+              "G000098",
+              "G000097",
+              "G000131",
+              "G000132"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000139",
+                "vector_score": 0.8999145610150111,
+                "rerank_score": 0.4
+              },
+              {
+                "concept_id": "G000098",
+                "vector_score": 0.8951515916592142,
+                "rerank_score": 0.4
+              },
+              {
+                "concept_id": "G000097",
+                "vector_score": 0.890887153715099,
+                "rerank_score": 0.4
+              },
+              {
+                "concept_id": "G000131",
+                "vector_score": 0.8908091714710724,
+                "rerank_score": 0.4
+              },
+              {
+                "concept_id": "G000132",
+                "vector_score": 0.8892834911214329,
+                "rerank_score": 0.4
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 18.893,
+            "rerank_latency_ms": 0.077
+          },
+          {
+            "case_id": "target-020",
+            "question": "我想学静态险象",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000170"
+            ],
+            "ranked_ids": [
+              "G000170",
+              "G000176",
+              "G000174",
+              "G000118",
+              "G000171"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000170",
+                "vector_score": 0.9057252780764081,
+                "rerank_score": 0.2
+              },
+              {
+                "concept_id": "G000176",
+                "vector_score": 0.8933292500120884,
+                "rerank_score": 0.2
+              },
+              {
+                "concept_id": "G000174",
+                "vector_score": 0.8908907353944816,
+                "rerank_score": 0.2
+              },
+              {
+                "concept_id": "G000118",
+                "vector_score": 0.8757115485823755,
+                "rerank_score": 0.2
+              },
+              {
+                "concept_id": "G000171",
+                "vector_score": 0.8861235088811185,
+                "rerank_score": 0.15000000000000002
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 19.424,
+            "rerank_latency_ms": 0.06
+          },
+          {
+            "case_id": "target-021",
+            "question": "What should I learn before studying Binary?",
+            "query_language": "en",
+            "acceptable_target_ids": [
+              "G000009"
+            ],
+            "ranked_ids": [
+              "G000009",
+              "G000020",
+              "G000008",
+              "G000019",
+              "G000054"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000009",
+                "vector_score": 0.8091838270989702,
+                "rerank_score": 0.05
+              },
+              {
+                "concept_id": "G000020",
+                "vector_score": 0.8081386462835555,
+                "rerank_score": 0.05
+              },
+              {
+                "concept_id": "G000008",
+                "vector_score": 0.7932762979667869,
+                "rerank_score": 0.0
+              },
+              {
+                "concept_id": "G000019",
+                "vector_score": 0.7921206722076408,
+                "rerank_score": 0.0
+              },
+              {
+                "concept_id": "G000054",
+                "vector_score": 0.7914694320430753,
+                "rerank_score": 0.0
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 19.259,
+            "rerank_latency_ms": 0.077
+          },
+          {
+            "case_id": "target-022",
+            "question": "How do I learn Hexadecimal?",
+            "query_language": "en",
+            "acceptable_target_ids": [
+              "G000008"
+            ],
+            "ranked_ids": [
+              "G000008",
+              "G000011",
+              "G000020",
+              "G000026",
+              "G000115"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000008",
+                "vector_score": 0.8336441421509551,
+                "rerank_score": 0.05
+              },
+              {
+                "concept_id": "G000011",
+                "vector_score": 0.811901539404732,
+                "rerank_score": 0.0
+              },
+              {
+                "concept_id": "G000020",
+                "vector_score": 0.8010240191233085,
+                "rerank_score": 0.0
+              },
+              {
+                "concept_id": "G000026",
+                "vector_score": 0.8008242060077929,
+                "rerank_score": 0.0
+              },
+              {
+                "concept_id": "G000115",
+                "vector_score": 0.8004356316598462,
+                "rerank_score": 0.0
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 117.897,
+            "rerank_latency_ms": 0.075
+          },
+          {
+            "case_id": "target-023",
+            "question": "I want to understand Hamming Code prerequisites",
+            "query_language": "en",
+            "acceptable_target_ids": [
+              "G000040"
+            ],
+            "ranked_ids": [
+              "G000040",
+              "G000054",
+              "G000026",
+              "G000028",
+              "G000115"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000040",
+                "vector_score": 0.8322434634449413,
+                "rerank_score": 0.1
+              },
+              {
+                "concept_id": "G000054",
+                "vector_score": 0.8073417415065589,
+                "rerank_score": 0.05
+              },
+              {
+                "concept_id": "G000026",
+                "vector_score": 0.8112092804221074,
+                "rerank_score": 0.0
+              },
+              {
+                "concept_id": "G000028",
+                "vector_score": 0.8075943443199574,
+                "rerank_score": 0.0
+              },
+              {
+                "concept_id": "G000115",
+                "vector_score": 0.8066344287425472,
+                "rerank_score": 0.0
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 19.342,
+            "rerank_latency_ms": 0.071
+          },
+          {
+            "case_id": "target-024",
+            "question": "What comes before Karnaugh map construction?",
+            "query_language": "en",
+            "acceptable_target_ids": [
+              "G000079"
+            ],
+            "ranked_ids": [
+              "G000079",
+              "G000109",
+              "G000175",
+              "G000050",
+              "G000159"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000079",
+                "vector_score": 0.7504544167980138,
+                "rerank_score": 0.15000000000000002
+              },
+              {
+                "concept_id": "G000109",
+                "vector_score": 0.6934419788480345,
+                "rerank_score": 0.0
+              },
+              {
+                "concept_id": "G000175",
+                "vector_score": 0.6934089377825472,
+                "rerank_score": 0.0
+              },
+              {
+                "concept_id": "G000050",
+                "vector_score": 0.6924542517014897,
+                "rerank_score": 0.0
+              },
+              {
+                "concept_id": "G000159",
+                "vector_score": 0.6912928990383452,
+                "rerank_score": 0.0
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 19.441,
+            "rerank_latency_ms": 0.074
+          },
+          {
+            "case_id": "target-025",
+            "question": "Teach me Two's Complement",
+            "query_language": "en",
+            "acceptable_target_ids": [
+              "G000028"
+            ],
+            "ranked_ids": [
+              "G000031",
+              "G000028",
+              "G000027",
+              "G000020",
+              "G000107"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000031",
+                "vector_score": 0.8041986871841451,
+                "rerank_score": 0.1
+              },
+              {
+                "concept_id": "G000028",
+                "vector_score": 0.8276000954204142,
+                "rerank_score": 0.05
+              },
+              {
+                "concept_id": "G000027",
+                "vector_score": 0.8114449218977927,
+                "rerank_score": 0.05
+              },
+              {
+                "concept_id": "G000020",
+                "vector_score": 0.796897693138041,
+                "rerank_score": 0.0
+              },
+              {
+                "concept_id": "G000107",
+                "vector_score": 0.7951561784728074,
+                "rerank_score": 0.0
+              }
+            ],
+            "top_1_correct": false,
+            "reciprocal_rank": 0.5,
+            "retrieval_latency_ms": 18.851,
+            "rerank_latency_ms": 0.068
+          },
+          {
+            "case_id": "target-026",
+            "question": "I need a path for sign-magnitude representation",
+            "query_language": "en",
+            "acceptable_target_ids": [
+              "G000026"
+            ],
+            "ranked_ids": [
+              "G000026",
+              "G000040",
+              "G000034",
+              "G000025",
+              "G000050"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000026",
+                "vector_score": 0.8276074666274894,
+                "rerank_score": 0.1
+              },
+              {
+                "concept_id": "G000040",
+                "vector_score": 0.7941094619289807,
+                "rerank_score": 0.0
+              },
+              {
+                "concept_id": "G000034",
+                "vector_score": 0.7917296453717904,
+                "rerank_score": 0.0
+              },
+              {
+                "concept_id": "G000025",
+                "vector_score": 0.7894415110058969,
+                "rerank_score": 0.0
+              },
+              {
+                "concept_id": "G000050",
+                "vector_score": 0.7893006054268045,
+                "rerank_score": 0.0
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 19.182,
+            "rerank_latency_ms": 0.064
+          },
+          {
+            "case_id": "target-027",
+            "question": "How should I study a priority encoder?",
+            "query_language": "en",
+            "acceptable_target_ids": [
+              "G000054"
+            ],
+            "ranked_ids": [
+              "G000054",
+              "G000019",
+              "G000107",
+              "G000028",
+              "G000058"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000054",
+                "vector_score": 0.8251683573118411,
+                "rerank_score": 0.1
+              },
+              {
+                "concept_id": "G000019",
+                "vector_score": 0.7865340377292515,
+                "rerank_score": 0.0
+              },
+              {
+                "concept_id": "G000107",
+                "vector_score": 0.7807743170331238,
+                "rerank_score": 0.0
+              },
+              {
+                "concept_id": "G000028",
+                "vector_score": 0.7806471076787853,
+                "rerank_score": 0.0
+              },
+              {
+                "concept_id": "G000058",
+                "vector_score": 0.7801475264154447,
+                "rerank_score": 0.0
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 19.243,
+            "rerank_latency_ms": 0.075
+          },
+          {
+            "case_id": "target-028",
+            "question": "卡诺图 K-map 的前置知识是什么？",
+            "query_language": "mixed",
+            "acceptable_target_ids": [
+              "G000071",
+              "G000079"
+            ],
+            "ranked_ids": [
+              "G000079",
+              "G000071",
+              "G000080",
+              "G000081",
+              "G000082"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000079",
+                "vector_score": 0.8941735253804316,
+                "rerank_score": 0.5
+              },
+              {
+                "concept_id": "G000071",
+                "vector_score": 0.8815579284019994,
+                "rerank_score": 0.4
+              },
+              {
+                "concept_id": "G000080",
+                "vector_score": 0.8781615371646533,
+                "rerank_score": 0.4
+              },
+              {
+                "concept_id": "G000081",
+                "vector_score": 0.8778802954069733,
+                "rerank_score": 0.4
+              },
+              {
+                "concept_id": "G000082",
+                "vector_score": 0.8777543995711207,
+                "rerank_score": 0.4
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 19.284,
+            "rerank_latency_ms": 0.068
+          },
+          {
+            "case_id": "target-029",
+            "question": "我想学 Boolean expression 的标准形式",
+            "query_language": "mixed",
+            "acceptable_target_ids": [
+              "G000119"
+            ],
+            "ranked_ids": [
+              "G000119",
+              "G000068",
+              "G000070",
+              "G000064",
+              "G000073"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000119",
+                "vector_score": 0.8961902226754964,
+                "rerank_score": 0.35000000000000003
+              },
+              {
+                "concept_id": "G000068",
+                "vector_score": 0.8657051314330791,
+                "rerank_score": 0.25
+              },
+              {
+                "concept_id": "G000070",
+                "vector_score": 0.865504887455047,
+                "rerank_score": 0.25
+              },
+              {
+                "concept_id": "G000064",
+                "vector_score": 0.8646163805013928,
+                "rerank_score": 0.25
+              },
+              {
+                "concept_id": "G000073",
+                "vector_score": 0.8717146789897052,
+                "rerank_score": 0.1
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 19.532,
+            "rerank_latency_ms": 0.087
+          },
+          {
+            "case_id": "target-030",
+            "question": "Binary 二进制转换怎么入门？",
+            "query_language": "mixed",
+            "acceptable_target_ids": [
+              "G000020"
+            ],
+            "ranked_ids": [
+              "G000020",
+              "G000023",
+              "G000032",
+              "G000022",
+              "G000009"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000020",
+                "vector_score": 0.9037129635568922,
+                "rerank_score": 0.30000000000000004
+              },
+              {
+                "concept_id": "G000023",
+                "vector_score": 0.8667520882766467,
+                "rerank_score": 0.25
+              },
+              {
+                "concept_id": "G000032",
+                "vector_score": 0.8654744155894063,
+                "rerank_score": 0.25
+              },
+              {
+                "concept_id": "G000022",
+                "vector_score": 0.8638282286235978,
+                "rerank_score": 0.25
+              },
+              {
+                "concept_id": "G000009",
+                "vector_score": 0.8955623854050119,
+                "rerank_score": 0.2
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 18.975,
+            "rerank_latency_ms": 0.065
+          }
+        ]
+      },
+      "cross_encoder": {
+        "metrics": {
+          "top_1_accuracy": {
+            "numerator": 25,
+            "denominator": 30,
+            "value": 0.8333333333333334
+          },
+          "recall_at_k": {
+            "numerator": 30,
+            "denominator": 30,
+            "value": 1.0
+          },
+          "mrr_at_k": 0.897222,
+          "by_language": {
+            "zh": {
+              "top_1_accuracy": {
+                "numerator": 18,
+                "denominator": 20,
+                "value": 0.9
+              },
+              "recall_at_k": {
+                "numerator": 20,
+                "denominator": 20,
+                "value": 1.0
+              },
+              "mrr_at_k": 0.941667
+            },
+            "en": {
+              "top_1_accuracy": {
+                "numerator": 4,
+                "denominator": 7,
+                "value": 0.5714285714285714
+              },
+              "recall_at_k": {
+                "numerator": 7,
+                "denominator": 7,
+                "value": 1.0
+              },
+              "mrr_at_k": 0.72619
+            },
+            "mixed": {
+              "top_1_accuracy": {
+                "numerator": 3,
+                "denominator": 3,
+                "value": 1.0
+              },
+              "recall_at_k": {
+                "numerator": 3,
+                "denominator": 3,
+                "value": 1.0
+              },
+              "mrr_at_k": 1.0
+            }
+          }
+        },
+        "latency": {
+          "rerank_only": {
+            "count": 30,
+            "p50_ms": 31.34,
+            "p95_ms": 136.956
+          },
+          "retrieval_plus_rerank": {
+            "count": 30,
+            "p50_ms": 55.147,
+            "p95_ms": 256.149
+          }
+        },
+        "failures": [
+          {
+            "case_id": "target-003",
+            "question": "二进制要怎么入门？",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000009"
+            ],
+            "ranked_ids": [
+              "G000056",
+              "G000149",
+              "G000009",
+              "G000032",
+              "G000020"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000056",
+                "vector_score": 0.8660074007203226,
+                "rerank_score": 0.01270773634314537
+              },
+              {
+                "concept_id": "G000149",
+                "vector_score": 0.8698909885754786,
+                "rerank_score": 0.0036058330442756414
+              },
+              {
+                "concept_id": "G000009",
+                "vector_score": 0.8840832418232745,
+                "rerank_score": 0.003326230449602008
+              },
+              {
+                "concept_id": "G000032",
+                "vector_score": 0.8661365581854399,
+                "rerank_score": 0.001561400480568409
+              },
+              {
+                "concept_id": "G000020",
+                "vector_score": 0.8735950493744148,
+                "rerank_score": 0.0007697321707382798
+              }
+            ],
+            "top_1_correct": false,
+            "reciprocal_rank": 0.3333333333333333,
+            "retrieval_latency_ms": 117.213,
+            "rerank_latency_ms": 128.996
+          },
+          {
+            "case_id": "target-016",
+            "question": "我已学过原码，现在想学反码",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000027"
+            ],
+            "ranked_ids": [
+              "G000026",
+              "G000027",
+              "G000028",
+              "G000040",
+              "G000116"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000026",
+                "vector_score": 0.888394342273456,
+                "rerank_score": 0.03253123164176941
+              },
+              {
+                "concept_id": "G000027",
+                "vector_score": 0.8867360586084685,
+                "rerank_score": 0.026770031079649925
+              },
+              {
+                "concept_id": "G000028",
+                "vector_score": 0.878380050885133,
+                "rerank_score": 0.0068696895614266396
+              },
+              {
+                "concept_id": "G000040",
+                "vector_score": 0.8608636584894265,
+                "rerank_score": 0.003669603494927287
+              },
+              {
+                "concept_id": "G000116",
+                "vector_score": 0.8681129346278446,
+                "rerank_score": 0.00230624177493155
+              }
+            ],
+            "top_1_correct": false,
+            "reciprocal_rank": 0.5,
+            "retrieval_latency_ms": 19.473,
+            "rerank_latency_ms": 23.741
+          },
+          {
+            "case_id": "target-022",
+            "question": "How do I learn Hexadecimal?",
+            "query_language": "en",
+            "acceptable_target_ids": [
+              "G000008"
+            ],
+            "ranked_ids": [
+              "G000011",
+              "G000117",
+              "G000032",
+              "G000008",
+              "G000019"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000011",
+                "vector_score": 0.811901539404732,
+                "rerank_score": 0.10066608339548111
+              },
+              {
+                "concept_id": "G000117",
+                "vector_score": 0.800387313122211,
+                "rerank_score": 0.06885956972837448
+              },
+              {
+                "concept_id": "G000032",
+                "vector_score": 0.7998270653254783,
+                "rerank_score": 0.051458850502967834
+              },
+              {
+                "concept_id": "G000008",
+                "vector_score": 0.8336441421509551,
+                "rerank_score": 0.034769054502248764
+              },
+              {
+                "concept_id": "G000019",
+                "vector_score": 0.798972045530133,
+                "rerank_score": 0.025612611323595047
+              }
+            ],
+            "top_1_correct": false,
+            "reciprocal_rank": 0.25,
+            "retrieval_latency_ms": 117.897,
+            "rerank_latency_ms": 37.472
+          },
+          {
+            "case_id": "target-023",
+            "question": "I want to understand Hamming Code prerequisites",
+            "query_language": "en",
+            "acceptable_target_ids": [
+              "G000040"
+            ],
+            "ranked_ids": [
+              "G000115",
+              "G000040",
+              "G000178",
+              "G000028",
+              "G000026"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000115",
+                "vector_score": 0.8066344287425472,
+                "rerank_score": 0.08387362211942673
+              },
+              {
+                "concept_id": "G000040",
+                "vector_score": 0.8322434634449413,
+                "rerank_score": 0.05121389403939247
+              },
+              {
+                "concept_id": "G000178",
+                "vector_score": 0.804551139766383,
+                "rerank_score": 0.041036829352378845
+              },
+              {
+                "concept_id": "G000028",
+                "vector_score": 0.8075943443199574,
+                "rerank_score": 0.007215230725705624
+              },
+              {
+                "concept_id": "G000026",
+                "vector_score": 0.8112092804221074,
+                "rerank_score": 0.005857164040207863
+              }
+            ],
+            "top_1_correct": false,
+            "reciprocal_rank": 0.5,
+            "retrieval_latency_ms": 19.342,
+            "rerank_latency_ms": 26.341
+          },
+          {
+            "case_id": "target-026",
+            "question": "I need a path for sign-magnitude representation",
+            "query_language": "en",
+            "acceptable_target_ids": [
+              "G000026"
+            ],
+            "ranked_ids": [
+              "G000025",
+              "G000033",
+              "G000026",
+              "G000032",
+              "G000050"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000025",
+                "vector_score": 0.7894415110058969,
+                "rerank_score": 0.02919716201722622
+              },
+              {
+                "concept_id": "G000033",
+                "vector_score": 0.7862644232502767,
+                "rerank_score": 0.02647344022989273
+              },
+              {
+                "concept_id": "G000026",
+                "vector_score": 0.8276074666274894,
+                "rerank_score": 0.016901422291994095
+              },
+              {
+                "concept_id": "G000032",
+                "vector_score": 0.787644992116526,
+                "rerank_score": 0.00951960776001215
+              },
+              {
+                "concept_id": "G000050",
+                "vector_score": 0.7893006054268045,
+                "rerank_score": 0.00029558996902778745
+              }
+            ],
+            "top_1_correct": false,
+            "reciprocal_rank": 0.3333333333333333,
+            "retrieval_latency_ms": 19.182,
+            "rerank_latency_ms": 26.6
+          }
+        ],
+        "cases": [
+          {
+            "case_id": "target-001",
+            "question": "想学卡诺图构成，应该先掌握什么？",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000079"
+            ],
+            "ranked_ids": [
+              "G000079",
+              "G000082",
+              "G000071",
+              "G000081",
+              "G000083"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000079",
+                "vector_score": 0.9038798554828872,
+                "rerank_score": 0.49026474356651306
+              },
+              {
+                "concept_id": "G000082",
+                "vector_score": 0.8890181446299539,
+                "rerank_score": 0.03104296140372753
+              },
+              {
+                "concept_id": "G000071",
+                "vector_score": 0.8913992645179415,
+                "rerank_score": 0.022437140345573425
+              },
+              {
+                "concept_id": "G000081",
+                "vector_score": 0.8831956108938968,
+                "rerank_score": 0.02148551121354103
+              },
+              {
+                "concept_id": "G000083",
+                "vector_score": 0.8818454027743284,
+                "rerank_score": 0.01750798337161541
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 1090.504,
+            "rerank_latency_ms": 189.741
+          },
+          {
+            "case_id": "target-002",
+            "question": "我准备学习逻辑函数化简",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000064"
+            ],
+            "ranked_ids": [
+              "G000064",
+              "G000084",
+              "G000083",
+              "G000113",
+              "G000077"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000064",
+                "vector_score": 0.8987889425051238,
+                "rerank_score": 0.6713800430297852
+              },
+              {
+                "concept_id": "G000084",
+                "vector_score": 0.9065781114734573,
+                "rerank_score": 0.5437358617782593
+              },
+              {
+                "concept_id": "G000083",
+                "vector_score": 0.8933246547772071,
+                "rerank_score": 0.22273533046245575
+              },
+              {
+                "concept_id": "G000113",
+                "vector_score": 0.8888910832114457,
+                "rerank_score": 0.09438201785087585
+              },
+              {
+                "concept_id": "G000077",
+                "vector_score": 0.8898109810073058,
+                "rerank_score": 0.0818442553281784
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 120.813,
+            "rerank_latency_ms": 143.469
+          },
+          {
+            "case_id": "target-003",
+            "question": "二进制要怎么入门？",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000009"
+            ],
+            "ranked_ids": [
+              "G000056",
+              "G000149",
+              "G000009",
+              "G000032",
+              "G000020"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000056",
+                "vector_score": 0.8660074007203226,
+                "rerank_score": 0.01270773634314537
+              },
+              {
+                "concept_id": "G000149",
+                "vector_score": 0.8698909885754786,
+                "rerank_score": 0.0036058330442756414
+              },
+              {
+                "concept_id": "G000009",
+                "vector_score": 0.8840832418232745,
+                "rerank_score": 0.003326230449602008
+              },
+              {
+                "concept_id": "G000032",
+                "vector_score": 0.8661365581854399,
+                "rerank_score": 0.001561400480568409
+              },
+              {
+                "concept_id": "G000020",
+                "vector_score": 0.8735950493744148,
+                "rerank_score": 0.0007697321707382798
+              }
+            ],
+            "top_1_correct": false,
+            "reciprocal_rank": 0.3333333333333333,
+            "retrieval_latency_ms": 117.213,
+            "rerank_latency_ms": 128.996
+          },
+          {
+            "case_id": "target-004",
+            "question": "我想了解补码",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000028"
+            ],
+            "ranked_ids": [
+              "G000028",
+              "G000027",
+              "G000030",
+              "G000031",
+              "G000057"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000028",
+                "vector_score": 0.8973600865206269,
+                "rerank_score": 0.10218928754329681
+              },
+              {
+                "concept_id": "G000027",
+                "vector_score": 0.8834752740853262,
+                "rerank_score": 0.02349592000246048
+              },
+              {
+                "concept_id": "G000030",
+                "vector_score": 0.8723914272113416,
+                "rerank_score": 0.012533187866210938
+              },
+              {
+                "concept_id": "G000031",
+                "vector_score": 0.8686597718802743,
+                "rerank_score": 0.009749173186719418
+              },
+              {
+                "concept_id": "G000057",
+                "vector_score": 0.8577822606673622,
+                "rerank_score": 0.007538144942373037
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 113.672,
+            "rerank_latency_ms": 31.007
+          },
+          {
+            "case_id": "target-005",
+            "question": "如何学习海明码？",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000040"
+            ],
+            "ranked_ids": [
+              "G000040",
+              "G000038",
+              "G000026",
+              "G000039",
+              "G000034"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000040",
+                "vector_score": 0.8943769528296235,
+                "rerank_score": 0.032539863139390945
+              },
+              {
+                "concept_id": "G000038",
+                "vector_score": 0.877304666078792,
+                "rerank_score": 0.0031914724968373775
+              },
+              {
+                "concept_id": "G000026",
+                "vector_score": 0.8687861770122419,
+                "rerank_score": 0.0012560681207105517
+              },
+              {
+                "concept_id": "G000039",
+                "vector_score": 0.8703457570321155,
+                "rerank_score": 0.000883568893186748
+              },
+              {
+                "concept_id": "G000034",
+                "vector_score": 0.8795412020587099,
+                "rerank_score": 0.0006740398239344358
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 18.966,
+            "rerank_latency_ms": 125.675
+          },
+          {
+            "case_id": "target-006",
+            "question": "想学优先编码器，需要哪些基础？",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000054"
+            ],
+            "ranked_ids": [
+              "G000054",
+              "G000041",
+              "G000042",
+              "G000166",
+              "G000167"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000054",
+                "vector_score": 0.9200138100971338,
+                "rerank_score": 0.4088010787963867
+              },
+              {
+                "concept_id": "G000041",
+                "vector_score": 0.898450430370621,
+                "rerank_score": 0.10368162393569946
+              },
+              {
+                "concept_id": "G000042",
+                "vector_score": 0.8983290196694719,
+                "rerank_score": 0.08384428173303604
+              },
+              {
+                "concept_id": "G000166",
+                "vector_score": 0.8978436572739098,
+                "rerank_score": 0.02844817005097866
+              },
+              {
+                "concept_id": "G000167",
+                "vector_score": 0.8994038137084043,
+                "rerank_score": 0.017382299527525902
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 23.321,
+            "rerank_latency_ms": 29.596
+          },
+          {
+            "case_id": "target-007",
+            "question": "我想掌握带无关项的逻辑函数化简",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000084"
+            ],
+            "ranked_ids": [
+              "G000084",
+              "G000064",
+              "G000062",
+              "G000063",
+              "G000075"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000084",
+                "vector_score": 0.9213926623237034,
+                "rerank_score": 0.9962676167488098
+              },
+              {
+                "concept_id": "G000064",
+                "vector_score": 0.8937464219665056,
+                "rerank_score": 0.9054716229438782
+              },
+              {
+                "concept_id": "G000062",
+                "vector_score": 0.8869765801021224,
+                "rerank_score": 0.7089117169380188
+              },
+              {
+                "concept_id": "G000063",
+                "vector_score": 0.8858690873087225,
+                "rerank_score": 0.6356174945831299
+              },
+              {
+                "concept_id": "G000075",
+                "vector_score": 0.8835888076068356,
+                "rerank_score": 0.052749354392290115
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 19.926,
+            "rerank_latency_ms": 45.593
+          },
+          {
+            "case_id": "target-008",
+            "question": "边沿D触发器之前学什么？",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000138"
+            ],
+            "ranked_ids": [
+              "G000138",
+              "G000137",
+              "G000136",
+              "G000131",
+              "G000140"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000138",
+                "vector_score": 0.9160277940220797,
+                "rerank_score": 0.982649564743042
+              },
+              {
+                "concept_id": "G000137",
+                "vector_score": 0.8866085016483951,
+                "rerank_score": 0.7782469391822815
+              },
+              {
+                "concept_id": "G000136",
+                "vector_score": 0.8968727114922302,
+                "rerank_score": 0.6525898575782776
+              },
+              {
+                "concept_id": "G000131",
+                "vector_score": 0.8888421730534789,
+                "rerank_score": 0.5890856385231018
+              },
+              {
+                "concept_id": "G000140",
+                "vector_score": 0.8925408707522171,
+                "rerank_score": 0.2358921319246292
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 23.686,
+            "rerank_latency_ms": 112.402
+          },
+          {
+            "case_id": "target-009",
+            "question": "如何分析同步时序逻辑电路？",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000048"
+            ],
+            "ranked_ids": [
+              "G000048",
+              "G000151",
+              "G000043",
+              "G000184",
+              "G000049"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000048",
+                "vector_score": 0.9146651965733247,
+                "rerank_score": 0.9622824788093567
+              },
+              {
+                "concept_id": "G000151",
+                "vector_score": 0.9027112134875142,
+                "rerank_score": 0.7258187532424927
+              },
+              {
+                "concept_id": "G000043",
+                "vector_score": 0.8921533112023834,
+                "rerank_score": 0.3843134939670563
+              },
+              {
+                "concept_id": "G000184",
+                "vector_score": 0.8999247073765736,
+                "rerank_score": 0.23544050753116608
+              },
+              {
+                "concept_id": "G000049",
+                "vector_score": 0.8911664242266117,
+                "rerank_score": 0.05161881446838379
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 118.535,
+            "rerank_latency_ms": 46.835
+          },
+          {
+            "case_id": "target-010",
+            "question": "我要学习用数据选择器实现逻辑函数",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000059"
+            ],
+            "ranked_ids": [
+              "G000059",
+              "G000058",
+              "G000004",
+              "G000125",
+              "G000002"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000059",
+                "vector_score": 0.9141607918308824,
+                "rerank_score": 0.997765064239502
+              },
+              {
+                "concept_id": "G000058",
+                "vector_score": 0.9093262693819045,
+                "rerank_score": 0.9018467664718628
+              },
+              {
+                "concept_id": "G000004",
+                "vector_score": 0.8837249354150837,
+                "rerank_score": 0.686131477355957
+              },
+              {
+                "concept_id": "G000125",
+                "vector_score": 0.8832314807479962,
+                "rerank_score": 0.40208694338798523
+              },
+              {
+                "concept_id": "G000002",
+                "vector_score": 0.8819336133334633,
+                "rerank_score": 0.40122276544570923
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 19.358,
+            "rerank_latency_ms": 41.437
+          },
+          {
+            "case_id": "target-011",
+            "question": "想了解组合逻辑电路设计",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000045"
+            ],
+            "ranked_ids": [
+              "G000045",
+              "G000044",
+              "G000002",
+              "G000146",
+              "G000061"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000045",
+                "vector_score": 0.9090700179787832,
+                "rerank_score": 0.9660060405731201
+              },
+              {
+                "concept_id": "G000044",
+                "vector_score": 0.9048472525439276,
+                "rerank_score": 0.6697064638137817
+              },
+              {
+                "concept_id": "G000002",
+                "vector_score": 0.8918915637773334,
+                "rerank_score": 0.3270014524459839
+              },
+              {
+                "concept_id": "G000146",
+                "vector_score": 0.8900203445867029,
+                "rerank_score": 0.2551983892917633
+              },
+              {
+                "concept_id": "G000061",
+                "vector_score": 0.8871397116858858,
+                "rerank_score": 0.20734216272830963
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 19.424,
+            "rerank_latency_ms": 41.369
+          },
+          {
+            "case_id": "target-012",
+            "question": "十六进制怎么学？",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000008"
+            ],
+            "ranked_ids": [
+              "G000008",
+              "G000011",
+              "G000007",
+              "G000009",
+              "G000066"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000008",
+                "vector_score": 0.8845641032629908,
+                "rerank_score": 0.30960655212402344
+              },
+              {
+                "concept_id": "G000011",
+                "vector_score": 0.8625688951789164,
+                "rerank_score": 0.010400512255728245
+              },
+              {
+                "concept_id": "G000007",
+                "vector_score": 0.8585298300250656,
+                "rerank_score": 0.005358988884836435
+              },
+              {
+                "concept_id": "G000009",
+                "vector_score": 0.8665496217020777,
+                "rerank_score": 0.00231901160441339
+              },
+              {
+                "concept_id": "G000066",
+                "vector_score": 0.8543027541339789,
+                "rerank_score": 0.0010864384239539504
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 18.875,
+            "rerank_latency_ms": 23.362
+          },
+          {
+            "case_id": "target-013",
+            "question": "我想学习格雷码",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000038"
+            ],
+            "ranked_ids": [
+              "G000038",
+              "G000040",
+              "G000026",
+              "G000028",
+              "G000025"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000038",
+                "vector_score": 0.8934623786563319,
+                "rerank_score": 0.04942595213651657
+              },
+              {
+                "concept_id": "G000040",
+                "vector_score": 0.8806803414610516,
+                "rerank_score": 0.010105181485414505
+              },
+              {
+                "concept_id": "G000026",
+                "vector_score": 0.8731037153450693,
+                "rerank_score": 0.008561527356505394
+              },
+              {
+                "concept_id": "G000028",
+                "vector_score": 0.8714265761955091,
+                "rerank_score": 0.005434636026620865
+              },
+              {
+                "concept_id": "G000025",
+                "vector_score": 0.866507595252195,
+                "rerank_score": 0.004324181005358696
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 115.216,
+            "rerank_latency_ms": 35.909
+          },
+          {
+            "case_id": "target-014",
+            "question": "什么是最小项表达式，学习顺序是什么？",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000122"
+            ],
+            "ranked_ids": [
+              "G000122",
+              "G000080",
+              "G000075",
+              "G000074",
+              "G000078"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000122",
+                "vector_score": 0.9041296712278387,
+                "rerank_score": 0.7042191624641418
+              },
+              {
+                "concept_id": "G000080",
+                "vector_score": 0.894322833452825,
+                "rerank_score": 0.44034215807914734
+              },
+              {
+                "concept_id": "G000075",
+                "vector_score": 0.8947437002407502,
+                "rerank_score": 0.2634716331958771
+              },
+              {
+                "concept_id": "G000074",
+                "vector_score": 0.9048085201481003,
+                "rerank_score": 0.2341972142457962
+              },
+              {
+                "concept_id": "G000078",
+                "vector_score": 0.8978822342128445,
+                "rerank_score": 0.2192518711090088
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 19.428,
+            "rerank_latency_ms": 23.171
+          },
+          {
+            "case_id": "target-015",
+            "question": "怎样学习卡诺图化简法？",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000083"
+            ],
+            "ranked_ids": [
+              "G000083",
+              "G000082",
+              "G000064",
+              "G000071",
+              "G000081"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000083",
+                "vector_score": 0.9139700223681596,
+                "rerank_score": 0.4081672430038452
+              },
+              {
+                "concept_id": "G000082",
+                "vector_score": 0.9033063911486456,
+                "rerank_score": 0.34148523211479187
+              },
+              {
+                "concept_id": "G000064",
+                "vector_score": 0.8832781580969119,
+                "rerank_score": 0.08038899302482605
+              },
+              {
+                "concept_id": "G000071",
+                "vector_score": 0.894269790538424,
+                "rerank_score": 0.05678121745586395
+              },
+              {
+                "concept_id": "G000081",
+                "vector_score": 0.883869056905413,
+                "rerank_score": 0.03179025650024414
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 18.743,
+            "rerank_latency_ms": 123.725
+          },
+          {
+            "case_id": "target-016",
+            "question": "我已学过原码，现在想学反码",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000027"
+            ],
+            "ranked_ids": [
+              "G000026",
+              "G000027",
+              "G000028",
+              "G000040",
+              "G000116"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000026",
+                "vector_score": 0.888394342273456,
+                "rerank_score": 0.03253123164176941
+              },
+              {
+                "concept_id": "G000027",
+                "vector_score": 0.8867360586084685,
+                "rerank_score": 0.026770031079649925
+              },
+              {
+                "concept_id": "G000028",
+                "vector_score": 0.878380050885133,
+                "rerank_score": 0.0068696895614266396
+              },
+              {
+                "concept_id": "G000040",
+                "vector_score": 0.8608636584894265,
+                "rerank_score": 0.003669603494927287
+              },
+              {
+                "concept_id": "G000116",
+                "vector_score": 0.8681129346278446,
+                "rerank_score": 0.00230624177493155
+              }
+            ],
+            "top_1_correct": false,
+            "reciprocal_rank": 0.5,
+            "retrieval_latency_ms": 19.473,
+            "rerank_latency_ms": 23.741
+          },
+          {
+            "case_id": "target-017",
+            "question": "想学一位全加器",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000163"
+            ],
+            "ranked_ids": [
+              "G000163",
+              "G000060",
+              "G000164",
+              "G000165",
+              "G000014"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000163",
+                "vector_score": 0.8976622687039724,
+                "rerank_score": 0.9187079071998596
+              },
+              {
+                "concept_id": "G000060",
+                "vector_score": 0.8885524756364811,
+                "rerank_score": 0.7282109260559082
+              },
+              {
+                "concept_id": "G000164",
+                "vector_score": 0.875032391175227,
+                "rerank_score": 0.2769034802913666
+              },
+              {
+                "concept_id": "G000165",
+                "vector_score": 0.8674597369448199,
+                "rerank_score": 0.2470237910747528
+              },
+              {
+                "concept_id": "G000014",
+                "vector_score": 0.874906337648192,
+                "rerank_score": 0.011986060068011284
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 19.022,
+            "rerank_latency_ms": 26.085
+          },
+          {
+            "case_id": "target-018",
+            "question": "逻辑代数的基本概念应该怎么学？",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000012"
+            ],
+            "ranked_ids": [
+              "G000012",
+              "G000006",
+              "G000067",
+              "G000101",
+              "G000085"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000012",
+                "vector_score": 0.9027606786853867,
+                "rerank_score": 0.9177020788192749
+              },
+              {
+                "concept_id": "G000006",
+                "vector_score": 0.9084614851767308,
+                "rerank_score": 0.701560914516449
+              },
+              {
+                "concept_id": "G000067",
+                "vector_score": 0.9085431044325873,
+                "rerank_score": 0.24466747045516968
+              },
+              {
+                "concept_id": "G000101",
+                "vector_score": 0.9032754650201308,
+                "rerank_score": 0.09381645917892456
+              },
+              {
+                "concept_id": "G000085",
+                "vector_score": 0.9013497434531274,
+                "rerank_score": 0.0805625468492508
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 19.215,
+            "rerank_latency_ms": 43.046
+          },
+          {
+            "case_id": "target-019",
+            "question": "触发器功能转换需要什么基础？",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000139"
+            ],
+            "ranked_ids": [
+              "G000139",
+              "G000098",
+              "G000133",
+              "G000131",
+              "G000097"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000139",
+                "vector_score": 0.8999145610150111,
+                "rerank_score": 0.2880719006061554
+              },
+              {
+                "concept_id": "G000098",
+                "vector_score": 0.8951515916592142,
+                "rerank_score": 0.01424119621515274
+              },
+              {
+                "concept_id": "G000133",
+                "vector_score": 0.8890909815278518,
+                "rerank_score": 0.013840100727975368
+              },
+              {
+                "concept_id": "G000131",
+                "vector_score": 0.8908091714710724,
+                "rerank_score": 0.013645322062075138
+              },
+              {
+                "concept_id": "G000097",
+                "vector_score": 0.890887153715099,
+                "rerank_score": 0.013532053679227829
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 18.893,
+            "rerank_latency_ms": 31.673
+          },
+          {
+            "case_id": "target-020",
+            "question": "我想学静态险象",
+            "query_language": "zh",
+            "acceptable_target_ids": [
+              "G000170"
+            ],
+            "ranked_ids": [
+              "G000170",
+              "G000171",
+              "G000176",
+              "G000174",
+              "G000118"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000170",
+                "vector_score": 0.9057252780764081,
+                "rerank_score": 0.7182992100715637
+              },
+              {
+                "concept_id": "G000171",
+                "vector_score": 0.8861235088811185,
+                "rerank_score": 0.6671846508979797
+              },
+              {
+                "concept_id": "G000176",
+                "vector_score": 0.8933292500120884,
+                "rerank_score": 0.27288690209388733
+              },
+              {
+                "concept_id": "G000174",
+                "vector_score": 0.8908907353944816,
+                "rerank_score": 0.25537043809890747
+              },
+              {
+                "concept_id": "G000118",
+                "vector_score": 0.8757115485823755,
+                "rerank_score": 0.034009579569101334
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 19.424,
+            "rerank_latency_ms": 24.876
+          },
+          {
+            "case_id": "target-021",
+            "question": "What should I learn before studying Binary?",
+            "query_language": "en",
+            "acceptable_target_ids": [
+              "G000009"
+            ],
+            "ranked_ids": [
+              "G000009",
+              "G000023",
+              "G000011",
+              "G000020",
+              "G000019"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000009",
+                "vector_score": 0.8091838270989702,
+                "rerank_score": 0.25380051136016846
+              },
+              {
+                "concept_id": "G000023",
+                "vector_score": 0.7869666045969135,
+                "rerank_score": 0.0832250788807869
+              },
+              {
+                "concept_id": "G000011",
+                "vector_score": 0.788190652198537,
+                "rerank_score": 0.0794031098484993
+              },
+              {
+                "concept_id": "G000020",
+                "vector_score": 0.8081386462835555,
+                "rerank_score": 0.04850568622350693
+              },
+              {
+                "concept_id": "G000019",
+                "vector_score": 0.7921206722076408,
+                "rerank_score": 0.038664694875478745
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 19.259,
+            "rerank_latency_ms": 26.188
+          },
+          {
+            "case_id": "target-022",
+            "question": "How do I learn Hexadecimal?",
+            "query_language": "en",
+            "acceptable_target_ids": [
+              "G000008"
+            ],
+            "ranked_ids": [
+              "G000011",
+              "G000117",
+              "G000032",
+              "G000008",
+              "G000019"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000011",
+                "vector_score": 0.811901539404732,
+                "rerank_score": 0.10066608339548111
+              },
+              {
+                "concept_id": "G000117",
+                "vector_score": 0.800387313122211,
+                "rerank_score": 0.06885956972837448
+              },
+              {
+                "concept_id": "G000032",
+                "vector_score": 0.7998270653254783,
+                "rerank_score": 0.051458850502967834
+              },
+              {
+                "concept_id": "G000008",
+                "vector_score": 0.8336441421509551,
+                "rerank_score": 0.034769054502248764
+              },
+              {
+                "concept_id": "G000019",
+                "vector_score": 0.798972045530133,
+                "rerank_score": 0.025612611323595047
+              }
+            ],
+            "top_1_correct": false,
+            "reciprocal_rank": 0.25,
+            "retrieval_latency_ms": 117.897,
+            "rerank_latency_ms": 37.472
+          },
+          {
+            "case_id": "target-023",
+            "question": "I want to understand Hamming Code prerequisites",
+            "query_language": "en",
+            "acceptable_target_ids": [
+              "G000040"
+            ],
+            "ranked_ids": [
+              "G000115",
+              "G000040",
+              "G000178",
+              "G000028",
+              "G000026"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000115",
+                "vector_score": 0.8066344287425472,
+                "rerank_score": 0.08387362211942673
+              },
+              {
+                "concept_id": "G000040",
+                "vector_score": 0.8322434634449413,
+                "rerank_score": 0.05121389403939247
+              },
+              {
+                "concept_id": "G000178",
+                "vector_score": 0.804551139766383,
+                "rerank_score": 0.041036829352378845
+              },
+              {
+                "concept_id": "G000028",
+                "vector_score": 0.8075943443199574,
+                "rerank_score": 0.007215230725705624
+              },
+              {
+                "concept_id": "G000026",
+                "vector_score": 0.8112092804221074,
+                "rerank_score": 0.005857164040207863
+              }
+            ],
+            "top_1_correct": false,
+            "reciprocal_rank": 0.5,
+            "retrieval_latency_ms": 19.342,
+            "rerank_latency_ms": 26.341
+          },
+          {
+            "case_id": "target-024",
+            "question": "What comes before Karnaugh map construction?",
+            "query_language": "en",
+            "acceptable_target_ids": [
+              "G000079"
+            ],
+            "ranked_ids": [
+              "G000079",
+              "G000071",
+              "G000080",
+              "G000175",
+              "G000072"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000079",
+                "vector_score": 0.7504544167980138,
+                "rerank_score": 0.9654633402824402
+              },
+              {
+                "concept_id": "G000071",
+                "vector_score": 0.6857532002712554,
+                "rerank_score": 0.20886296033859253
+              },
+              {
+                "concept_id": "G000080",
+                "vector_score": 0.6891373154566952,
+                "rerank_score": 0.04280291497707367
+              },
+              {
+                "concept_id": "G000175",
+                "vector_score": 0.6934089377825472,
+                "rerank_score": 0.042579181492328644
+              },
+              {
+                "concept_id": "G000072",
+                "vector_score": 0.6849642486891511,
+                "rerank_score": 0.039420899003744125
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 19.441,
+            "rerank_latency_ms": 27.552
+          },
+          {
+            "case_id": "target-025",
+            "question": "Teach me Two's Complement",
+            "query_language": "en",
+            "acceptable_target_ids": [
+              "G000028"
+            ],
+            "ranked_ids": [
+              "G000028",
+              "G000027",
+              "G000031",
+              "G000032",
+              "G000149"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000028",
+                "vector_score": 0.8276000954204142,
+                "rerank_score": 0.5962903499603271
+              },
+              {
+                "concept_id": "G000027",
+                "vector_score": 0.8114449218977927,
+                "rerank_score": 0.4898163080215454
+              },
+              {
+                "concept_id": "G000031",
+                "vector_score": 0.8041986871841451,
+                "rerank_score": 0.39603689312934875
+              },
+              {
+                "concept_id": "G000032",
+                "vector_score": 0.7925614478775996,
+                "rerank_score": 0.10564026981592178
+              },
+              {
+                "concept_id": "G000149",
+                "vector_score": 0.793483073950083,
+                "rerank_score": 0.043408170342445374
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 18.851,
+            "rerank_latency_ms": 26.027
+          },
+          {
+            "case_id": "target-026",
+            "question": "I need a path for sign-magnitude representation",
+            "query_language": "en",
+            "acceptable_target_ids": [
+              "G000026"
+            ],
+            "ranked_ids": [
+              "G000025",
+              "G000033",
+              "G000026",
+              "G000032",
+              "G000050"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000025",
+                "vector_score": 0.7894415110058969,
+                "rerank_score": 0.02919716201722622
+              },
+              {
+                "concept_id": "G000033",
+                "vector_score": 0.7862644232502767,
+                "rerank_score": 0.02647344022989273
+              },
+              {
+                "concept_id": "G000026",
+                "vector_score": 0.8276074666274894,
+                "rerank_score": 0.016901422291994095
+              },
+              {
+                "concept_id": "G000032",
+                "vector_score": 0.787644992116526,
+                "rerank_score": 0.00951960776001215
+              },
+              {
+                "concept_id": "G000050",
+                "vector_score": 0.7893006054268045,
+                "rerank_score": 0.00029558996902778745
+              }
+            ],
+            "top_1_correct": false,
+            "reciprocal_rank": 0.3333333333333333,
+            "retrieval_latency_ms": 19.182,
+            "rerank_latency_ms": 26.6
+          },
+          {
+            "case_id": "target-027",
+            "question": "How should I study a priority encoder?",
+            "query_language": "en",
+            "acceptable_target_ids": [
+              "G000054"
+            ],
+            "ranked_ids": [
+              "G000054",
+              "G000077",
+              "G000058",
+              "G000112",
+              "G000046"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000054",
+                "vector_score": 0.8251683573118411,
+                "rerank_score": 0.432984322309494
+              },
+              {
+                "concept_id": "G000077",
+                "vector_score": 0.7797513274838969,
+                "rerank_score": 0.019193202257156372
+              },
+              {
+                "concept_id": "G000058",
+                "vector_score": 0.7801475264154447,
+                "rerank_score": 0.003953365609049797
+              },
+              {
+                "concept_id": "G000112",
+                "vector_score": 0.780043737336335,
+                "rerank_score": 0.002876620041206479
+              },
+              {
+                "concept_id": "G000046",
+                "vector_score": 0.7798606841177644,
+                "rerank_score": 0.0020329151302576065
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 19.243,
+            "rerank_latency_ms": 20.042
+          },
+          {
+            "case_id": "target-028",
+            "question": "卡诺图 K-map 的前置知识是什么？",
+            "query_language": "mixed",
+            "acceptable_target_ids": [
+              "G000071",
+              "G000079"
+            ],
+            "ranked_ids": [
+              "G000079",
+              "G000071",
+              "G000081",
+              "G000082",
+              "G000080"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000079",
+                "vector_score": 0.8941735253804316,
+                "rerank_score": 0.9999628067016602
+              },
+              {
+                "concept_id": "G000071",
+                "vector_score": 0.8815579284019994,
+                "rerank_score": 0.9894466400146484
+              },
+              {
+                "concept_id": "G000081",
+                "vector_score": 0.8778802954069733,
+                "rerank_score": 0.9685288071632385
+              },
+              {
+                "concept_id": "G000082",
+                "vector_score": 0.8777543995711207,
+                "rerank_score": 0.9394868016242981
+              },
+              {
+                "concept_id": "G000080",
+                "vector_score": 0.8781615371646533,
+                "rerank_score": 0.9394053816795349
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 19.284,
+            "rerank_latency_ms": 22.012
+          },
+          {
+            "case_id": "target-029",
+            "question": "我想学 Boolean expression 的标准形式",
+            "query_language": "mixed",
+            "acceptable_target_ids": [
+              "G000119"
+            ],
+            "ranked_ids": [
+              "G000119",
+              "G000070",
+              "G000068",
+              "G000064",
+              "G000102"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000119",
+                "vector_score": 0.8961902226754964,
+                "rerank_score": 0.9883702993392944
+              },
+              {
+                "concept_id": "G000070",
+                "vector_score": 0.865504887455047,
+                "rerank_score": 0.0430481992661953
+              },
+              {
+                "concept_id": "G000068",
+                "vector_score": 0.8657051314330791,
+                "rerank_score": 0.037917718291282654
+              },
+              {
+                "concept_id": "G000064",
+                "vector_score": 0.8646163805013928,
+                "rerank_score": 0.02354932390153408
+              },
+              {
+                "concept_id": "G000102",
+                "vector_score": 0.8666497960119047,
+                "rerank_score": 0.001813784008845687
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 19.532,
+            "rerank_latency_ms": 37.845
+          },
+          {
+            "case_id": "target-030",
+            "question": "Binary 二进制转换怎么入门？",
+            "query_language": "mixed",
+            "acceptable_target_ids": [
+              "G000020"
+            ],
+            "ranked_ids": [
+              "G000020",
+              "G000009",
+              "G000056",
+              "G000032",
+              "G000023"
+            ],
+            "scores": [
+              {
+                "concept_id": "G000020",
+                "vector_score": 0.9037129635568922,
+                "rerank_score": 0.07811283320188522
+              },
+              {
+                "concept_id": "G000009",
+                "vector_score": 0.8955623854050119,
+                "rerank_score": 0.01929209753870964
+              },
+              {
+                "concept_id": "G000056",
+                "vector_score": 0.8640318137280487,
+                "rerank_score": 0.004037135746330023
+              },
+              {
+                "concept_id": "G000032",
+                "vector_score": 0.8654744155894063,
+                "rerank_score": 0.0013389424420893192
+              },
+              {
+                "concept_id": "G000023",
+                "vector_score": 0.8667520882766467,
+                "rerank_score": 0.001000580145046115
+              }
+            ],
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "retrieval_latency_ms": 18.975,
+            "rerank_latency_ms": 19.998
+          }
+        ]
+      }
+    },
+    "decision": {
+      "recommended_default": "none",
+      "top_1_gain_vs_none": -0.033333,
+      "language_regressions": [
+        "en"
+      ],
+      "quality_gate": false,
+      "latency_gate_p95_le_1000ms": true,
+      "policy": "Enable the cross-encoder only if it improves Top-1, causes no language subgroup Top-1 regression, and reranking P95 is at most 1000 ms on the target Mac."
+    }
+  }
+}

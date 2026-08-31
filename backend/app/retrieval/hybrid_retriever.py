@@ -5,7 +5,7 @@ from app.retrieval.concept_retriever import ConceptRetriever
 from app.retrieval.corpus_builder import build_concept_documents
 from app.retrieval.embedding_backend import get_embedding_backend
 from app.retrieval.embedding_cache import EmbeddingCache
-from app.retrieval.reranker import TokenOverlapReranker
+from app.retrieval.reranker import get_reranker
 
 
 def hybrid_retrieve(
@@ -20,7 +20,11 @@ def hybrid_retrieve(
     documents = build_concept_documents(corpus)
     backend, degraded, degradation_reason = get_embedding_backend()
     selected_mode = mode or settings.retrieval_mode
-    reranker = TokenOverlapReranker() if selected_mode == "hybrid_rrf_rerank" else None
+    reranker = None
+    reranker_degraded = False
+    reranker_degradation_reason = None
+    if selected_mode == "hybrid_rrf_rerank":
+        reranker, reranker_degraded, reranker_degradation_reason = get_reranker()
     result = ConceptRetriever(
         backend, cache=EmbeddingCache(), reranker=reranker
     ).search(
@@ -42,4 +46,6 @@ def hybrid_retrieve(
         "fusion": "rrf" if selected_mode.startswith("hybrid") else "none",
         "rrf_k": settings.retrieval_rrf_k if selected_mode.startswith("hybrid") else None,
         "reranker": reranker.model_id if reranker is not None else "none",
+        "reranker_degraded": reranker_degraded,
+        "reranker_degradation_reason": reranker_degradation_reason,
     }

@@ -30,6 +30,8 @@ class GraphRagMeta(BaseModel):
     embedding_cache_status: str = "not_used"
     fusion: str = "none"
     reranker: str = "none"
+    reranker_degraded: bool = False
+    reranker_degradation_reason: str | None = None
 
 
 class GraphRagQueryResponse(BaseModel):

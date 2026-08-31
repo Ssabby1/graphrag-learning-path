@@ -63,6 +63,7 @@ def test_graphrag_query_returns_contract() -> None:
     assert payload["path"][-1] == "C3"
     assert payload["meta"]["retrieval_strategy"] == "hybrid_rrf"
     assert payload["meta"]["reranker"] == "none"
+    assert payload["meta"]["reranker_degraded"] is False
     assert payload["meta"]["embedding_model"]
     assert payload["meta"]["model"] == "template-grounded-answer"
     assert payload["meta"]["truncated"] is False

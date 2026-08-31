@@ -33,6 +33,13 @@ class Settings:
     retrieval_top_k_vector: int = 8
     retrieval_top_k_final: int = 6
     retrieval_rrf_k: int = 60
+    reranker_backend: str = "cross_encoder"
+    reranker_model: str = "cross-encoder/mmarco-mMiniLMv2-L12-H384-v1"
+    reranker_allow_download: bool = False
+    reranker_fallback_backend: str = "token_overlap"
+    reranker_batch_size: int = 16
+    reranker_max_length: int = 512
+    reranker_device: str = ""
     target_resolver_top_k: int = 5
     target_resolver_min_score: float = 0.8
     target_resolver_min_margin: float = 0.01
@@ -79,6 +86,21 @@ class Settings:
                 "RETRIEVAL_TOP_K_FINAL", cls.retrieval_top_k_final
             ),
             retrieval_rrf_k=_positive_int("RETRIEVAL_RRF_K", cls.retrieval_rrf_k),
+            reranker_backend=os.getenv("RERANKER_BACKEND", cls.reranker_backend).strip(),
+            reranker_model=os.getenv("RERANKER_MODEL", cls.reranker_model).strip(),
+            reranker_allow_download=_bool_env(
+                "RERANKER_ALLOW_DOWNLOAD", cls.reranker_allow_download
+            ),
+            reranker_fallback_backend=os.getenv(
+                "RERANKER_FALLBACK_BACKEND", cls.reranker_fallback_backend
+            ).strip(),
+            reranker_batch_size=_positive_int(
+                "RERANKER_BATCH_SIZE", cls.reranker_batch_size
+            ),
+            reranker_max_length=_positive_int(
+                "RERANKER_MAX_LENGTH", cls.reranker_max_length
+            ),
+            reranker_device=os.getenv("RERANKER_DEVICE", cls.reranker_device).strip(),
             target_resolver_top_k=_positive_int(
                 "TARGET_RESOLVER_TOP_K", cls.target_resolver_top_k
             ),

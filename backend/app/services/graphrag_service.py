@@ -67,5 +67,9 @@ def query_graphrag(
             "embedding_cache_status": retrieval.get("cache_status", "not_used"),
             "fusion": retrieval.get("fusion", "none"),
             "reranker": retrieval.get("reranker", "none"),
+            "reranker_degraded": bool(retrieval.get("reranker_degraded", False)),
+            "reranker_degradation_reason": retrieval.get(
+                "reranker_degradation_reason"
+            ),
         },
     }

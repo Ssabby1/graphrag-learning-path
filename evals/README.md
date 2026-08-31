@@ -37,3 +37,21 @@ HF_HOME="$PWD/backend/.cache/huggingface" PYTHONPATH="$PWD" \
 ```
 
 The first run downloads the configured multilingual model and builds separate concept and relationship caches. Later runs can omit `--allow-download` and must report cache hits. Both model and embedding caches live below the ignored `backend/.cache/` directory. The runner records model ID, dimensions, corpus hashes, threshold provenance, per-language metrics, failures, and P50/P95 latency.
+
+## Reproduce the stage-3 reranker ablation
+
+The ablation fixes the multilingual E5 Top-8 candidate set, then compares no reranking, deterministic token overlap, and a multilingual CrossEncoder:
+
+```bash
+HF_HOME="$PWD/backend/.cache/huggingface" PYTHONPATH="$PWD" \
+  backend/.venv-macos-embeddings/bin/python evals/stage3_reranker_runner.py \
+  --allow-download --device cpu
+
+HF_HOME="$PWD/backend/.cache/huggingface" PYTHONPATH="$PWD" \
+  backend/.venv-macos-embeddings/bin/python evals/stage3_reranker_runner.py \
+  --device mps \
+  --output-json evals/reports/stage3_reranker_ablation_mps.json \
+  --output-markdown evals/reports/stage3_reranker_ablation_mps.md
+```
+
+Some restricted or containerized macOS processes cannot access Metal even when PyTorch is built with MPS support. In that case, run the MPS command from a normal host terminal or use `--device cpu`. CPU and MPS must produce the same ranking; device-specific reports are kept separately because latency is hardware- and environment-dependent.
