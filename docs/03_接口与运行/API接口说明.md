@@ -168,8 +168,9 @@
 
 - `answer`：最终自然语言回答
 - `path`：推荐学习路径
-- `evidence`：图谱证据
-- `citations`：引用列表
+- `evidence`：兼容字段，保留路径中的先修概念 ID
+- `evidence_pack`：确定性构建的关系级证据集合
+- `citations`：只引用当前 Evidence Pack 内 evidence ID 的关系引用列表
 - `meta`：元信息，包括检索与生成策略说明
 
 响应示例：
@@ -178,13 +179,43 @@
 {
   "answer": "建议先学习组合逻辑基础，再进入时序逻辑相关内容。",
   "path": ["C005", "C010", "C021"],
-  "evidence": ["C010 is a prerequisite of C021"],
+  "evidence": ["C010"],
+  "evidence_pack": {
+    "evidence_pack_version": "1.0",
+    "target_concept_id": "C021",
+    "path": ["C005", "C010", "C021"],
+    "items": [
+      {
+        "evidence_id": "prereq:C010:C021",
+        "evidence_type": "required_prerequisite",
+        "from_concept": {"id": "C010", "name": "组合逻辑基础"},
+        "relation": "PREREQUISITE_OF",
+        "to_concept": {"id": "C021", "name": "时序逻辑"},
+        "reason": "组合逻辑基础是时序逻辑的前置知识",
+        "source_chapters": ["第二章"],
+        "source_images": ["img_02_01"],
+        "confidence": 0.92,
+        "confidence_type": "extraction_confidence",
+        "verification_status": "unreviewed",
+        "retrieval": {
+          "graph_rank": 1,
+          "vector_rank": 1,
+          "graph_score": 1.0,
+          "vector_score": 0.84,
+          "rrf_score": null,
+          "rerank_score": null,
+          "source": "graph+vector"
+        }
+      }
+    ]
+  },
   "citations": [
     {
-      "concept_id": "C010",
-      "kind": "concept",
-      "score": 0.92,
-      "source": "graph"
+      "evidence_id": "prereq:C010:C021",
+      "concept_id": "C021",
+      "kind": "relationship",
+      "score": 0.84,
+      "source": "graph+vector"
     }
   ],
   "meta": {
@@ -193,12 +224,16 @@
     "max_depth": 2,
     "planner_strategy": "cached_graph_ancestor_closure",
     "dataset_hash": "sha256...",
-    "source": "path_service+hybrid_retrieval",
+    "source": "path_service+relationship_evidence_retrieval",
     "model": "template-grounded-answer",
-    "retrieval_strategy": "graph+vector+rrf+rerank",
-    "vector_backend": "fallback",
-    "fusion": "rrf",
-    "reranker": "heuristic"
+    "retrieval_strategy": "graph_scoped_vector",
+    "evidence_retrieval_strategy": "graph_scoped_vector",
+    "vector_backend": "intfloat/multilingual-e5-small",
+    "fusion": "none",
+    "reranker": "none",
+    "evidence_count": 1,
+    "citation_integrity": 1.0,
+    "invalid_evidence_id_count": 0
   }
 }
 ```

@@ -40,6 +40,7 @@ class Settings:
     reranker_batch_size: int = 16
     reranker_max_length: int = 512
     reranker_device: str = ""
+    evidence_top_k: int = 8
     target_resolver_top_k: int = 5
     target_resolver_min_score: float = 0.8
     target_resolver_min_margin: float = 0.01
@@ -101,6 +102,7 @@ class Settings:
                 "RERANKER_MAX_LENGTH", cls.reranker_max_length
             ),
             reranker_device=os.getenv("RERANKER_DEVICE", cls.reranker_device).strip(),
+            evidence_top_k=_positive_int("EVIDENCE_TOP_K", cls.evidence_top_k),
             target_resolver_top_k=_positive_int(
                 "TARGET_RESOLVER_TOP_K", cls.target_resolver_top_k
             ),

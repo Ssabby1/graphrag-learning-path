@@ -12,14 +12,17 @@ def build_grounded_answer(
     explanation: str,
     retrieval_hits: list[dict],
 ) -> str:
-    hit_preview = ", ".join(hit.get("concept_id", "") for hit in retrieval_hits[:5])
+    hit_preview = ", ".join(
+        hit.get("evidence_id") or hit.get("concept_id", "")
+        for hit in retrieval_hits[:5]
+    )
     path_text = " -> ".join(path) if path else "No additional path needed"
 
     if PromptTemplate is not None:
         prompt = PromptTemplate.from_template(
             "Question: {question}\n"
             "Path: {path_text}\n"
-            "Evidence concepts: {hits}\n"
+            "Evidence relationships: {hits}\n"
             "Explanation: {explanation}\n"
             "Answer:"
         )
@@ -33,6 +36,6 @@ def build_grounded_answer(
     return (
         f"Question: {question}\n"
         f"Path: {path_text}\n"
-        f"Evidence concepts: {hit_preview or 'none'}\n"
+        f"Evidence relationships: {hit_preview or 'none'}\n"
         f"Explanation: {explanation}"
     )

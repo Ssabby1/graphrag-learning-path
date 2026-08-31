@@ -1,5 +1,7 @@
 from pydantic import BaseModel, Field
 
+from app.schemas.evidence import EvidencePack
+
 
 class GraphRagQueryRequest(BaseModel):
     question: str = Field(min_length=1)
@@ -8,8 +10,9 @@ class GraphRagQueryRequest(BaseModel):
 
 
 class GraphRagCitation(BaseModel):
-    concept_id: str
-    kind: str = "concept"
+    evidence_id: str
+    concept_id: str | None = None
+    kind: str = "relationship"
     score: float | None = None
     source: str | None = None
 
@@ -32,11 +35,16 @@ class GraphRagMeta(BaseModel):
     reranker: str = "none"
     reranker_degraded: bool = False
     reranker_degradation_reason: str | None = None
+    evidence_retrieval_strategy: str = "graph_scoped_vector"
+    evidence_count: int = 0
+    citation_integrity: float = 1.0
+    invalid_evidence_id_count: int = 0
 
 
 class GraphRagQueryResponse(BaseModel):
     answer: str
     path: list[str] = Field(default_factory=list)
     evidence: list[str] = Field(default_factory=list)
+    evidence_pack: EvidencePack
     citations: list[GraphRagCitation] = Field(default_factory=list)
     meta: GraphRagMeta

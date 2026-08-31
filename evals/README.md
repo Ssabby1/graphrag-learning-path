@@ -55,3 +55,12 @@ HF_HOME="$PWD/backend/.cache/huggingface" PYTHONPATH="$PWD" \
 ```
 
 Some restricted or containerized macOS processes cannot access Metal even when PyTorch is built with MPS support. In that case, run the MPS command from a normal host terminal or use `--device cpu`. CPU and MPS must produce the same ranking; device-specific reports are kept separately because latency is hardware- and environment-dependent.
+
+## Reproduce the stage-4 evidence evaluation
+
+```bash
+HF_HOME="$PWD/backend/.cache/huggingface" PYTHONPATH="$PWD" \
+  backend/.venv-macos-embeddings/bin/python evals/stage4_evidence_runner.py
+```
+
+The report compares global vector retrieval over every relationship document with graph-scoped retrieval over prerequisite edges already selected by the Path Planner. Model/index warmup is recorded separately from hot-request latency. Citation Integrity is computed by deterministic membership validation against each generated Evidence Pack; human relevance labels remain separate from production `verification_status`.

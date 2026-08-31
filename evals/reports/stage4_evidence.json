@@ -1,0 +1,776 @@
+{
+  "run": {
+    "generated_at": "2026-08-31T03:58:01.564594+00:00",
+    "dataset_profile": "full_local",
+    "git_commit": "6e9c61e88539996c4ccc0bec610ddad7d8fbd58b",
+    "git_dirty": true,
+    "python": "3.13.15",
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "dataset_sha256": "da7d05f9f0f7d753cf5afab4d664558f30a829df58b4b3e9de174cf7da5c026f"
+  },
+  "model": {
+    "embedding_model": "intfloat/multilingual-e5-small",
+    "dimension": 384,
+    "normalization": true
+  },
+  "corpus": {
+    "document_count": 708,
+    "hash": "458f3f053665e146a87d5b5ea4369146bbe54e40ea83a0521524b6b7f367f465",
+    "schema": "evidence-v1"
+  },
+  "evaluation": {
+    "strategies": {
+      "global_vector": {
+        "metrics": {
+          "evidence_recall_at_k": {
+            "numerator": 5,
+            "denominator": 6,
+            "value": 0.8333333333333334
+          },
+          "mrr_at_k": 0.708333,
+          "ndcg_at_k": 0.738446,
+          "top_1_accuracy": {
+            "numerator": 4,
+            "denominator": 6,
+            "value": 0.6666666666666666
+          },
+          "latency": {
+            "count": 6,
+            "p50_ms": 57.633,
+            "p95_ms": 58.34
+          },
+          "k": 5
+        },
+        "failures": [
+          {
+            "case_id": "evidence-002",
+            "question": "Why is sign-magnitude needed before ones' complement?",
+            "review_status": "human_verified",
+            "relevant_evidence_ids": [
+              "prereq:G000026:G000027"
+            ],
+            "scope_evidence_ids": null,
+            "ranked_evidence_ids": [
+              "prereq:G000104:G000064",
+              "prereq:G000108:G000064",
+              "prereq:G000006:G000104",
+              "prereq:G000065:G000104",
+              "prereq:G000004:G000051"
+            ],
+            "scores": [
+              {
+                "evidence_id": "prereq:G000104:G000064",
+                "graph_rank": null,
+                "vector_rank": 1,
+                "graph_score": null,
+                "vector_score": 0.7678916287614712,
+                "source": "vector"
+              },
+              {
+                "evidence_id": "prereq:G000108:G000064",
+                "graph_rank": null,
+                "vector_rank": 2,
+                "graph_score": null,
+                "vector_score": 0.767201794542237,
+                "source": "vector"
+              },
+              {
+                "evidence_id": "prereq:G000006:G000104",
+                "graph_rank": null,
+                "vector_rank": 3,
+                "graph_score": null,
+                "vector_score": 0.7661903410866179,
+                "source": "vector"
+              },
+              {
+                "evidence_id": "prereq:G000065:G000104",
+                "graph_rank": null,
+                "vector_rank": 4,
+                "graph_score": null,
+                "vector_score": 0.7659335337808272,
+                "source": "vector"
+              },
+              {
+                "evidence_id": "prereq:G000004:G000051",
+                "graph_rank": null,
+                "vector_rank": 5,
+                "graph_score": null,
+                "vector_score": 0.7653494675597862,
+                "source": "vector"
+              }
+            ],
+            "retrieved_relevant_count": 0,
+            "top_1_correct": false,
+            "reciprocal_rank": 0.0,
+            "ndcg": 0.0,
+            "latency_ms": 57.642
+          },
+          {
+            "case_id": "evidence-005",
+            "question": "Why learn basic RS flip-flops before an edge-triggered D flip-flop?",
+            "review_status": "human_verified",
+            "relevant_evidence_ids": [
+              "prereq:G000128:G000138"
+            ],
+            "scope_evidence_ids": null,
+            "ranked_evidence_ids": [
+              "prereq:G000128:G000131",
+              "prereq:G000099:G000097",
+              "prereq:G000099:G000128",
+              "prereq:G000128:G000138",
+              "related:G000128:G000151"
+            ],
+            "scores": [
+              {
+                "evidence_id": "prereq:G000128:G000131",
+                "graph_rank": null,
+                "vector_rank": 1,
+                "graph_score": null,
+                "vector_score": 0.7762440497124523,
+                "source": "vector"
+              },
+              {
+                "evidence_id": "prereq:G000099:G000097",
+                "graph_rank": null,
+                "vector_rank": 2,
+                "graph_score": null,
+                "vector_score": 0.7751347239571359,
+                "source": "vector"
+              },
+              {
+                "evidence_id": "prereq:G000099:G000128",
+                "graph_rank": null,
+                "vector_rank": 3,
+                "graph_score": null,
+                "vector_score": 0.7748372306503452,
+                "source": "vector"
+              },
+              {
+                "evidence_id": "prereq:G000128:G000138",
+                "graph_rank": null,
+                "vector_rank": 4,
+                "graph_score": null,
+                "vector_score": 0.772290995192826,
+                "source": "vector"
+              },
+              {
+                "evidence_id": "related:G000128:G000151",
+                "graph_rank": null,
+                "vector_rank": 5,
+                "graph_score": null,
+                "vector_score": 0.772218011462144,
+                "source": "vector"
+              }
+            ],
+            "retrieved_relevant_count": 1,
+            "top_1_correct": false,
+            "reciprocal_rank": 0.25,
+            "ndcg": 0.430677,
+            "latency_ms": 57.817
+          }
+        ],
+        "cases": [
+          {
+            "case_id": "evidence-001",
+            "question": "为什么学习补码前要掌握反码？",
+            "review_status": "human_verified",
+            "relevant_evidence_ids": [
+              "prereq:G000027:G000028"
+            ],
+            "scope_evidence_ids": null,
+            "ranked_evidence_ids": [
+              "prereq:G000027:G000028",
+              "prereq:G000028:G000030",
+              "prereq:G000030:G000031",
+              "prereq:G000032:G000033",
+              "prereq:G000006:G000116"
+            ],
+            "scores": [
+              {
+                "evidence_id": "prereq:G000027:G000028",
+                "graph_rank": null,
+                "vector_rank": 1,
+                "graph_score": null,
+                "vector_score": 0.8668071482237588,
+                "source": "vector"
+              },
+              {
+                "evidence_id": "prereq:G000028:G000030",
+                "graph_rank": null,
+                "vector_rank": 2,
+                "graph_score": null,
+                "vector_score": 0.8619444709714511,
+                "source": "vector"
+              },
+              {
+                "evidence_id": "prereq:G000030:G000031",
+                "graph_rank": null,
+                "vector_rank": 3,
+                "graph_score": null,
+                "vector_score": 0.8577555399857211,
+                "source": "vector"
+              },
+              {
+                "evidence_id": "prereq:G000032:G000033",
+                "graph_rank": null,
+                "vector_rank": 4,
+                "graph_score": null,
+                "vector_score": 0.8548127785322054,
+                "source": "vector"
+              },
+              {
+                "evidence_id": "prereq:G000006:G000116",
+                "graph_rank": null,
+                "vector_rank": 5,
+                "graph_score": null,
+                "vector_score": 0.8544716148987449,
+                "source": "vector"
+              }
+            ],
+            "retrieved_relevant_count": 1,
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "ndcg": 1.0,
+            "latency_ms": 57.625
+          },
+          {
+            "case_id": "evidence-002",
+            "question": "Why is sign-magnitude needed before ones' complement?",
+            "review_status": "human_verified",
+            "relevant_evidence_ids": [
+              "prereq:G000026:G000027"
+            ],
+            "scope_evidence_ids": null,
+            "ranked_evidence_ids": [
+              "prereq:G000104:G000064",
+              "prereq:G000108:G000064",
+              "prereq:G000006:G000104",
+              "prereq:G000065:G000104",
+              "prereq:G000004:G000051"
+            ],
+            "scores": [
+              {
+                "evidence_id": "prereq:G000104:G000064",
+                "graph_rank": null,
+                "vector_rank": 1,
+                "graph_score": null,
+                "vector_score": 0.7678916287614712,
+                "source": "vector"
+              },
+              {
+                "evidence_id": "prereq:G000108:G000064",
+                "graph_rank": null,
+                "vector_rank": 2,
+                "graph_score": null,
+                "vector_score": 0.767201794542237,
+                "source": "vector"
+              },
+              {
+                "evidence_id": "prereq:G000006:G000104",
+                "graph_rank": null,
+                "vector_rank": 3,
+                "graph_score": null,
+                "vector_score": 0.7661903410866179,
+                "source": "vector"
+              },
+              {
+                "evidence_id": "prereq:G000065:G000104",
+                "graph_rank": null,
+                "vector_rank": 4,
+                "graph_score": null,
+                "vector_score": 0.7659335337808272,
+                "source": "vector"
+              },
+              {
+                "evidence_id": "prereq:G000004:G000051",
+                "graph_rank": null,
+                "vector_rank": 5,
+                "graph_score": null,
+                "vector_score": 0.7653494675597862,
+                "source": "vector"
+              }
+            ],
+            "retrieved_relevant_count": 0,
+            "top_1_correct": false,
+            "reciprocal_rank": 0.0,
+            "ndcg": 0.0,
+            "latency_ms": 57.642
+          },
+          {
+            "case_id": "evidence-003",
+            "question": "海明码为什么需要奇偶校验码？",
+            "review_status": "human_verified",
+            "relevant_evidence_ids": [
+              "prereq:G000039:G000040"
+            ],
+            "scope_evidence_ids": null,
+            "ranked_evidence_ids": [
+              "prereq:G000039:G000040",
+              "prereq:G000038:G000040",
+              "prereq:G000034:G000040",
+              "prereq:G000002:G000057",
+              "prereq:G000006:G000117"
+            ],
+            "scores": [
+              {
+                "evidence_id": "prereq:G000039:G000040",
+                "graph_rank": null,
+                "vector_rank": 1,
+                "graph_score": null,
+                "vector_score": 0.8915866688837628,
+                "source": "vector"
+              },
+              {
+                "evidence_id": "prereq:G000038:G000040",
+                "graph_rank": null,
+                "vector_rank": 2,
+                "graph_score": null,
+                "vector_score": 0.8536254396033457,
+                "source": "vector"
+              },
+              {
+                "evidence_id": "prereq:G000034:G000040",
+                "graph_rank": null,
+                "vector_rank": 3,
+                "graph_score": null,
+                "vector_score": 0.8494009347694914,
+                "source": "vector"
+              },
+              {
+                "evidence_id": "prereq:G000002:G000057",
+                "graph_rank": null,
+                "vector_rank": 4,
+                "graph_score": null,
+                "vector_score": 0.8467725714484693,
+                "source": "vector"
+              },
+              {
+                "evidence_id": "prereq:G000006:G000117",
+                "graph_rank": null,
+                "vector_rank": 5,
+                "graph_score": null,
+                "vector_score": 0.8462423553656565,
+                "source": "vector"
+              }
+            ],
+            "retrieved_relevant_count": 1,
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "ndcg": 1.0,
+            "latency_ms": 58.514
+          },
+          {
+            "case_id": "evidence-004",
+            "question": "逻辑变量如何支撑逻辑函数的表示方法？",
+            "review_status": "human_verified",
+            "relevant_evidence_ids": [
+              "prereq:G000006:G000063"
+            ],
+            "scope_evidence_ids": null,
+            "ranked_evidence_ids": [
+              "prereq:G000006:G000063",
+              "prereq:G000006:G000068",
+              "prereq:G000012:G000063",
+              "prereq:G000063:G000084",
+              "prereq:G000063:G000064"
+            ],
+            "scores": [
+              {
+                "evidence_id": "prereq:G000006:G000063",
+                "graph_rank": null,
+                "vector_rank": 1,
+                "graph_score": null,
+                "vector_score": 0.8772134441939894,
+                "source": "vector"
+              },
+              {
+                "evidence_id": "prereq:G000006:G000068",
+                "graph_rank": null,
+                "vector_rank": 2,
+                "graph_score": null,
+                "vector_score": 0.8720920022841859,
+                "source": "vector"
+              },
+              {
+                "evidence_id": "prereq:G000012:G000063",
+                "graph_rank": null,
+                "vector_rank": 3,
+                "graph_score": null,
+                "vector_score": 0.8702891395165311,
+                "source": "vector"
+              },
+              {
+                "evidence_id": "prereq:G000063:G000084",
+                "graph_rank": null,
+                "vector_rank": 4,
+                "graph_score": null,
+                "vector_score": 0.8697078784363258,
+                "source": "vector"
+              },
+              {
+                "evidence_id": "prereq:G000063:G000064",
+                "graph_rank": null,
+                "vector_rank": 5,
+                "graph_score": null,
+                "vector_score": 0.8696323544883133,
+                "source": "vector"
+              }
+            ],
+            "retrieved_relevant_count": 1,
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "ndcg": 1.0,
+            "latency_ms": 57.404
+          },
+          {
+            "case_id": "evidence-005",
+            "question": "Why learn basic RS flip-flops before an edge-triggered D flip-flop?",
+            "review_status": "human_verified",
+            "relevant_evidence_ids": [
+              "prereq:G000128:G000138"
+            ],
+            "scope_evidence_ids": null,
+            "ranked_evidence_ids": [
+              "prereq:G000128:G000131",
+              "prereq:G000099:G000097",
+              "prereq:G000099:G000128",
+              "prereq:G000128:G000138",
+              "related:G000128:G000151"
+            ],
+            "scores": [
+              {
+                "evidence_id": "prereq:G000128:G000131",
+                "graph_rank": null,
+                "vector_rank": 1,
+                "graph_score": null,
+                "vector_score": 0.7762440497124523,
+                "source": "vector"
+              },
+              {
+                "evidence_id": "prereq:G000099:G000097",
+                "graph_rank": null,
+                "vector_rank": 2,
+                "graph_score": null,
+                "vector_score": 0.7751347239571359,
+                "source": "vector"
+              },
+              {
+                "evidence_id": "prereq:G000099:G000128",
+                "graph_rank": null,
+                "vector_rank": 3,
+                "graph_score": null,
+                "vector_score": 0.7748372306503452,
+                "source": "vector"
+              },
+              {
+                "evidence_id": "prereq:G000128:G000138",
+                "graph_rank": null,
+                "vector_rank": 4,
+                "graph_score": null,
+                "vector_score": 0.772290995192826,
+                "source": "vector"
+              },
+              {
+                "evidence_id": "related:G000128:G000151",
+                "graph_rank": null,
+                "vector_rank": 5,
+                "graph_score": null,
+                "vector_score": 0.772218011462144,
+                "source": "vector"
+              }
+            ],
+            "retrieved_relevant_count": 1,
+            "top_1_correct": false,
+            "reciprocal_rank": 0.25,
+            "ndcg": 0.430677,
+            "latency_ms": 57.817
+          },
+          {
+            "case_id": "evidence-006",
+            "question": "编码器为什么依赖组合逻辑电路设计？",
+            "review_status": "human_verified",
+            "relevant_evidence_ids": [
+              "prereq:G000045:G000046"
+            ],
+            "scope_evidence_ids": null,
+            "ranked_evidence_ids": [
+              "prereq:G000045:G000046",
+              "prereq:G000044:G000047",
+              "prereq:G000045:G000162",
+              "prereq:G000002:G000054",
+              "prereq:G000045:G000014"
+            ],
+            "scores": [
+              {
+                "evidence_id": "prereq:G000045:G000046",
+                "graph_rank": null,
+                "vector_rank": 1,
+                "graph_score": null,
+                "vector_score": 0.8844160853797923,
+                "source": "vector"
+              },
+              {
+                "evidence_id": "prereq:G000044:G000047",
+                "graph_rank": null,
+                "vector_rank": 2,
+                "graph_score": null,
+                "vector_score": 0.881060452753413,
+                "source": "vector"
+              },
+              {
+                "evidence_id": "prereq:G000045:G000162",
+                "graph_rank": null,
+                "vector_rank": 3,
+                "graph_score": null,
+                "vector_score": 0.8750313313728149,
+                "source": "vector"
+              },
+              {
+                "evidence_id": "prereq:G000002:G000054",
+                "graph_rank": null,
+                "vector_rank": 4,
+                "graph_score": null,
+                "vector_score": 0.8748353764009971,
+                "source": "vector"
+              },
+              {
+                "evidence_id": "prereq:G000045:G000014",
+                "graph_rank": null,
+                "vector_rank": 5,
+                "graph_score": null,
+                "vector_score": 0.8743239279581589,
+                "source": "vector"
+              }
+            ],
+            "retrieved_relevant_count": 1,
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "ndcg": 1.0,
+            "latency_ms": 56.084
+          }
+        ]
+      },
+      "graph_scoped_vector": {
+        "metrics": {
+          "evidence_recall_at_k": {
+            "numerator": 6,
+            "denominator": 6,
+            "value": 1.0
+          },
+          "mrr_at_k": 1.0,
+          "ndcg_at_k": 1.0,
+          "top_1_accuracy": {
+            "numerator": 6,
+            "denominator": 6,
+            "value": 1.0
+          },
+          "latency": {
+            "count": 6,
+            "p50_ms": 51.731,
+            "p95_ms": 52.41
+          },
+          "k": 5
+        },
+        "failures": [],
+        "cases": [
+          {
+            "case_id": "evidence-001",
+            "question": "为什么学习补码前要掌握反码？",
+            "review_status": "human_verified",
+            "relevant_evidence_ids": [
+              "prereq:G000027:G000028"
+            ],
+            "scope_evidence_ids": [
+              "prereq:G000027:G000028"
+            ],
+            "ranked_evidence_ids": [
+              "prereq:G000027:G000028"
+            ],
+            "scores": [
+              {
+                "evidence_id": "prereq:G000027:G000028",
+                "graph_rank": 1,
+                "vector_rank": 1,
+                "graph_score": 1.0,
+                "vector_score": 0.8668071482237588,
+                "source": "graph+vector"
+              }
+            ],
+            "retrieved_relevant_count": 1,
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "ndcg": 1.0,
+            "latency_ms": 52.528
+          },
+          {
+            "case_id": "evidence-002",
+            "question": "Why is sign-magnitude needed before ones' complement?",
+            "review_status": "human_verified",
+            "relevant_evidence_ids": [
+              "prereq:G000026:G000027"
+            ],
+            "scope_evidence_ids": [
+              "prereq:G000026:G000027"
+            ],
+            "ranked_evidence_ids": [
+              "prereq:G000026:G000027"
+            ],
+            "scores": [
+              {
+                "evidence_id": "prereq:G000026:G000027",
+                "graph_rank": 1,
+                "vector_rank": 1,
+                "graph_score": 1.0,
+                "vector_score": 0.7560727384883925,
+                "source": "graph+vector"
+              }
+            ],
+            "retrieved_relevant_count": 1,
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "ndcg": 1.0,
+            "latency_ms": 51.224
+          },
+          {
+            "case_id": "evidence-003",
+            "question": "海明码为什么需要奇偶校验码？",
+            "review_status": "human_verified",
+            "relevant_evidence_ids": [
+              "prereq:G000039:G000040"
+            ],
+            "scope_evidence_ids": [
+              "prereq:G000039:G000040"
+            ],
+            "ranked_evidence_ids": [
+              "prereq:G000039:G000040"
+            ],
+            "scores": [
+              {
+                "evidence_id": "prereq:G000039:G000040",
+                "graph_rank": 1,
+                "vector_rank": 1,
+                "graph_score": 1.0,
+                "vector_score": 0.8915866688837628,
+                "source": "graph+vector"
+              }
+            ],
+            "retrieved_relevant_count": 1,
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "ndcg": 1.0,
+            "latency_ms": 52.058
+          },
+          {
+            "case_id": "evidence-004",
+            "question": "逻辑变量如何支撑逻辑函数的表示方法？",
+            "review_status": "human_verified",
+            "relevant_evidence_ids": [
+              "prereq:G000006:G000063"
+            ],
+            "scope_evidence_ids": [
+              "prereq:G000006:G000063"
+            ],
+            "ranked_evidence_ids": [
+              "prereq:G000006:G000063"
+            ],
+            "scores": [
+              {
+                "evidence_id": "prereq:G000006:G000063",
+                "graph_rank": 1,
+                "vector_rank": 1,
+                "graph_score": 1.0,
+                "vector_score": 0.8772134441939894,
+                "source": "graph+vector"
+              }
+            ],
+            "retrieved_relevant_count": 1,
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "ndcg": 1.0,
+            "latency_ms": 51.023
+          },
+          {
+            "case_id": "evidence-005",
+            "question": "Why learn basic RS flip-flops before an edge-triggered D flip-flop?",
+            "review_status": "human_verified",
+            "relevant_evidence_ids": [
+              "prereq:G000128:G000138"
+            ],
+            "scope_evidence_ids": [
+              "prereq:G000128:G000138"
+            ],
+            "ranked_evidence_ids": [
+              "prereq:G000128:G000138"
+            ],
+            "scores": [
+              {
+                "evidence_id": "prereq:G000128:G000138",
+                "graph_rank": 1,
+                "vector_rank": 1,
+                "graph_score": 1.0,
+                "vector_score": 0.772290995192826,
+                "source": "graph+vector"
+              }
+            ],
+            "retrieved_relevant_count": 1,
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "ndcg": 1.0,
+            "latency_ms": 51.627
+          },
+          {
+            "case_id": "evidence-006",
+            "question": "编码器为什么依赖组合逻辑电路设计？",
+            "review_status": "human_verified",
+            "relevant_evidence_ids": [
+              "prereq:G000045:G000046"
+            ],
+            "scope_evidence_ids": [
+              "prereq:G000045:G000046"
+            ],
+            "ranked_evidence_ids": [
+              "prereq:G000045:G000046"
+            ],
+            "scores": [
+              {
+                "evidence_id": "prereq:G000045:G000046",
+                "graph_rank": 1,
+                "vector_rank": 1,
+                "graph_score": 1.0,
+                "vector_score": 0.8844160853797923,
+                "source": "graph+vector"
+              }
+            ],
+            "retrieved_relevant_count": 1,
+            "top_1_correct": true,
+            "reciprocal_rank": 1.0,
+            "ndcg": 1.0,
+            "latency_ms": 51.835
+          }
+        ]
+      }
+    },
+    "citation": {
+      "integrity": {
+        "numerator": 6,
+        "denominator": 6,
+        "value": 1.0
+      },
+      "invalid_evidence_id_count": 0,
+      "invalid_evidence_ids": [],
+      "human_labeled_top_1_correctness": {
+        "numerator": 6,
+        "denominator": 6,
+        "value": 1.0
+      },
+      "note": "Human labels come from the versioned evaluation fixtures; production relationship verification_status remains independent."
+    },
+    "cache": {
+      "warmup_status": "hit",
+      "warmup_latency_ms": 2466.941,
+      "rebuilt": 0,
+      "hits": 12
+    },
+    "skipped": []
+  }
+}

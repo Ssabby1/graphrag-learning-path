@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Iterable
 
 from app.retrieval.corpus_builder import build_evidence_documents
 from app.retrieval.embedding_cache import EmbeddingCache
@@ -21,13 +21,24 @@ class EvidenceRetriever:
         self,
         query: str,
         relation_rows: list[dict[str, Any]],
-        allowed_evidence_ids: set[str] | None = None,
+        allowed_evidence_ids: Iterable[str] | None = None,
         top_k: int = 8,
     ) -> dict[str, Any]:
+        allowed_sequence = (
+            list(dict.fromkeys(item for item in allowed_evidence_ids if item))
+            if allowed_evidence_ids is not None
+            else None
+        )
+        if allowed_sequence == []:
+            return {"hits": [], "cache_status": "not_used", "index_metadata": None}
         documents = build_evidence_documents(relation_rows)
         index = self.cache.get_or_build(documents, self.backend)
         query_vector = self.backend.embed_query(query)
-        allowed = allowed_evidence_ids
+        allowed = set(allowed_sequence) if allowed_sequence is not None else None
+        graph_positions = {
+            evidence_id: rank
+            for rank, evidence_id in enumerate(allowed_sequence or [], start=1)
+        }
         scored = []
         for document, vector in zip(index.documents, index.vectors):
             evidence_id = document["id"]
@@ -40,9 +51,18 @@ class EvidenceRetriever:
                 "id": evidence_id,
                 "evidence_id": evidence_id,
                 "rank": rank,
-                "source": "vector",
+                "source": "graph+vector" if allowed is not None else "vector",
+                "graph_rank": graph_positions.get(evidence_id),
                 "vector_rank": rank,
+                "graph_score": (
+                    1.0 / graph_positions[evidence_id]
+                    if evidence_id in graph_positions
+                    else None
+                ),
                 "vector_score": score,
+                "rrf_score": None,
+                "rerank_score": None,
+                "score": score,
                 "text": document["text"],
                 "metadata": document["metadata"],
             }

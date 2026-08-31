@@ -2,7 +2,7 @@
 
 > 文档用途：这是当前仓库下一阶段改造的唯一执行入口。新的开发线程应先完整阅读本文件，再检查仓库与运行环境，从“阶段 0”开始按顺序实施。除非新的实验证据推翻现有判断，不要重新扩张产品范围。
 >
-> 当前状态：阶段 0、阶段 1、阶段 2、阶段 3 已完成；当前 baseline 已冻结，图推理使用完整缓存快照与确定性祖先闭包，检索层使用可插拔多语言 embedding、双语语料与持久化缓存；Reranker 消融未显示质量提升，因此默认关闭；下一轮从阶段 4 开始。
+> 当前状态：阶段 0 至阶段 4 已完成；当前 baseline 已冻结，图推理使用完整缓存快照与确定性祖先闭包，检索层使用可插拔多语言 embedding、双语语料与持久化缓存；Reranker 默认关闭；关系级 Evidence Pack 与 Citation Integrity 确定性校验已接入 GraphRAG 主链；下一轮从阶段 5 开始。
 >
 > 最后确认日期：2026-08-31。
 
@@ -1104,15 +1104,15 @@ uncertain
 
 ### 阶段 4：关系证据与 Citation
 
-- [ ] Neo4j 返回关系属性；
-- [ ] 定义 evidence schema；
-- [ ] 构建稳定 evidence ID；
-- [ ] 构建 Evidence Pack；
-- [ ] 区分必要先修与补充背景；
-- [ ] 导入人工审核状态；
-- [ ] 实现 Citation Validator；
-- [ ] 添加 evidence/citation 测试；
-- [ ] 运行 Evidence Retriever 评测。
+- [x] Neo4j 返回关系属性；
+- [x] 定义 evidence schema；
+- [x] 构建稳定 evidence ID；
+- [x] 构建 Evidence Pack；
+- [x] 区分必要先修与补充背景；
+- [x] 导入人工审核状态；
+- [x] 实现 Citation Validator；
+- [x] 添加 evidence/citation 测试；
+- [x] 运行 Evidence Retriever 评测。
 
 完成标准：Citation Integrity 为 100%，Invalid Evidence ID 为 0，所有证据均可追溯到图关系。
 
@@ -1261,4 +1261,5 @@ uncertain
 | 2026-08-30 | 阶段 0 | `dfe94a5`（工作区实现，尚未提交） | 建立四类 JSONL 评测契约；加入 36 条 Target Resolver（含 20 中文、7 英文、3 混合正例与 6 拒绝样本）、10 条 Path、6 条 Evidence、6 条 Answer 案例；新增离线 baseline runner、配置/哈希快照、失败明细和 API 样例 | 后端 `32 passed`；前端 Vite 构建成功；Planner Top-1 `20/30=66.7%`，英文 `0/7=0%`；hashing Vector Top-1 `1/30=3.3%`、Recall@5 `2/30=6.7%`；完整闭包召回 `1503/1514=99.3%`，11/190 个目标发生静默遗漏；关系 Evidence Recall `0/6`；结构化 Answer `0/6`，Prompt 泄漏 `6/6` | Python 3.14 触发依赖弃用警告；npm 报告 9 个依赖漏洞、前端 bundle >500 kB；这些不阻塞阶段 0，后续单独处理。下一轮严格从阶段 1 开始 |
 | 2026-08-30 | 阶段 1 | `dfe94a5`（工作区实现，尚未提交） | 新增不可变 `GraphSnapshot`、进程内 TTL 缓存和双向邻接索引；Neo4j 只读取全量直接边，不再枚举固定深度路径；确定性完整祖先闭包与拓扑排序；mastered 节点及其祖先从学习路径跳过但保留图上下文；安全限制显式返回 `truncated`、省略计数、深度、策略和数据哈希；校验脚本支持 Neo4j 与跨平台 CSV 离线模式 | 后端 `43 passed`（含 17 节点长链、分支汇合、环、自环、截断、缓存、mastered 语义、190/190 全目标独立 CSV oracle）；Structural Closure Recall `1514/1514=100%`；拓扑约束违反率 `0`；完整 DAG PASS；最长路径 16 边；48 个目标深度超过 8；前端构建成功 | Python 3.14 仍有依赖弃用警告；完整数据未公开时全量 oracle 测试会明确 skip，公开 seed 流程继续可用。下一轮从阶段 2 开始 |
 | 2026-08-30 | 阶段 2 | `bf1e63a` | 构建确定性的概念与关系证据双语料；Neo4j 查询补齐双语元数据、章节、邻居与关系属性；加入可插拔 embedding、E5 query/passage 前缀、原子 JSON 缓存、损坏恢复、四种检索模式、逐阶段排名/分数；新增少量可审计的项目人工双语 aliases；Target Resolver 使用最低分与 Top-1 margin 拒绝无关问题 | macOS ARM64 Python 3.13 + `sentence-transformers 6.0.0` 成功加载 `intfloat/multilingual-e5-small`（384 维）；后端 `54 passed`；完整本地语料 190 个概念、708 条可检索关系；Target Top-1 `30/30=100%`、Recall@5 `30/30=100%`、拒绝 `6/6=100%`、跨语言 Top-1 `10/10=100%`；概念缓存 1 次 rebuild/35 次 hit，关系缓存 rebuild 后命中；P50/P95 `22.106/24.123 ms` | 结果来自 36 条方向性小数据集，部分演示目标使用同仓库人工 aliases，不声称统计显著性；真实模型首次运行需约 470 MB 下载，CI 单测仍使用 fake backend 且禁止隐式下载。下一轮从阶段 3 开始 |
-| 2026-08-31 | 阶段 3 | `bf1e63a`（阶段 0–2 检查点；阶段 3 工作区实现） | 实现可插拔 CrossEncoder、离线加载、显式 token fallback、稳定 tie-break 与降级元数据；以固定 E5 Top-8 候选对比 none、token-overlap 和 `cross-encoder/mmarco-mMiniLMv2-L12-H384-v1`；按预先声明的质量、语言分组与 P95 延迟门槛决定默认策略 | 后端 `58 passed`；无重排 Top-1 `26/30=86.7%`、MRR@5 `0.925`；token Top-1 `25/30=83.3%`、MRR@5 `0.911`；CrossEncoder Top-1 `25/30=83.3%`、MRR@5 `0.897`，英文分组回退；CPU P50/P95 `54.7/110.0 ms`，MPS `31.3/137.0 ms`；CPU/MPS 排序一致 | CrossEncoder 质量门槛未通过，默认继续使用 `hybrid_rrf` 且不启用 reranker；MPS 在受限沙箱内不可见，宿主环境验证通过；小样本仅为方向性结论。下一轮从阶段 4 开始 |
+| 2026-08-31 | 阶段 3 | `6e9c61e` | 实现可插拔 CrossEncoder、离线加载、显式 token fallback、稳定 tie-break 与降级元数据；以固定 E5 Top-8 候选对比 none、token-overlap 和 `cross-encoder/mmarco-mMiniLMv2-L12-H384-v1`；按预先声明的质量、语言分组与 P95 延迟门槛决定默认策略 | 后端 `58 passed`；无重排 Top-1 `26/30=86.7%`、MRR@5 `0.925`；token Top-1 `25/30=83.3%`、MRR@5 `0.911`；CrossEncoder Top-1 `25/30=83.3%`、MRR@5 `0.897`，英文分组回退；CPU P50/P95 `54.7/110.0 ms`，MPS `31.3/137.0 ms`；CPU/MPS 排序一致 | CrossEncoder 质量门槛未通过，默认继续使用 `hybrid_rrf` 且不启用 reranker；MPS 在受限沙箱内不可见，宿主环境验证通过；小样本仅为方向性结论。下一轮从阶段 4 开始 |
+| 2026-08-31 | 阶段 4 | `6e9c61e`（阶段 3 检查点；阶段 4 工作区实现） | 新增关系级 Evidence Pack 1.0、必要先修/补充背景类型、关系属性追踪、图范围 Evidence Retriever 与 Citation Validator；GraphRAG 引用由 concept ID 切换为稳定 relationship evidence ID；未知引用由确定性后处理拒绝；抽取置信度与人工审核状态保持分离 | 后端 `61 passed`；708 条关系语料全局 Vector Recall@5 `5/6=83.3%`、MRR@5 `0.708`、nDCG@5 `0.738`；Graph-scoped Recall/MRR/nDCG/Top-1 均 `6/6=100%`；Citation Integrity `6/6=100%`；Invalid Evidence ID `0`；热缓存全局 P50/P95 `57.6/58.3 ms`、图范围 `51.7/52.4 ms` | 仅 6 条人工标注方向性 fixture，不能代表总体 Citation Correctness；生产关系仍以 `verification_status` 独立标记，大部分为 `unreviewed`；自然语言 Answer Generator 留待阶段 5。下一轮从阶段 5 开始 |

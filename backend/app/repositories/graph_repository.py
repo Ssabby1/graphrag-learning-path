@@ -316,10 +316,8 @@ class GraphRepository:
                         "source_images": record.get("source_images") or [],
                         "confidence_max": record.get("confidence_max"),
                         "verification_status": record.get("verification_status") or "unreviewed",
-                        "source_chapters": list(
-                            dict.fromkeys(
-                                item for item in (record.get("source_chapters") or []) if item
-                            )
+                        "source_chapters": sorted(
+                            set(item for item in (record.get("source_chapters") or []) if item)
                         ),
                     }
                     for record in records
