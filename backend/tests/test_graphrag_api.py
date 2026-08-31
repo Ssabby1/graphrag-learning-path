@@ -95,13 +95,19 @@ def test_graphrag_query_returns_contract() -> None:
     assert payload["meta"]["reranker_degraded"] is False
     assert payload["meta"]["citation_integrity"] == 1.0
     assert payload["meta"]["invalid_evidence_id_count"] == 0
+    assert payload["meta"]["citation_completeness"] == 1.0
     assert payload["evidence_pack"]["evidence_pack_version"] == "1.0"
     pack_ids = {item["evidence_id"] for item in payload["evidence_pack"]["items"]}
     assert pack_ids
     assert {citation["evidence_id"] for citation in payload["citations"]} <= pack_ids
     assert all(citation["kind"] == "relationship" for citation in payload["citations"])
     assert payload["meta"]["embedding_model"]
-    assert payload["meta"]["model"] == "template-grounded-answer"
+    assert payload["meta"]["model"] == "deterministic-evidence-fallback-v1"
+    assert payload["answer_source"] == "fallback"
+    assert payload["answer_language"] == "en"
+    assert payload["cited_evidence_ids"]
+    assert "Question:" not in payload["answer"]
+    assert "Evidence relationships:" not in payload["answer"]
     assert payload["meta"]["truncated"] is False
     assert payload["meta"]["max_depth"] == 2
     assert payload["path"][-1] == "C3"
@@ -123,4 +129,24 @@ def test_graphrag_query_returns_503_when_repo_unavailable() -> None:
 
     assert response.status_code == 503
     assert "Neo4j unavailable" in response.json()["detail"]
+    app.dependency_overrides.clear()
+
+
+def test_graphrag_query_honors_explicit_response_language() -> None:
+    app.dependency_overrides[get_graph_repository] = _override_with(HealthyRepo())
+    client = TestClient(app)
+
+    response = client.post(
+        "/graphrag/query",
+        json={
+            "question": "How should I learn C3?",
+            "target_concept_id": "C3",
+            "mastered_concepts": [],
+            "response_language": "zh",
+        },
+    )
+
+    assert response.status_code == 200
+    assert response.json()["answer_language"] == "zh"
+    assert "建议按顺序学习" in response.json()["answer"]
     app.dependency_overrides.clear()

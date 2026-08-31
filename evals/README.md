@@ -64,3 +64,12 @@ HF_HOME="$PWD/backend/.cache/huggingface" PYTHONPATH="$PWD" \
 ```
 
 The report compares global vector retrieval over every relationship document with graph-scoped retrieval over prerequisite edges already selected by the Path Planner. Model/index warmup is recorded separately from hot-request latency. Citation Integrity is computed by deterministic membership validation against each generated Evidence Pack; human relevance labels remain separate from production `verification_status`.
+
+## Reproduce the stage-5 Answer Generator evaluation
+
+```bash
+PYTHONPATH="$PWD" backend/.venv-macos-embeddings/bin/python \
+  evals/stage5_answer_runner.py
+```
+
+This evaluation never calls an external LLM. It separately measures the real deterministic bilingual fallback, a deterministic fake-LLM structured-output contract, and malformed JSON/timeout/hallucinated-citation guardrails. The fake fixture is not an LLM quality result. Unsupported Claim Rate and human Faithfulness remain explicitly unmeasured until a reviewed real-model evaluation is available.

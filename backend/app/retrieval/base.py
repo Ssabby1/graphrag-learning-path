@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Protocol
+from typing import Any, Protocol
 
 
 class EmbeddingBackend(Protocol):
@@ -24,3 +24,13 @@ class Reranker(Protocol):
 
     def rerank(self, query: str, hits: list[dict], top_k: int) -> list[dict]: ...
 
+
+class AnswerGenerator(Protocol):
+    def generate(
+        self,
+        question: str,
+        target_concept_id: str,
+        path: list[str],
+        evidence_pack: dict[str, Any],
+        response_language: str = "auto",
+    ) -> dict[str, Any]: ...

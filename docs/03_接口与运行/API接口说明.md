@@ -160,13 +160,17 @@
 {
   "question": "我想学习时序逻辑，应该先补哪些知识？",
   "target_concept_id": "C021",
-  "mastered_concepts": ["C001", "C005"]
+  "mastered_concepts": ["C001", "C005"],
+  "response_language": "auto"
 }
 ```
 
 响应字段：
 
 - `answer`：最终自然语言回答
+- `answer_source`：`llm` 或 `fallback`
+- `answer_language`：最终使用的 `zh` 或 `en`
+- `cited_evidence_ids`：经过校验后保留的关系证据 ID
 - `path`：推荐学习路径
 - `evidence`：兼容字段，保留路径中的先修概念 ID
 - `evidence_pack`：确定性构建的关系级证据集合
@@ -178,6 +182,9 @@
 ```json
 {
   "answer": "建议先学习组合逻辑基础，再进入时序逻辑相关内容。",
+  "answer_source": "fallback",
+  "answer_language": "zh",
+  "cited_evidence_ids": ["prereq:C010:C021"],
   "path": ["C005", "C010", "C021"],
   "evidence": ["C010"],
   "evidence_pack": {
@@ -225,7 +232,7 @@
     "planner_strategy": "cached_graph_ancestor_closure",
     "dataset_hash": "sha256...",
     "source": "path_service+relationship_evidence_retrieval",
-    "model": "template-grounded-answer",
+    "model": "deterministic-evidence-fallback-v1",
     "retrieval_strategy": "graph_scoped_vector",
     "evidence_retrieval_strategy": "graph_scoped_vector",
     "vector_backend": "intfloat/multilingual-e5-small",
@@ -233,7 +240,13 @@
     "reranker": "none",
     "evidence_count": 1,
     "citation_integrity": 1.0,
-    "invalid_evidence_id_count": 0
+    "invalid_evidence_id_count": 0,
+    "answer_source": "fallback",
+    "answer_language": "zh",
+    "generation_model": "deterministic-evidence-fallback-v1",
+    "structured_output_success": true,
+    "discarded_invalid_citation_count": 0,
+    "citation_completeness": 1.0
   }
 }
 ```

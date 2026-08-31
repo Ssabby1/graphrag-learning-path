@@ -20,6 +20,7 @@ def graphrag_query(
             target_concept_id=payload.target_concept_id,
             mastered_concepts=payload.mastered_concepts,
             repo=repo,
+            response_language=payload.response_language,
         )
     except RepositoryUnavailableError as exc:
         raise HTTPException(status_code=503, detail=str(exc)) from exc

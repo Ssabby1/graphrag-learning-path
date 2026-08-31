@@ -1,0 +1,422 @@
+{
+  "run": {
+    "generated_at": "2026-08-31T04:14:09.921321+00:00",
+    "git_commit": "d3a821d87f09b85eedec1fdf0719c113c8daa2f4",
+    "git_dirty": true,
+    "python": "3.13.15",
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "dataset_sha256": "4ecae2d344170685ac1af885547b0af8df6698f1adba5d122933b9ee038b96d2",
+    "case_count": 6,
+    "external_llm_called": false
+  },
+  "strategies": {
+    "offline_fallback": {
+      "implementation": "real deterministic fallback",
+      "metrics": {
+        "structured_output_success_rate": {
+          "numerator": 6,
+          "denominator": 6,
+          "value": 1.0
+        },
+        "fallback_success_rate": {
+          "numerator": 6,
+          "denominator": 6,
+          "value": 1.0
+        },
+        "llm_contract_success_rate": {
+          "numerator": 0,
+          "denominator": 6,
+          "value": 0.0
+        },
+        "answer_language_match_rate": {
+          "numerator": 6,
+          "denominator": 6,
+          "value": 1.0
+        },
+        "citation_integrity": {
+          "numerator": 5,
+          "denominator": 5,
+          "value": 1.0
+        },
+        "required_citation_completeness": {
+          "numerator": 5,
+          "denominator": 5,
+          "value": 1.0
+        },
+        "direction_expression_accuracy": {
+          "numerator": 6,
+          "denominator": 6,
+          "value": 1.0
+        },
+        "prompt_template_leak_rate": {
+          "numerator": 0,
+          "denominator": 6,
+          "value": 0.0
+        },
+        "invalid_evidence_id_count": 0,
+        "latency": {
+          "count": 6,
+          "p50_ms": 0.003,
+          "p95_ms": 0.567
+        },
+        "unsupported_claim_rate": {
+          "numerator": null,
+          "denominator": null,
+          "value": null,
+          "status": "not_measured_without_human_or_judge_review"
+        },
+        "human_faithfulness": {
+          "value": null,
+          "status": "not_measured"
+        }
+      },
+      "failures": [],
+      "cases": [
+        {
+          "case_id": "answer-001",
+          "expected_answer_language": "zh",
+          "answer": "建议按顺序学习：G000027 → G000028。反码 是 补码 的前置知识（反码推导补码）。",
+          "cited_evidence_ids": [
+            "prereq:G000027:G000028"
+          ],
+          "answer_source": "fallback",
+          "answer_language": "zh",
+          "generation_model": "deterministic-evidence-fallback-v1",
+          "structured_output_success": true,
+          "language_match": true,
+          "citation_integrity": 1.0,
+          "invalid_evidence_id_count": 0,
+          "required_citation_count": 1,
+          "returned_required_citation_count": 1,
+          "direction_correct": true,
+          "prompt_template_leak": false,
+          "latency_ms": 0.753,
+          "fallback_reason": "llm_disabled_or_missing_api_key"
+        },
+        {
+          "case_id": "answer-002",
+          "expected_answer_language": "en",
+          "answer": "Follow this learning order: G000026 → G000027. 原码 is a prerequisite for 反码 (原码推导反码).",
+          "cited_evidence_ids": [
+            "prereq:G000026:G000027"
+          ],
+          "answer_source": "fallback",
+          "answer_language": "en",
+          "generation_model": "deterministic-evidence-fallback-v1",
+          "structured_output_success": true,
+          "language_match": true,
+          "citation_integrity": 1.0,
+          "invalid_evidence_id_count": 0,
+          "required_citation_count": 1,
+          "returned_required_citation_count": 1,
+          "direction_correct": true,
+          "prompt_template_leak": false,
+          "latency_ms": 0.008,
+          "fallback_reason": "llm_disabled_or_missing_api_key"
+        },
+        {
+          "case_id": "answer-003",
+          "expected_answer_language": "zh",
+          "answer": "建议按顺序学习：G000039 → G000040。奇偶校验码 是 海明码 的前置知识（后置:海明码）。",
+          "cited_evidence_ids": [
+            "prereq:G000039:G000040"
+          ],
+          "answer_source": "fallback",
+          "answer_language": "zh",
+          "generation_model": "deterministic-evidence-fallback-v1",
+          "structured_output_success": true,
+          "language_match": true,
+          "citation_integrity": 1.0,
+          "invalid_evidence_id_count": 0,
+          "required_citation_count": 1,
+          "returned_required_citation_count": 1,
+          "direction_correct": true,
+          "prompt_template_leak": false,
+          "latency_ms": 0.002,
+          "fallback_reason": "llm_disabled_or_missing_api_key"
+        },
+        {
+          "case_id": "answer-004",
+          "expected_answer_language": "en",
+          "answer": "Follow this learning order: G000128 → G000138. 基本RS触发器 is a prerequisite for 边沿D触发器 (后置知识点:边沿D触发器; 前置知识点:基本RS触发器).",
+          "cited_evidence_ids": [
+            "prereq:G000128:G000138"
+          ],
+          "answer_source": "fallback",
+          "answer_language": "en",
+          "generation_model": "deterministic-evidence-fallback-v1",
+          "structured_output_success": true,
+          "language_match": true,
+          "citation_integrity": 1.0,
+          "invalid_evidence_id_count": 0,
+          "required_citation_count": 1,
+          "returned_required_citation_count": 1,
+          "direction_correct": true,
+          "prompt_template_leak": false,
+          "latency_ms": 0.002,
+          "fallback_reason": "llm_disabled_or_missing_api_key"
+        },
+        {
+          "case_id": "answer-005",
+          "expected_answer_language": "zh",
+          "answer": "建议按顺序学习：G000006 → G000063。逻辑变量 是 逻辑函数的表示方法 的前置知识（后置知识点:逻辑函数的表示方法; 前置知识点:逻辑变量）。",
+          "cited_evidence_ids": [
+            "prereq:G000006:G000063"
+          ],
+          "answer_source": "fallback",
+          "answer_language": "zh",
+          "generation_model": "deterministic-evidence-fallback-v1",
+          "structured_output_success": true,
+          "language_match": true,
+          "citation_integrity": 1.0,
+          "invalid_evidence_id_count": 0,
+          "required_citation_count": 1,
+          "returned_required_citation_count": 1,
+          "direction_correct": true,
+          "prompt_template_leak": false,
+          "latency_ms": 0.003,
+          "fallback_reason": "llm_disabled_or_missing_api_key"
+        },
+        {
+          "case_id": "answer-006",
+          "expected_answer_language": "en",
+          "answer": "Start with the target concept G000009. The current evidence pack contains no additional prerequisite relationship.",
+          "cited_evidence_ids": [],
+          "answer_source": "fallback",
+          "answer_language": "en",
+          "generation_model": "deterministic-evidence-fallback-v1",
+          "structured_output_success": true,
+          "language_match": true,
+          "citation_integrity": 1.0,
+          "invalid_evidence_id_count": 0,
+          "required_citation_count": 0,
+          "returned_required_citation_count": 0,
+          "direction_correct": true,
+          "prompt_template_leak": false,
+          "latency_ms": 0.001,
+          "fallback_reason": "llm_disabled_or_missing_api_key"
+        }
+      ]
+    },
+    "structured_contract_fixture": {
+      "implementation": "deterministic fake LLM; validates contract and guardrails, not model quality",
+      "metrics": {
+        "structured_output_success_rate": {
+          "numerator": 6,
+          "denominator": 6,
+          "value": 1.0
+        },
+        "fallback_success_rate": {
+          "numerator": 0,
+          "denominator": 6,
+          "value": 0.0
+        },
+        "llm_contract_success_rate": {
+          "numerator": 6,
+          "denominator": 6,
+          "value": 1.0
+        },
+        "answer_language_match_rate": {
+          "numerator": 6,
+          "denominator": 6,
+          "value": 1.0
+        },
+        "citation_integrity": {
+          "numerator": 5,
+          "denominator": 5,
+          "value": 1.0
+        },
+        "required_citation_completeness": {
+          "numerator": 5,
+          "denominator": 5,
+          "value": 1.0
+        },
+        "direction_expression_accuracy": {
+          "numerator": 6,
+          "denominator": 6,
+          "value": 1.0
+        },
+        "prompt_template_leak_rate": {
+          "numerator": 0,
+          "denominator": 6,
+          "value": 0.0
+        },
+        "invalid_evidence_id_count": 0,
+        "latency": {
+          "count": 6,
+          "p50_ms": 0.01,
+          "p95_ms": 0.031
+        },
+        "unsupported_claim_rate": {
+          "numerator": null,
+          "denominator": null,
+          "value": null,
+          "status": "not_measured_without_human_or_judge_review"
+        },
+        "human_faithfulness": {
+          "value": null,
+          "status": "not_measured"
+        }
+      },
+      "failures": [],
+      "cases": [
+        {
+          "case_id": "answer-001",
+          "expected_answer_language": "zh",
+          "answer": "反码 是 补码 的前置知识。",
+          "cited_evidence_ids": [
+            "prereq:G000027:G000028"
+          ],
+          "answer_source": "llm",
+          "answer_language": "zh",
+          "generation_model": "deterministic-structured-contract-fixture",
+          "structured_output_success": true,
+          "language_match": true,
+          "citation_integrity": 1.0,
+          "invalid_evidence_id_count": 0,
+          "required_citation_count": 1,
+          "returned_required_citation_count": 1,
+          "direction_correct": true,
+          "prompt_template_leak": false,
+          "latency_ms": 0.034,
+          "fallback_reason": null
+        },
+        {
+          "case_id": "answer-002",
+          "expected_answer_language": "en",
+          "answer": "原码 is a prerequisite for 反码.",
+          "cited_evidence_ids": [
+            "prereq:G000026:G000027"
+          ],
+          "answer_source": "llm",
+          "answer_language": "en",
+          "generation_model": "deterministic-structured-contract-fixture",
+          "structured_output_success": true,
+          "language_match": true,
+          "citation_integrity": 1.0,
+          "invalid_evidence_id_count": 0,
+          "required_citation_count": 1,
+          "returned_required_citation_count": 1,
+          "direction_correct": true,
+          "prompt_template_leak": false,
+          "latency_ms": 0.022,
+          "fallback_reason": null
+        },
+        {
+          "case_id": "answer-003",
+          "expected_answer_language": "zh",
+          "answer": "奇偶校验码 是 海明码 的前置知识。",
+          "cited_evidence_ids": [
+            "prereq:G000039:G000040"
+          ],
+          "answer_source": "llm",
+          "answer_language": "zh",
+          "generation_model": "deterministic-structured-contract-fixture",
+          "structured_output_success": true,
+          "language_match": true,
+          "citation_integrity": 1.0,
+          "invalid_evidence_id_count": 0,
+          "required_citation_count": 1,
+          "returned_required_citation_count": 1,
+          "direction_correct": true,
+          "prompt_template_leak": false,
+          "latency_ms": 0.011,
+          "fallback_reason": null
+        },
+        {
+          "case_id": "answer-004",
+          "expected_answer_language": "en",
+          "answer": "基本RS触发器 is a prerequisite for 边沿D触发器.",
+          "cited_evidence_ids": [
+            "prereq:G000128:G000138"
+          ],
+          "answer_source": "llm",
+          "answer_language": "en",
+          "generation_model": "deterministic-structured-contract-fixture",
+          "structured_output_success": true,
+          "language_match": true,
+          "citation_integrity": 1.0,
+          "invalid_evidence_id_count": 0,
+          "required_citation_count": 1,
+          "returned_required_citation_count": 1,
+          "direction_correct": true,
+          "prompt_template_leak": false,
+          "latency_ms": 0.009,
+          "fallback_reason": null
+        },
+        {
+          "case_id": "answer-005",
+          "expected_answer_language": "zh",
+          "answer": "逻辑变量 是 逻辑函数的表示方法 的前置知识。",
+          "cited_evidence_ids": [
+            "prereq:G000006:G000063"
+          ],
+          "answer_source": "llm",
+          "answer_language": "zh",
+          "generation_model": "deterministic-structured-contract-fixture",
+          "structured_output_success": true,
+          "language_match": true,
+          "citation_integrity": 1.0,
+          "invalid_evidence_id_count": 0,
+          "required_citation_count": 1,
+          "returned_required_citation_count": 1,
+          "direction_correct": true,
+          "prompt_template_leak": false,
+          "latency_ms": 0.009,
+          "fallback_reason": null
+        },
+        {
+          "case_id": "answer-006",
+          "expected_answer_language": "en",
+          "answer": "The target G000009 has no additional prerequisite relationship.",
+          "cited_evidence_ids": [],
+          "answer_source": "llm",
+          "answer_language": "en",
+          "generation_model": "deterministic-structured-contract-fixture",
+          "structured_output_success": true,
+          "language_match": true,
+          "citation_integrity": 1.0,
+          "invalid_evidence_id_count": 0,
+          "required_citation_count": 0,
+          "returned_required_citation_count": 0,
+          "direction_correct": true,
+          "prompt_template_leak": false,
+          "latency_ms": 0.009,
+          "fallback_reason": null
+        }
+      ]
+    }
+  },
+  "guardrails": [
+    {
+      "scenario": "malformed_json",
+      "answer_source": "fallback",
+      "fallback_reason": "JSONDecodeError:structured_generation_failed",
+      "final_cited_evidence_ids": [
+        "prereq:G000027:G000028"
+      ],
+      "final_invalid_evidence_id_count": 0,
+      "passed": true
+    },
+    {
+      "scenario": "timeout",
+      "answer_source": "fallback",
+      "fallback_reason": "TimeoutError:structured_generation_failed",
+      "final_cited_evidence_ids": [
+        "prereq:G000027:G000028"
+      ],
+      "final_invalid_evidence_id_count": 0,
+      "passed": true
+    },
+    {
+      "scenario": "hallucinated_citation",
+      "answer_source": "fallback",
+      "fallback_reason": "no_valid_citations",
+      "final_cited_evidence_ids": [
+        "prereq:G000027:G000028"
+      ],
+      "final_invalid_evidence_id_count": 0,
+      "passed": true
+    }
+  ]
+}

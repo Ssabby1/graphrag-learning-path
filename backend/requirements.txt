@@ -5,4 +5,3 @@ neo4j==5.25.0
 networkx==3.3
 pytest==8.3.2
 httpx==0.28.1
-langchain-core==0.3.58

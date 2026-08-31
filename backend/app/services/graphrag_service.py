@@ -6,7 +6,7 @@ from app.retrieval.corpus_builder import evidence_id
 from app.retrieval.embedding_backend import get_embedding_backend
 from app.retrieval.embedding_cache import EmbeddingCache
 from app.retrieval.evidence_retriever import EvidenceRetriever
-from app.services.langchain_adapter import build_grounded_answer
+from app.services.answer_generator import StructuredAnswerGenerator
 from app.services.path_service import recommend_path
 
 
@@ -15,6 +15,8 @@ def query_graphrag(
     target_concept_id: str,
     mastered_concepts: list[str],
     repo: GraphRepository,
+    response_language: str = "auto",
+    answer_generator: StructuredAnswerGenerator | None = None,
 ) -> dict:
     path_result = recommend_path(
         target_concept_id=target_concept_id,
@@ -22,7 +24,6 @@ def query_graphrag(
         repo=repo,
     )
     path = path_result.get("path", [])
-    explanation = path_result.get("explanation", "")
     path_meta = path_result.get("meta", {})
     path_nodes = set(path)
     allowed_evidence_ids = [
@@ -48,10 +49,16 @@ def query_graphrag(
     hits = retrieval.get("hits", [])
     evidence_pack = build_evidence_pack(target_concept_id, path, hits)
 
-    requested_citations = [
-        item["evidence_id"] for item in evidence_pack.get("items", [])
-    ]
-    validation = validate_citation_ids(requested_citations, evidence_pack)
+    answer_result = (answer_generator or StructuredAnswerGenerator()).generate(
+        question=question,
+        target_concept_id=target_concept_id,
+        path=path,
+        evidence_pack=evidence_pack,
+        response_language=response_language,
+    )
+    validation = validate_citation_ids(
+        answer_result["cited_evidence_ids"], evidence_pack
+    )
     item_by_id = {
         item["evidence_id"]: item for item in evidence_pack.get("items", [])
     }
@@ -70,14 +77,17 @@ def query_graphrag(
             }
         )
 
-    answer = build_grounded_answer(
-        question=question,
-        path=path,
-        explanation=explanation,
-        retrieval_hits=hits,
+    pack_item_count = len(evidence_pack.get("items", []))
+    citation_completeness = (
+        len(validation["valid_evidence_ids"]) / pack_item_count
+        if pack_item_count
+        else 1.0
     )
     return {
-        "answer": answer,
+        "answer": answer_result["answer"],
+        "cited_evidence_ids": validation["valid_evidence_ids"],
+        "answer_source": answer_result["answer_source"],
+        "answer_language": answer_result["answer_language"],
         "path": path,
         "evidence": path_result.get("evidence", []),
         "evidence_pack": evidence_pack,
@@ -91,7 +101,7 @@ def query_graphrag(
             ),
             "dataset_hash": path_meta.get("dataset_hash"),
             "source": "path_service+relationship_evidence_retrieval",
-            "model": "template-grounded-answer",
+            "model": answer_result["generation_model"],
             "retrieval_strategy": "graph_scoped_vector",
             "vector_backend": backend.model_id if backend is not None else "not_used",
             "embedding_model": backend.model_id if backend is not None else "not_used",
@@ -106,5 +116,17 @@ def query_graphrag(
             "evidence_count": len(evidence_pack.get("items", [])),
             "citation_integrity": validation["integrity"],
             "invalid_evidence_id_count": validation["invalid_count"],
+            "answer_source": answer_result["answer_source"],
+            "answer_language": answer_result["answer_language"],
+            "generation_model": answer_result["generation_model"],
+            "generation_latency_ms": answer_result["generation_latency_ms"],
+            "structured_output_success": answer_result[
+                "structured_output_success"
+            ],
+            "fallback_reason": answer_result["fallback_reason"],
+            "discarded_invalid_citation_count": answer_result[
+                "discarded_invalid_citation_count"
+            ],
+            "citation_completeness": citation_completeness,
         },
     }

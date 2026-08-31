@@ -1,3 +1,5 @@
+from typing import Literal
+
 from pydantic import BaseModel, Field
 
 from app.schemas.evidence import EvidencePack
@@ -7,6 +9,7 @@ class GraphRagQueryRequest(BaseModel):
     question: str = Field(min_length=1)
     target_concept_id: str = Field(min_length=1)
     mastered_concepts: list[str] = Field(default_factory=list)
+    response_language: Literal["auto", "zh", "en"] = "auto"
 
 
 class GraphRagCitation(BaseModel):
@@ -39,10 +42,21 @@ class GraphRagMeta(BaseModel):
     evidence_count: int = 0
     citation_integrity: float = 1.0
     invalid_evidence_id_count: int = 0
+    answer_source: str = "fallback"
+    answer_language: str = "zh"
+    generation_model: str = "deterministic-evidence-fallback-v1"
+    generation_latency_ms: float = 0.0
+    structured_output_success: bool = True
+    fallback_reason: str | None = None
+    discarded_invalid_citation_count: int = 0
+    citation_completeness: float = 1.0
 
 
 class GraphRagQueryResponse(BaseModel):
     answer: str
+    cited_evidence_ids: list[str] = Field(default_factory=list)
+    answer_source: str = "fallback"
+    answer_language: str = "zh"
     path: list[str] = Field(default_factory=list)
     evidence: list[str] = Field(default_factory=list)
     evidence_pack: EvidencePack
