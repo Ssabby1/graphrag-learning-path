@@ -18,6 +18,7 @@ def test_recommend_path_when_target_mastered() -> None:
         repo=repo,
     )
 
+    assert result["status"] == "already_mastered"
     assert result["path"] == []
     assert result["graph_nodes"] == []
     assert result["graph_edges"] == []
@@ -40,10 +41,21 @@ def test_recommend_path_when_target_not_found() -> None:
         repo=repo,
     )
 
+    assert result["status"] == "not_found"
     assert result["path"] == []
     assert result["graph_nodes"] == []
     assert result["graph_edges"] == []
     assert "不存在" in result["explanation"]
+
+
+def test_not_found_takes_precedence_over_untrusted_mastered_input() -> None:
+    repo = FakeGraphRepository(
+        payload={"target_exists": False, "node_ids": [], "edges": []}
+    )
+
+    result = recommend_path("NOPE", ["NOPE"], repo)
+
+    assert result["status"] == "not_found"
 
 
 def test_recommend_path_topological_order_and_mastered_filter() -> None:
@@ -63,6 +75,7 @@ def test_recommend_path_topological_order_and_mastered_filter() -> None:
     )
 
     assert result["path"][-1] == "C4"
+    assert result["status"] == "ok"
     assert "C2" not in result["path"]
     assert result["path"] == ["C3", "C4"]
     assert result["evidence"] == ["C3"]
@@ -113,6 +126,7 @@ def test_recommend_path_reports_explicit_truncation() -> None:
     result = recommend_path("T", [], repo)
 
     assert result["truncated"] is True
+    assert result["status"] == "truncated"
     assert result["meta"]["omitted_node_count"] == 2
     assert "路径不完整" in result["explanation"]
 
@@ -134,6 +148,7 @@ def test_recommend_path_cycle_fallback_order() -> None:
     )
 
     assert sorted(result["path"]) == ["C1", "C2", "C3"]
+    assert result["status"] == "cycle"
     assert result["path"][-1] == "C3"
     assert sorted(result["graph_nodes"]) == ["C1", "C2", "C3"]
     assert sorted(result["graph_edges"]) == [("C1", "C2"), ("C2", "C1"), ("C2", "C3")]

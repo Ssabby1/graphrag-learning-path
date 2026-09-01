@@ -1,8 +1,8 @@
 {
   "run": {
-    "generated_at": "2026-08-31T03:58:01.564594+00:00",
+    "generated_at": "2026-09-01T06:19:30.196924+00:00",
     "dataset_profile": "full_local",
-    "git_commit": "6e9c61e88539996c4ccc0bec610ddad7d8fbd58b",
+    "git_commit": "4d9a2293f97162eb58ce3955c2ff801a00631fe6",
     "git_dirty": true,
     "python": "3.13.15",
     "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
@@ -36,8 +36,8 @@
           },
           "latency": {
             "count": 6,
-            "p50_ms": 57.633,
-            "p95_ms": 58.34
+            "p50_ms": 63.029,
+            "p95_ms": 65.01
           },
           "k": 5
         },
@@ -103,7 +103,7 @@
             "top_1_correct": false,
             "reciprocal_rank": 0.0,
             "ndcg": 0.0,
-            "latency_ms": 57.642
+            "latency_ms": 63.787
           },
           {
             "case_id": "evidence-005",
@@ -166,7 +166,7 @@
             "top_1_correct": false,
             "reciprocal_rank": 0.25,
             "ndcg": 0.430677,
-            "latency_ms": 57.817
+            "latency_ms": 63.295
           }
         ],
         "cases": [
@@ -231,7 +231,7 @@
             "top_1_correct": true,
             "reciprocal_rank": 1.0,
             "ndcg": 1.0,
-            "latency_ms": 57.625
+            "latency_ms": 65.418
           },
           {
             "case_id": "evidence-002",
@@ -294,7 +294,7 @@
             "top_1_correct": false,
             "reciprocal_rank": 0.0,
             "ndcg": 0.0,
-            "latency_ms": 57.642
+            "latency_ms": 63.787
           },
           {
             "case_id": "evidence-003",
@@ -357,7 +357,7 @@
             "top_1_correct": true,
             "reciprocal_rank": 1.0,
             "ndcg": 1.0,
-            "latency_ms": 58.514
+            "latency_ms": 61.663
           },
           {
             "case_id": "evidence-004",
@@ -420,7 +420,7 @@
             "top_1_correct": true,
             "reciprocal_rank": 1.0,
             "ndcg": 1.0,
-            "latency_ms": 57.404
+            "latency_ms": 60.907
           },
           {
             "case_id": "evidence-005",
@@ -483,7 +483,7 @@
             "top_1_correct": false,
             "reciprocal_rank": 0.25,
             "ndcg": 0.430677,
-            "latency_ms": 57.817
+            "latency_ms": 63.295
           },
           {
             "case_id": "evidence-006",
@@ -546,7 +546,7 @@
             "top_1_correct": true,
             "reciprocal_rank": 1.0,
             "ndcg": 1.0,
-            "latency_ms": 56.084
+            "latency_ms": 62.762
           }
         ]
       },
@@ -566,8 +566,8 @@
           },
           "latency": {
             "count": 6,
-            "p50_ms": 51.731,
-            "p95_ms": 52.41
+            "p50_ms": 56.085,
+            "p95_ms": 56.324
           },
           "k": 5
         },
@@ -600,7 +600,7 @@
             "top_1_correct": true,
             "reciprocal_rank": 1.0,
             "ndcg": 1.0,
-            "latency_ms": 52.528
+            "latency_ms": 56.074
           },
           {
             "case_id": "evidence-002",
@@ -629,7 +629,7 @@
             "top_1_correct": true,
             "reciprocal_rank": 1.0,
             "ndcg": 1.0,
-            "latency_ms": 51.224
+            "latency_ms": 56.324
           },
           {
             "case_id": "evidence-003",
@@ -658,7 +658,7 @@
             "top_1_correct": true,
             "reciprocal_rank": 1.0,
             "ndcg": 1.0,
-            "latency_ms": 52.058
+            "latency_ms": 55.669
           },
           {
             "case_id": "evidence-004",
@@ -687,7 +687,7 @@
             "top_1_correct": true,
             "reciprocal_rank": 1.0,
             "ndcg": 1.0,
-            "latency_ms": 51.023
+            "latency_ms": 56.096
           },
           {
             "case_id": "evidence-005",
@@ -716,7 +716,7 @@
             "top_1_correct": true,
             "reciprocal_rank": 1.0,
             "ndcg": 1.0,
-            "latency_ms": 51.627
+            "latency_ms": 55.661
           },
           {
             "case_id": "evidence-006",
@@ -745,7 +745,7 @@
             "top_1_correct": true,
             "reciprocal_rank": 1.0,
             "ndcg": 1.0,
-            "latency_ms": 51.835
+            "latency_ms": 56.324
           }
         ]
       }
@@ -767,7 +767,7 @@
     },
     "cache": {
       "warmup_status": "hit",
-      "warmup_latency_ms": 2466.941,
+      "warmup_latency_ms": 3761.557,
       "rebuilt": 0,
       "hits": 12
     },

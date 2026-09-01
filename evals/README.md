@@ -78,7 +78,11 @@ This evaluation never calls an external LLM. It separately measures the real det
 
 ```bash
 PYTHONPATH="$PWD" backend/.venv-macos-embeddings/bin/python \
+  evals/graphrag_contract_runner.py
+PYTHONPATH="$PWD" backend/.venv-macos-embeddings/bin/python \
+  evals/stage5_answer_runner.py
+PYTHONPATH="$PWD" backend/.venv-macos-embeddings/bin/python \
   evals/stage6_report.py
 ```
 
-The runner reads the versioned stage reports and writes four independent JSON/Markdown module scorecards plus a consolidated ablation table. It does not rerun or reinterpret model experiments. The public-sample end-to-end contract is covered by `backend/tests/test_stage6_public_sample.py`.
+The contract runner verifies special-status gating and separates complete path evidence from the bounded Answer Generator context on a 42-node/107-edge fixture. The Stage 6 runner then reads the versioned reports and writes four independent module scorecards, a consolidated ablation table, and the GraphRAG contract regression summary. The public-sample end-to-end contract is also covered by `backend/tests/test_stage6_public_sample.py`.

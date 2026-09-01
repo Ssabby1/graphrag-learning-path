@@ -1,0 +1,25 @@
+{
+  "generated_at": "2026-09-01T06:19:38.983808+00:00",
+  "git_commit": "4d9a2293f97162eb58ce3955c2ff801a00631fe6",
+  "fixture": {
+    "path_nodes": 42,
+    "path_edges": 107,
+    "answer_evidence_limit": 8
+  },
+  "status_gates": {
+    "not_found_rejected": true,
+    "already_mastered": true,
+    "truncated": true,
+    "cycle": true
+  },
+  "evidence_coverage": {
+    "path_node_count": 42,
+    "path_edge_count": 107,
+    "full_evidence_count": 107,
+    "selected_answer_evidence_count": 8,
+    "missing_path_evidence_count": 0,
+    "path_edge_evidence_coverage": 1.0,
+    "answer_evidence_citation_coverage": 1.0
+  },
+  "passed": true
+}

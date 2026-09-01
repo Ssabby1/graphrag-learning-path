@@ -34,6 +34,9 @@ def test_bilingual_fallback_follows_auto_and_explicit_language() -> None:
     )
 
     assert zh["answer_source"] == en["answer_source"] == "fallback"
+    assert zh["structured_output_success"] is False
+    assert zh["llm_structured_output_success"] is False
+    assert zh["response_schema_valid"] is True
     assert zh["answer_language"] == "zh"
     assert en["answer_language"] == "en"
     assert "建议按顺序学习" in zh["answer"]
@@ -57,6 +60,8 @@ def test_structured_llm_output_keeps_only_pack_citations() -> None:
     assert result["cited_evidence_ids"] == ["prereq:C1:C2"]
     assert result["discarded_invalid_citation_count"] == 1
     assert result["structured_output_success"] is True
+    assert result["llm_structured_output_success"] is True
+    assert result["response_schema_valid"] is True
 
 
 def test_only_hallucinated_citations_force_grounded_fallback() -> None:
@@ -71,6 +76,9 @@ def test_only_hallucinated_citations_force_grounded_fallback() -> None:
     )
 
     assert result["answer_source"] == "fallback"
+    assert result["structured_output_success"] is False
+    assert result["llm_structured_output_success"] is False
+    assert result["response_schema_valid"] is True
     assert result["fallback_reason"] == "no_valid_citations"
     assert result["cited_evidence_ids"] == ["prereq:C1:C2"]
     assert result["discarded_invalid_citation_count"] == 1
@@ -95,6 +103,8 @@ def test_malformed_output_timeout_and_language_mismatch_use_fallback() -> None:
     ).generate("Explain this path", "C2", ["C1", "C2"], _pack(), "en")
 
     assert malformed["answer_source"] == "fallback"
+    assert malformed["llm_structured_output_success"] is False
+    assert malformed["response_schema_valid"] is True
     assert "structured_generation_failed" in malformed["fallback_reason"]
     assert timed_out["answer_source"] == "fallback"
     assert timed_out["fallback_reason"].startswith("TimeoutError")

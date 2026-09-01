@@ -1,14 +1,15 @@
 {
   "module": "Answer Generator",
-  "generated_at": "2026-09-01T05:32:21.474756+00:00",
-  "git_commit": "135ad27adfcc256602504be78fb40b0a4af4e0a0",
+  "generated_at": "2026-09-01T06:19:39.094545+00:00",
+  "git_commit": "4d9a2293f97162eb58ce3955c2ff801a00631fe6",
   "source_report": "stage5_answer_generator.json",
   "configuration": {
     "implementation": "real deterministic fallback",
     "external_llm_called": false
   },
   "metrics": {
-    "Structured Output Success": "100.0%",
+    "Response Schema Valid (fallback)": "100.0%",
+    "LLM Structured Contract (fixture)": "100.0%",
     "Language Match": "100.0%",
     "Citation Integrity": "100.0%",
     "Required Citation Completeness": "100.0%",

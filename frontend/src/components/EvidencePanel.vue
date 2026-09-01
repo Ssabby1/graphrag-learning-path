@@ -2,7 +2,7 @@
   <section class="evidence-section" aria-labelledby="why-heading">
     <header class="section-heading">
       <div><span class="section-eyebrow">Evidence Pack 1.0</span><h2 id="why-heading">{{ copy.whyTitle }}</h2></div>
-      <span class="evidence-count">{{ items.length }} {{ copy.citations }}</span>
+      <span class="evidence-count">{{ items.length }} {{ copy.evidenceRelations }}</span>
     </header>
     <p class="section-copy">{{ copy.whyIntro }}</p>
     <ol v-if="items.length" class="evidence-list">

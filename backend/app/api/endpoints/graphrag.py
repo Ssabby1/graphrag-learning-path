@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 
 from app.api.deps import get_graph_repository
-from app.core.errors import RepositoryUnavailableError
+from app.core.errors import RepositoryUnavailableError, TargetConceptNotFoundError
 from app.repositories.graph_repository import GraphRepository
 from app.schemas.graphrag import GraphRagQueryRequest, GraphRagQueryResponse
 from app.services.graphrag_service import query_graphrag
@@ -24,5 +24,7 @@ def graphrag_query(
         )
     except RepositoryUnavailableError as exc:
         raise HTTPException(status_code=503, detail=str(exc)) from exc
+    except TargetConceptNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
 
     return GraphRagQueryResponse(**result)

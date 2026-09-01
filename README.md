@@ -14,8 +14,10 @@ A semantic match can suggest relevant concepts, but relevance alone cannot guara
 
 - the graph determines the complete prerequisite path;
 - multilingual retrieval resolves a target and selects evidence, but never changes the path;
-- the Answer Generator can cite only relationship IDs in the current Evidence Pack;
+- every path relationship is retained in a complete Evidence Pack, while only a bounded, ranked subset is sent to the Answer Generator;
+- the Answer Generator can cite only relationship IDs in that selected answer evidence;
 - a deterministic validator removes unknown citations before the API responds.
+- explicit `ok`, `already_mastered`, `not_found`, `truncated`, and `cycle` states prevent unsafe paths from becoming normal answers.
 
 ## Architecture
 
@@ -24,19 +26,20 @@ flowchart LR
     Q[English / Chinese / Mixed Query] --> R[Target Resolver]
     R -->|Resolved Concept ID| P[Path Planner]
     G[(Prerequisite Graph)] --> P
-    P -->|Ordered Ancestor Closure| E[Evidence Retriever]
-    G -->|Allowed Relationship IDs| E
-    E --> EP[Evidence Pack 1.0]
-    EP --> A[Answer Generator]
+    P -->|Ordered Ancestor Closure| F[Full Path Evidence Pack]
+    G -->|All Path Relationship IDs| F
+    F -->|Complete Explanation Evidence| UI[Path + Why Recommended + Sources]
+    F --> E[Ranked Answer Evidence Selector]
+    E -->|Bounded Context| A[Answer Generator]
     A --> V[Citation Validator]
-    V --> UI[Path + Why Recommended + Sources]
+    V --> UI
 ```
 
 The core contract is deliberately narrow:
 
 ```text
-query → resolved target → graph-safe path → scoped relationship evidence
-      → grounded answer → validated citations
+query → resolved target → explicit path status → complete relationship evidence
+      → bounded answer evidence → grounded answer → validated citations
 ```
 
 ## Cross-Language Example
@@ -60,6 +63,7 @@ The public sample contains 15 synthetic, curated bilingual concepts and 18 relat
 | Path Planner | Closure recall 1514/1514; 0 structural violations | all 190 local targets |
 | Evidence Retriever | Graph-scoped Recall@5 6/6; Citation Integrity 6/6 | 6 labelled fixtures |
 | Answer Generator | Language match 6/6; invalid evidence IDs 0 | offline fallback + fake contract tests |
+| GraphRAG Contract | 42 nodes / 107 edges fully evidenced; answer context 8 | deterministic regression fixture |
 
 These are directional engineering evaluations, not claims of statistical generalisation. No external LLM was called for the versioned Answer Generator report: deterministic fallback claim lineage measured `0/6` unsupported claim templates, while real-model unsupported-claim rate and human faithfulness remain explicitly unmeasured. See the [four independent scorecards and feature ablation](evals/reports/stage6_summary.md).
 
@@ -105,6 +109,8 @@ For the full local graph, set `GRAPH_BACKEND=neo4j` and start Neo4j with `docker
 cd backend
 .venv-unix/bin/python -m pytest
 cd ..
+backend/.venv-unix/bin/python evals/graphrag_contract_runner.py
+backend/.venv-unix/bin/python evals/stage5_answer_runner.py
 backend/.venv-unix/bin/python evals/stage6_report.py
 cd frontend
 npm run build

@@ -2,7 +2,7 @@
 
 > 文档用途：这是当前仓库下一阶段改造的唯一执行入口。新的开发线程应先完整阅读本文件，再检查仓库与运行环境，从“阶段 0”开始按顺序实施。除非新的实验证据推翻现有判断，不要重新扩张产品范围。
 >
-> 当前状态：阶段 0 至阶段 6 已完成；公开双语样例可在 macOS、Linux 与 Windows 上离线启动并演示完整 GraphRAG 链路，四模块报告、消融、英文 README、跨语言演示和前端证据解释均已交付；Reranker 默认关闭；外部 LLM 的真实 Unsupported Claim Rate 与人工 Faithfulness 仍明确留作后续在线评测。
+> 当前状态：阶段 0 至阶段 6 已完成，阶段 6 后的 P0 正确性复核也已落实：路径状态显式传播，异常状态不会进入正常生成；完整路径证据与有限回答上下文已拆分，并分别报告路径覆盖率、回答证据引用覆盖率和 citation integrity。公开双语样例可离线演示完整链路；Reranker 默认关闭；外部 LLM 的真实 Unsupported Claim Rate 与人工 Faithfulness 仍明确留作后续在线评测。
 >
 > 最后确认日期：2026-08-31。
 
@@ -1203,7 +1203,7 @@ uncertain
 - [x] Evidence Pack 可追溯；
 - [x] Citation Integrity = 100%；
 - [x] Invalid Evidence ID = 0；
-- [x] Citation Correctness、Completeness 和 Unsupported Claim Rate 报告实测值（Unsupported Claim Rate 当前限定为确定性 fallback `0/6`；外部 LLM 仍未测）；
+- [x] Citation Correctness、回答证据引用覆盖率、路径边证据覆盖率和 Unsupported Claim Rate 报告实测值（路径边证据覆盖率使用 42 节点/107 边回归 fixture；Unsupported Claim Rate 当前限定为确定性 fallback `0/6`；外部 LLM 仍未测）；
 - [x] 抽取置信度不被误称为教学正确率。
 
 ### 生成
@@ -1265,3 +1265,4 @@ uncertain
 | 2026-08-31 | 阶段 4 | `d3a821d` | 新增关系级 Evidence Pack 1.0、必要先修/补充背景类型、关系属性追踪、图范围 Evidence Retriever 与 Citation Validator；GraphRAG 引用由 concept ID 切换为稳定 relationship evidence ID；未知引用由确定性后处理拒绝；抽取置信度与人工审核状态保持分离 | 后端 `61 passed`；708 条关系语料全局 Vector Recall@5 `5/6=83.3%`、MRR@5 `0.708`、nDCG@5 `0.738`；Graph-scoped Recall/MRR/nDCG/Top-1 均 `6/6=100%`；Citation Integrity `6/6=100%`；Invalid Evidence ID `0`；热缓存全局 P50/P95 `57.6/58.3 ms`、图范围 `51.7/52.4 ms` | 仅 6 条人工标注方向性 fixture，不能代表总体 Citation Correctness；生产关系仍以 `verification_status` 独立标记，大部分为 `unreviewed`；自然语言 Answer Generator 留待阶段 5。下一轮从阶段 5 开始 |
 | 2026-08-31 | 阶段 5 | `7149efe` | 新增结构化 AnswerGenerator 接口和 Evidence Pack 限定 Prompt；支持 OpenAI-compatible JSON 输出、生成后 Citation Validator、自动/显式中英文选择、确定性双语 fallback、生成来源/模型/延迟/完整率元数据；删除旧 PromptTemplate formatter 与未使用的 LangChain 依赖 | 后端 `68 passed`；离线 fallback 结构成功、语言匹配、Citation Integrity、必要引用完整率、关系方向表达均 `6/6=100%`，Prompt 泄漏 `0/6`；结构化 fake-LLM 契约 `6/6`；格式错误、超时、幻觉引用 guardrail `3/3`，最终 Invalid Evidence ID `0` | 本轮未调用外部 LLM，fake LLM 只验证结构契约，不能代表真实模型质量；Unsupported Claim Rate 与人工 Faithfulness 明确未测量。下一轮进入阶段 6 |
 | 2026-08-31 | 阶段 6 | `135ad27` | 扩展 15 概念/18 关系的人工确认双语公开样例；新增只读 CSV graph backend 与 macOS/Linux shell 启停入口，Windows PowerShell 入口继续保留；重构英文优先 Agent 前端，加入可交互学习路径图和关系级 “Why This Was Recommended”；补齐英文 README、中文入口、架构图、真实浏览器跨语言演示 GIF、四模块报告和消融汇总 | 后端 `71 passed`；前端生产构建成功；真实浏览器验证英文问题定位中文概念并生成 6 节点路径、5 条可验证引用，Citation Integrity `100%`；公开样例 DAG/闭包端到端测试通过；确定性 fallback Unsupported Claim `0/6` | 报告仍是小型方向性工程评估；本轮未调用外部 LLM，真实模型 Unsupported Claim Rate 与人工 Faithfulness 仍未测；Neo4j 保留为可选生产后端，零依赖演示默认使用 CSV |
+| 2026-09-01 | 阶段 6 P0 正确性修正 | `4d9a229`（前一检查点；工作区实现） | 新增 `ok/already_mastered/not_found/truncated/cycle` 路径状态并在 GraphRAG 层门控；目标不存在返回 404，已掌握/截断/环路返回 system 说明且不进入 Answer Generator；拆分 `full_evidence_pack` 与 `selected_answer_evidence`；前端完整展示全部路径关系；fallback 的 LLM 结构化成功标记改为 false，同时独立报告响应 schema 有效性 | 后端 `76 passed`；前端生产构建成功；42 节点/107 路径边契约回归中完整证据 `107`、回答证据 `8`、缺失 `0`、路径边证据覆盖率 `100%`；四种异常状态门控全部 PASS；Stage 5/6 报告已按新指标定义重生成 | `citation_completeness` 暂保留为兼容别名，新字段为 `answer_evidence_citation_coverage`；真实外部 LLM 仍未评测；依赖升级、可选 E5 安装、完整图谱人工审核和 Windows 真正冒烟测试属于后续 P1 |

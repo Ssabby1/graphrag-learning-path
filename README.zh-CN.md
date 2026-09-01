@@ -8,10 +8,12 @@
 
 - 图谱决定学习顺序，向量检索不能改变路径；
 - Target Resolver 支持中文、英文和中英混合查询；
+- 完整 Evidence Pack 覆盖路径中的全部关系，另从中选取有限证据交给 Answer Generator；
 - Evidence Pack 使用稳定的关系级 ID，可追溯到证据文本；
 - Answer Generator 默认跟随问题语言，也允许显式选择；
 - 外部 LLM 不可用时使用确定性双语 fallback；
 - 未知 citation 在 API 返回前会被移除。
+- `ok`、`already_mastered`、`not_found`、`truncated`、`cycle` 状态会阻止异常路径生成普通回答。
 
 ## 公开样例
 
@@ -54,3 +56,5 @@ npm run build
 ```
 
 四模块独立报告、限制说明和功能消融结果见 [阶段 6 评测汇总](evals/reports/stage6_summary.md)。
+
+新增 GraphRAG 契约回归使用 42 节点、107 条路径关系验证：完整证据覆盖率 `100%`，仅选取 8 条证据进入回答上下文；目标不存在、已掌握、截断和环路状态均有独立门控。

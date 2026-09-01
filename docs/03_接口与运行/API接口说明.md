@@ -168,26 +168,29 @@
 响应字段：
 
 - `answer`：最终自然语言回答
-- `answer_source`：`llm` 或 `fallback`
+- `status`：`ok`、`already_mastered`、`not_found`、`truncated` 或 `cycle`
+- `answer_source`：`llm`、`fallback` 或 `system`
 - `answer_language`：最终使用的 `zh` 或 `en`
 - `cited_evidence_ids`：经过校验后保留的关系证据 ID
 - `path`：推荐学习路径
 - `evidence`：兼容字段，保留路径中的先修概念 ID
-- `evidence_pack`：确定性构建的关系级证据集合
-- `citations`：只引用当前 Evidence Pack 内 evidence ID 的关系引用列表
+- `full_evidence_pack`：覆盖全部路径关系的确定性证据集合，供前端完整解释
+- `selected_answer_evidence`：从完整证据中排序选出的有限生成上下文
+- `citations`：只引用 `selected_answer_evidence` 内 evidence ID 的关系引用列表
 - `meta`：元信息，包括检索与生成策略说明
 
 响应示例：
 
 ```json
 {
+  "status": "ok",
   "answer": "建议先学习组合逻辑基础，再进入时序逻辑相关内容。",
   "answer_source": "fallback",
   "answer_language": "zh",
   "cited_evidence_ids": ["prereq:C010:C021"],
   "path": ["C005", "C010", "C021"],
   "evidence": ["C010"],
-  "evidence_pack": {
+  "full_evidence_pack": {
     "evidence_pack_version": "1.0",
     "target_concept_id": "C021",
     "path": ["C005", "C010", "C021"],
@@ -216,6 +219,21 @@
       }
     ]
   },
+  "selected_answer_evidence": {
+    "evidence_pack_version": "1.0",
+    "target_concept_id": "C021",
+    "path": ["C005", "C010", "C021"],
+    "items": [
+      {
+        "evidence_id": "prereq:C010:C021",
+        "evidence_type": "required_prerequisite",
+        "from_concept": {"id": "C010", "name": "组合逻辑基础"},
+        "relation": "PREREQUISITE_OF",
+        "to_concept": {"id": "C021", "name": "时序逻辑"},
+        "reason": "组合逻辑基础是时序逻辑的前置知识"
+      }
+    ]
+  },
   "citations": [
     {
       "evidence_id": "prereq:C010:C021",
@@ -234,19 +252,27 @@
     "source": "path_service+relationship_evidence_retrieval",
     "model": "deterministic-evidence-fallback-v1",
     "retrieval_strategy": "graph_scoped_vector",
-    "evidence_retrieval_strategy": "graph_scoped_vector",
+    "evidence_retrieval_strategy": "full_graph+selected_vector",
     "vector_backend": "intfloat/multilingual-e5-small",
     "fusion": "none",
     "reranker": "none",
     "evidence_count": 1,
+    "answer_evidence_count": 1,
+    "path_edge_count": 1,
+    "path_edge_evidence_count": 1,
+    "missing_path_evidence_count": 0,
+    "path_edge_evidence_coverage": 1.0,
     "citation_integrity": 1.0,
     "invalid_evidence_id_count": 0,
     "answer_source": "fallback",
     "answer_language": "zh",
     "generation_model": "deterministic-evidence-fallback-v1",
-    "structured_output_success": true,
+    "structured_output_success": false,
+    "llm_structured_output_success": false,
+    "response_schema_valid": true,
     "discarded_invalid_citation_count": 0,
-    "citation_completeness": 1.0
+    "citation_completeness": 1.0,
+    "answer_evidence_citation_coverage": 1.0
   }
 }
 ```

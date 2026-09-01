@@ -118,6 +118,7 @@ def test_path_recommend_returns_complete_meta_contract() -> None:
 
     assert response.status_code == 200
     payload = response.json()
+    assert payload["status"] == "ok"
     assert payload["truncated"] is False
     assert payload["max_depth"] == 0
     assert payload["meta"]["node_count"] == 1

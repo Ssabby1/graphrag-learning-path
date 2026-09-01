@@ -228,6 +228,8 @@ class StructuredAnswerGenerator:
                     (time.perf_counter() - started) * 1000, 3
                 ),
                 "structured_output_success": True,
+                "llm_structured_output_success": True,
+                "response_schema_valid": True,
                 "fallback_reason": None,
                 "discarded_invalid_citation_count": validation["invalid_count"],
             }
@@ -258,7 +260,9 @@ class StructuredAnswerGenerator:
             "generation_latency_ms": round(
                 (time.perf_counter() - started) * 1000, 3
             ),
-            "structured_output_success": True,
+            "structured_output_success": False,
+            "llm_structured_output_success": False,
+            "response_schema_valid": True,
             "fallback_reason": reason,
             "discarded_invalid_citation_count": discarded_invalid_count,
         }

@@ -59,10 +59,12 @@ def main() -> int:
         load("stage3_reranker_ablation.json"), load("stage4_evidence.json"), load("stage5_answer_generator.json")
     )
     graph = json.loads((ROOT / "backend/docs/graph_validation_report_stage1.json").read_text(encoding="utf-8"))
+    contract = load("graphrag_contract.json")
     target = stage2["target_resolver"]["metrics"]
     planner = graph["metrics"]
     evidence = stage4["evaluation"]
     answer = stage5["strategies"]["offline_fallback"]["metrics"]
+    answer_contract = stage5["strategies"]["structured_contract_fixture"]["metrics"]
 
     modules = [
         write_module("target_resolver", "Target Resolver", "stage2_retrieval.json",
@@ -79,7 +81,7 @@ def main() -> int:
             ["6 human-labelled directional fixtures.", "Extraction confidence is not instructional correctness."]),
         write_module("answer_generator", "Answer Generator", "stage5_answer_generator.json",
             {"implementation": stage5["strategies"]["offline_fallback"]["implementation"], "external_llm_called": stage5["run"]["external_llm_called"]},
-            {"Structured Output Success": pct(answer["structured_output_success_rate"]), "Language Match": pct(answer["answer_language_match_rate"]), "Citation Integrity": pct(answer["citation_integrity"]), "Required Citation Completeness": pct(answer["required_citation_completeness"]), "Prompt Leak Rate": pct(answer["prompt_template_leak_rate"]), "Unsupported Claim Rate (deterministic fallback)": "0/6 claim templates (0.0%)"},
+            {"Response Schema Valid (fallback)": pct(answer["response_schema_valid_rate"]), "LLM Structured Contract (fixture)": pct(answer_contract["llm_structured_output_success_rate"]), "Language Match": pct(answer["answer_language_match_rate"]), "Citation Integrity": pct(answer["citation_integrity"]), "Required Citation Completeness": pct(answer["required_citation_completeness"]), "Prompt Leak Rate": pct(answer["prompt_template_leak_rate"]), "Unsupported Claim Rate (deterministic fallback)": "0/6 claim templates (0.0%)"},
             ["No external LLM was called in this run.", "The fallback unsupported-claim result follows deterministic claim lineage; real-model unsupported-claim rate and human faithfulness remain unmeasured.", "Fake-LLM tests validate the contract, not model quality or faithfulness."])
     ]
 
@@ -90,13 +92,16 @@ def main() -> int:
         {"feature": "Multilingual retrieval", "baseline": pct(stage2["baseline_comparison"]["stage0_vector_top_1"]), "candidate": pct(target["top_1_accuracy"]), "decision": "Keep multilingual E5"},
         {"feature": "Cross-encoder reranker", "baseline": pct(rerank["strategies"]["none"]["metrics"]["top_1_accuracy"]), "candidate": pct(rerank["strategies"]["cross_encoder"]["metrics"]["top_1_accuracy"]), "decision": "Disabled by quality gate"},
         {"feature": "Graph-scoped evidence", "baseline": pct(evidence["strategies"]["global_vector"]["metrics"]["evidence_recall_at_k"]), "candidate": pct(evidence["strategies"]["graph_scoped_vector"]["metrics"]["evidence_recall_at_k"]), "decision": "Keep graph scope"},
-        {"feature": "Structured Answer Generator", "baseline": "0.0% structured", "candidate": pct(answer["structured_output_success_rate"]), "decision": "Keep contract + fallback"},
+        {"feature": "Structured Answer Generator", "baseline": "0.0% structured", "candidate": f"{pct(answer_contract['llm_structured_output_success_rate'])} contract; {pct(answer['response_schema_valid_rate'])} fallback schema", "decision": "Keep contract + fallback"},
     ]
-    report = {"generated_at": datetime.now(timezone.utc).isoformat(), "git_commit": git_commit(), "module_reports": [item["module"] for item in modules], "ablations": ablations}
+    report = {"generated_at": datetime.now(timezone.utc).isoformat(), "git_commit": git_commit(), "module_reports": [item["module"] for item in modules], "ablations": ablations, "graphrag_contract": contract}
     (REPORTS / "stage6_summary.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     rows = "\n".join(f"| {r['feature']} | {r['baseline']} | {r['candidate']} | {r['decision']} |" for r in ablations)
     links = "\n".join(f"- [{item['module']}](stage6_modules/{slug}.md)" for item, slug in zip(modules, ("target_resolver", "path_planner", "evidence_retriever", "answer_generator")))
-    (REPORTS / "stage6_summary.md").write_text(f"# Stage 6 Evaluation Summary\n\n## Independent Module Reports\n\n{links}\n\n## Feature Ablation\n\n| Feature | Baseline | Candidate | Decision |\n| --- | ---: | ---: | --- |\n{rows}\n\nAll values are copied from versioned stage reports; limitations remain attached to each module report.\n", encoding="utf-8")
+    coverage = contract["evidence_coverage"]
+    gates = contract["status_gates"]
+    gate_rows = "\n".join(f"| {name} | {'Pass' if passed else 'Fail'} |" for name, passed in gates.items())
+    (REPORTS / "stage6_summary.md").write_text(f"# Stage 6 Evaluation Summary\n\n## Independent Module Reports\n\n{links}\n\n## Feature Ablation\n\n| Feature | Baseline | Candidate | Decision |\n| --- | ---: | ---: | --- |\n{rows}\n\n## GraphRAG Contract Regression\n\n| Status gate | Result |\n| --- | --- |\n{gate_rows}\n\n- Long-path fixture: `{coverage['path_node_count']}` nodes / `{coverage['path_edge_count']}` edges\n- Full evidence: `{coverage['full_evidence_count']}` relationships\n- Selected answer evidence: `{coverage['selected_answer_evidence_count']}` relationships\n- Path-edge evidence coverage: `{coverage['path_edge_evidence_coverage']:.1%}`\n\nAll values are copied from versioned stage reports; limitations remain attached to each module report.\n", encoding="utf-8")
     print(REPORTS / "stage6_summary.md")
     return 0
 

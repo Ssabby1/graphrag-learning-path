@@ -1,7 +1,7 @@
 {
   "run": {
-    "generated_at": "2026-08-31T04:14:09.921321+00:00",
-    "git_commit": "d3a821d87f09b85eedec1fdf0719c113c8daa2f4",
+    "generated_at": "2026-09-01T06:19:38.615471+00:00",
+    "git_commit": "4d9a2293f97162eb58ce3955c2ff801a00631fe6",
     "git_dirty": true,
     "python": "3.13.15",
     "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
@@ -14,6 +14,16 @@
       "implementation": "real deterministic fallback",
       "metrics": {
         "structured_output_success_rate": {
+          "numerator": 0,
+          "denominator": 6,
+          "value": 0.0
+        },
+        "llm_structured_output_success_rate": {
+          "numerator": 0,
+          "denominator": 6,
+          "value": 0.0
+        },
+        "response_schema_valid_rate": {
           "numerator": 6,
           "denominator": 6,
           "value": 1.0
@@ -56,8 +66,8 @@
         "invalid_evidence_id_count": 0,
         "latency": {
           "count": 6,
-          "p50_ms": 0.003,
-          "p95_ms": 0.567
+          "p50_ms": 0.004,
+          "p95_ms": 0.742
         },
         "unsupported_claim_rate": {
           "numerator": null,
@@ -82,7 +92,9 @@
           "answer_source": "fallback",
           "answer_language": "zh",
           "generation_model": "deterministic-evidence-fallback-v1",
-          "structured_output_success": true,
+          "structured_output_success": false,
+          "llm_structured_output_success": false,
+          "response_schema_valid": true,
           "language_match": true,
           "citation_integrity": 1.0,
           "invalid_evidence_id_count": 0,
@@ -90,7 +102,7 @@
           "returned_required_citation_count": 1,
           "direction_correct": true,
           "prompt_template_leak": false,
-          "latency_ms": 0.753,
+          "latency_ms": 0.986,
           "fallback_reason": "llm_disabled_or_missing_api_key"
         },
         {
@@ -103,7 +115,9 @@
           "answer_source": "fallback",
           "answer_language": "en",
           "generation_model": "deterministic-evidence-fallback-v1",
-          "structured_output_success": true,
+          "structured_output_success": false,
+          "llm_structured_output_success": false,
+          "response_schema_valid": true,
           "language_match": true,
           "citation_integrity": 1.0,
           "invalid_evidence_id_count": 0,
@@ -111,7 +125,7 @@
           "returned_required_citation_count": 1,
           "direction_correct": true,
           "prompt_template_leak": false,
-          "latency_ms": 0.008,
+          "latency_ms": 0.011,
           "fallback_reason": "llm_disabled_or_missing_api_key"
         },
         {
@@ -124,49 +138,9 @@
           "answer_source": "fallback",
           "answer_language": "zh",
           "generation_model": "deterministic-evidence-fallback-v1",
-          "structured_output_success": true,
-          "language_match": true,
-          "citation_integrity": 1.0,
-          "invalid_evidence_id_count": 0,
-          "required_citation_count": 1,
-          "returned_required_citation_count": 1,
-          "direction_correct": true,
-          "prompt_template_leak": false,
-          "latency_ms": 0.002,
-          "fallback_reason": "llm_disabled_or_missing_api_key"
-        },
-        {
-          "case_id": "answer-004",
-          "expected_answer_language": "en",
-          "answer": "Follow this learning order: G000128 → G000138. 基本RS触发器 is a prerequisite for 边沿D触发器 (后置知识点:边沿D触发器; 前置知识点:基本RS触发器).",
-          "cited_evidence_ids": [
-            "prereq:G000128:G000138"
-          ],
-          "answer_source": "fallback",
-          "answer_language": "en",
-          "generation_model": "deterministic-evidence-fallback-v1",
-          "structured_output_success": true,
-          "language_match": true,
-          "citation_integrity": 1.0,
-          "invalid_evidence_id_count": 0,
-          "required_citation_count": 1,
-          "returned_required_citation_count": 1,
-          "direction_correct": true,
-          "prompt_template_leak": false,
-          "latency_ms": 0.002,
-          "fallback_reason": "llm_disabled_or_missing_api_key"
-        },
-        {
-          "case_id": "answer-005",
-          "expected_answer_language": "zh",
-          "answer": "建议按顺序学习：G000006 → G000063。逻辑变量 是 逻辑函数的表示方法 的前置知识（后置知识点:逻辑函数的表示方法; 前置知识点:逻辑变量）。",
-          "cited_evidence_ids": [
-            "prereq:G000006:G000063"
-          ],
-          "answer_source": "fallback",
-          "answer_language": "zh",
-          "generation_model": "deterministic-evidence-fallback-v1",
-          "structured_output_success": true,
+          "structured_output_success": false,
+          "llm_structured_output_success": false,
+          "response_schema_valid": true,
           "language_match": true,
           "citation_integrity": 1.0,
           "invalid_evidence_id_count": 0,
@@ -178,6 +152,52 @@
           "fallback_reason": "llm_disabled_or_missing_api_key"
         },
         {
+          "case_id": "answer-004",
+          "expected_answer_language": "en",
+          "answer": "Follow this learning order: G000128 → G000138. 基本RS触发器 is a prerequisite for 边沿D触发器 (前置知识点:基本RS触发器).",
+          "cited_evidence_ids": [
+            "prereq:G000128:G000138"
+          ],
+          "answer_source": "fallback",
+          "answer_language": "en",
+          "generation_model": "deterministic-evidence-fallback-v1",
+          "structured_output_success": false,
+          "llm_structured_output_success": false,
+          "response_schema_valid": true,
+          "language_match": true,
+          "citation_integrity": 1.0,
+          "invalid_evidence_id_count": 0,
+          "required_citation_count": 1,
+          "returned_required_citation_count": 1,
+          "direction_correct": true,
+          "prompt_template_leak": false,
+          "latency_ms": 0.003,
+          "fallback_reason": "llm_disabled_or_missing_api_key"
+        },
+        {
+          "case_id": "answer-005",
+          "expected_answer_language": "zh",
+          "answer": "建议按顺序学习：G000006 → G000063。逻辑变量 是 逻辑函数的表示方法 的前置知识（后置知识点:逻辑函数的表示方法）。",
+          "cited_evidence_ids": [
+            "prereq:G000006:G000063"
+          ],
+          "answer_source": "fallback",
+          "answer_language": "zh",
+          "generation_model": "deterministic-evidence-fallback-v1",
+          "structured_output_success": false,
+          "llm_structured_output_success": false,
+          "response_schema_valid": true,
+          "language_match": true,
+          "citation_integrity": 1.0,
+          "invalid_evidence_id_count": 0,
+          "required_citation_count": 1,
+          "returned_required_citation_count": 1,
+          "direction_correct": true,
+          "prompt_template_leak": false,
+          "latency_ms": 0.004,
+          "fallback_reason": "llm_disabled_or_missing_api_key"
+        },
+        {
           "case_id": "answer-006",
           "expected_answer_language": "en",
           "answer": "Start with the target concept G000009. The current evidence pack contains no additional prerequisite relationship.",
@@ -185,7 +205,9 @@
           "answer_source": "fallback",
           "answer_language": "en",
           "generation_model": "deterministic-evidence-fallback-v1",
-          "structured_output_success": true,
+          "structured_output_success": false,
+          "llm_structured_output_success": false,
+          "response_schema_valid": true,
           "language_match": true,
           "citation_integrity": 1.0,
           "invalid_evidence_id_count": 0,
@@ -202,6 +224,16 @@
       "implementation": "deterministic fake LLM; validates contract and guardrails, not model quality",
       "metrics": {
         "structured_output_success_rate": {
+          "numerator": 6,
+          "denominator": 6,
+          "value": 1.0
+        },
+        "llm_structured_output_success_rate": {
+          "numerator": 6,
+          "denominator": 6,
+          "value": 1.0
+        },
+        "response_schema_valid_rate": {
           "numerator": 6,
           "denominator": 6,
           "value": 1.0
@@ -244,8 +276,8 @@
         "invalid_evidence_id_count": 0,
         "latency": {
           "count": 6,
-          "p50_ms": 0.01,
-          "p95_ms": 0.031
+          "p50_ms": 0.011,
+          "p95_ms": 0.04
         },
         "unsupported_claim_rate": {
           "numerator": null,
@@ -271,6 +303,8 @@
           "answer_language": "zh",
           "generation_model": "deterministic-structured-contract-fixture",
           "structured_output_success": true,
+          "llm_structured_output_success": true,
+          "response_schema_valid": true,
           "language_match": true,
           "citation_integrity": 1.0,
           "invalid_evidence_id_count": 0,
@@ -278,7 +312,7 @@
           "returned_required_citation_count": 1,
           "direction_correct": true,
           "prompt_template_leak": false,
-          "latency_ms": 0.034,
+          "latency_ms": 0.046,
           "fallback_reason": null
         },
         {
@@ -292,6 +326,8 @@
           "answer_language": "en",
           "generation_model": "deterministic-structured-contract-fixture",
           "structured_output_success": true,
+          "llm_structured_output_success": true,
+          "response_schema_valid": true,
           "language_match": true,
           "citation_integrity": 1.0,
           "invalid_evidence_id_count": 0,
@@ -299,7 +335,7 @@
           "returned_required_citation_count": 1,
           "direction_correct": true,
           "prompt_template_leak": false,
-          "latency_ms": 0.022,
+          "latency_ms": 0.02,
           "fallback_reason": null
         },
         {
@@ -313,6 +349,8 @@
           "answer_language": "zh",
           "generation_model": "deterministic-structured-contract-fixture",
           "structured_output_success": true,
+          "llm_structured_output_success": true,
+          "response_schema_valid": true,
           "language_match": true,
           "citation_integrity": 1.0,
           "invalid_evidence_id_count": 0,
@@ -334,6 +372,8 @@
           "answer_language": "en",
           "generation_model": "deterministic-structured-contract-fixture",
           "structured_output_success": true,
+          "llm_structured_output_success": true,
+          "response_schema_valid": true,
           "language_match": true,
           "citation_integrity": 1.0,
           "invalid_evidence_id_count": 0,
@@ -341,7 +381,7 @@
           "returned_required_citation_count": 1,
           "direction_correct": true,
           "prompt_template_leak": false,
-          "latency_ms": 0.009,
+          "latency_ms": 0.01,
           "fallback_reason": null
         },
         {
@@ -355,6 +395,8 @@
           "answer_language": "zh",
           "generation_model": "deterministic-structured-contract-fixture",
           "structured_output_success": true,
+          "llm_structured_output_success": true,
+          "response_schema_valid": true,
           "language_match": true,
           "citation_integrity": 1.0,
           "invalid_evidence_id_count": 0,
@@ -362,7 +404,7 @@
           "returned_required_citation_count": 1,
           "direction_correct": true,
           "prompt_template_leak": false,
-          "latency_ms": 0.009,
+          "latency_ms": 0.012,
           "fallback_reason": null
         },
         {
@@ -374,6 +416,8 @@
           "answer_language": "en",
           "generation_model": "deterministic-structured-contract-fixture",
           "structured_output_success": true,
+          "llm_structured_output_success": true,
+          "response_schema_valid": true,
           "language_match": true,
           "citation_integrity": 1.0,
           "invalid_evidence_id_count": 0,

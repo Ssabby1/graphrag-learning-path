@@ -25,6 +25,7 @@ jobs:
       RERANKER_ENABLED: "false"
       LLM_ENABLED: "false"
       PYTHONDONTWRITEBYTECODE: "1"
+      PYTHONPATH: ${{ github.workspace }}/backend:${{ github.workspace }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -44,14 +45,17 @@ jobs:
         working-directory: backend
         run: python -m pytest tests -q
 
-      - name: Regenerate Stage 6 reports
-        run: python evals/stage6_report.py
+      - name: Regenerate correctness and Stage 6 reports
+        run: |
+          python evals/graphrag_contract_runner.py
+          python evals/stage5_answer_runner.py
+          python evals/stage6_report.py
 
       - name: Validate report artifacts
         run: >-
           python -c "import json, pathlib;
           root = pathlib.Path('evals/reports');
-          files = [root / 'stage6_summary.json',
+          files = [root / 'graphrag_contract.json', root / 'stage6_summary.json',
           *(root / 'stage6_modules' / f'{name}.json' for name in
           ('target_resolver', 'path_planner', 'evidence_retriever', 'answer_generator'))];
           [json.loads(path.read_text(encoding='utf-8')) for path in files];

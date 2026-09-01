@@ -7,25 +7,10 @@ from app.services.explanation_service import get_fallback_reasoning_and_explanat
 def recommend_path(target_concept_id: str, mastered_concepts: list[str], repo: GraphRepository) -> dict:
     mastered_set = set(mastered_concepts)
 
-    if target_concept_id in mastered_set:
-        return {
-            "target_concept_id": target_concept_id,
-            "path": [],
-            "evidence": [f"{target_concept_id} already in mastered_concepts"],
-            "graph_nodes": [],
-            "graph_edges": [],
-            "reasoning_steps": ["Target concept already mastered"],
-            "explanation": "目标知识点已掌握，无需额外学习路径。",
-            "has_cycle": False,
-            "truncated": False,
-            "max_depth": 0,
-            "meta": _meta(node_count=0, edge_count=0, skipped_mastered_count=1),
-            "explanation_source": "fallback",
-        }
-
     subgraph = repo.get_prerequisite_subgraph(target_concept_id=target_concept_id)
     if not subgraph.get("target_exists", False):
         return {
+            "status": "not_found",
             "target_concept_id": target_concept_id,
             "path": [],
             "evidence": [],
@@ -37,6 +22,23 @@ def recommend_path(target_concept_id: str, mastered_concepts: list[str], repo: G
             "truncated": False,
             "max_depth": 0,
             "meta": _meta(node_count=0, edge_count=0),
+            "explanation_source": "fallback",
+        }
+
+    if target_concept_id in mastered_set:
+        return {
+            "status": "already_mastered",
+            "target_concept_id": target_concept_id,
+            "path": [],
+            "evidence": [f"{target_concept_id} already in mastered_concepts"],
+            "graph_nodes": [],
+            "graph_edges": [],
+            "reasoning_steps": ["Target concept already mastered"],
+            "explanation": "目标知识点已掌握，无需额外学习路径。",
+            "has_cycle": False,
+            "truncated": False,
+            "max_depth": 0,
+            "meta": _meta(node_count=0, edge_count=0, skipped_mastered_count=1),
             "explanation_source": "fallback",
         }
 
@@ -96,6 +98,7 @@ def recommend_path(target_concept_id: str, mastered_concepts: list[str], repo: G
     )
 
     return {
+        "status": "cycle" if has_cycle else "truncated" if truncated else "ok",
         "target_concept_id": target_concept_id,
         "path": ordered_path,
         "evidence": missing_prerequisites,

@@ -1,15 +1,15 @@
 # Stage 5 Answer Generator report
 
-- Generated at: `2026-08-31T04:14:09.921321+00:00`
+- Generated at: `2026-09-01T06:19:38.615471+00:00`
 - Cases: `6`
 - Real external LLM evaluated: `false`
 
 ## Offline and contract results
 
-| Strategy | Structured | Fallback | LLM contract | Language | Citation integrity | Completeness | Direction | Prompt leak | P50/P95 |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| offline_fallback | 100.0% | 100.0% | 0.0% | 100.0% | 100.0% | 100.0% | 100.0% | 0.0% | 0.003/0.567 ms |
-| structured_contract_fixture | 100.0% | 0.0% | 100.0% | 100.0% | 100.0% | 100.0% | 100.0% | 0.0% | 0.01/0.031 ms |
+| Strategy | Response schema valid | LLM structured | Fallback | LLM contract | Language | Citation integrity | Completeness | Direction | Prompt leak | P50/P95 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| offline_fallback | 100.0% | 0.0% | 100.0% | 0.0% | 100.0% | 100.0% | 100.0% | 100.0% | 0.0% | 0.004/0.742 ms |
+| structured_contract_fixture | 100.0% | 100.0% | 0.0% | 100.0% | 100.0% | 100.0% | 100.0% | 100.0% | 0.0% | 0.011/0.04 ms |
 
 ## Guardrails
 

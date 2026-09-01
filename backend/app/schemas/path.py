@@ -1,6 +1,9 @@
 ﻿from pydantic import BaseModel, Field
 
 
+from app.schemas.status import PathStatus
+
+
 class PathRecommendRequest(BaseModel):
     target_concept_id: str = Field(min_length=1)
     mastered_concepts: list[str] = Field(default_factory=list)
@@ -20,6 +23,7 @@ class PathMeta(BaseModel):
 
 
 class PathRecommendResponse(BaseModel):
+    status: PathStatus = "ok"
     target_concept_id: str
     path: list[str] = Field(default_factory=list)
     evidence: list[str] = Field(default_factory=list)

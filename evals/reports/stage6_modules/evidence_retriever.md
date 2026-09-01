@@ -1,7 +1,7 @@
 # Evidence Retriever
 
 Source: `stage4_evidence.json`  
-Git commit: `135ad27adfcc256602504be78fb40b0a4af4e0a0`
+Git commit: `4d9a2293f97162eb58ce3955c2ff801a00631fe6`
 
 ## Metrics
 

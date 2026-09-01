@@ -115,6 +115,10 @@ def _evaluate_strategy(
                 "answer_language": result["answer_language"],
                 "generation_model": result["generation_model"],
                 "structured_output_success": result["structured_output_success"],
+                "llm_structured_output_success": result[
+                    "llm_structured_output_success"
+                ],
+                "response_schema_valid": result["response_schema_valid"],
                 "language_match": (
                     result["answer_language"] == case["expected_answer_language"]
                     and _language_matches(
@@ -154,6 +158,13 @@ def _evaluate_strategy(
         "metrics": {
             "structured_output_success_rate": safe_ratio(
                 sum(case["structured_output_success"] for case in details), len(details)
+            ),
+            "llm_structured_output_success_rate": safe_ratio(
+                sum(case["llm_structured_output_success"] for case in details),
+                len(details),
+            ),
+            "response_schema_valid_rate": safe_ratio(
+                sum(case["response_schema_valid"] for case in details), len(details)
             ),
             "fallback_success_rate": safe_ratio(
                 sum(
@@ -255,14 +266,15 @@ def _write_markdown(report: dict[str, Any], path: Path) -> None:
         "",
         "## Offline and contract results",
         "",
-        "| Strategy | Structured | Fallback | LLM contract | Language | Citation integrity | Completeness | Direction | Prompt leak | P50/P95 |",
-        "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
+        "| Strategy | Response schema valid | LLM structured | Fallback | LLM contract | Language | Citation integrity | Completeness | Direction | Prompt leak | P50/P95 |",
+        "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
     ]
     for name, result in report["strategies"].items():
         metrics = result["metrics"]
         latency = metrics["latency"]
         lines.append(
-            f"| {name} | {_percent(metrics['structured_output_success_rate'])} | "
+            f"| {name} | {_percent(metrics['response_schema_valid_rate'])} | "
+            f"{_percent(metrics['llm_structured_output_success_rate'])} | "
             f"{_percent(metrics['fallback_success_rate'])} | "
             f"{_percent(metrics['llm_contract_success_rate'])} | "
             f"{_percent(metrics['answer_language_match_rate'])} | "

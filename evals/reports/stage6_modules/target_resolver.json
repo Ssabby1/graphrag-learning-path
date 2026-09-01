@@ -1,7 +1,7 @@
 {
   "module": "Target Resolver",
-  "generated_at": "2026-09-01T05:32:21.460646+00:00",
-  "git_commit": "135ad27adfcc256602504be78fb40b0a4af4e0a0",
+  "generated_at": "2026-09-01T06:19:39.078950+00:00",
+  "git_commit": "4d9a2293f97162eb58ce3955c2ff801a00631fe6",
   "source_report": "stage2_retrieval.json",
   "configuration": {
     "embedding": {

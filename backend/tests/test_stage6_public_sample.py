@@ -2,38 +2,18 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from app.graph.graph_snapshot import GraphSnapshot
-from app.graph.prerequisite_index import PrerequisiteGraphIndex
+from app.repositories.csv_graph_repository import CsvGraphRepository
 from app.services.graphrag_service import query_graphrag
-from scripts.import_data import load_concepts, load_relations
 
 ROOT = Path(__file__).resolve().parents[2]
 
 
-class PublicSampleRepository:
+class PublicSampleRepository(CsvGraphRepository):
     def __init__(self) -> None:
-        self.concepts = load_concepts(ROOT / "data/seed/concepts.csv")
-        self.relations = load_relations(ROOT / "data/seed/relations.csv")
-        self.snapshot = GraphSnapshot.build(
-            [row["concept_id"] for row in self.concepts],
-            [(row["from_concept_id"], row["to_concept_id"]) for row in self.relations],
+        super().__init__(
+            ROOT / "data/seed/concepts.csv",
+            ROOT / "data/seed/relations.csv",
         )
-
-    def get_prerequisite_subgraph(self, target_concept_id: str) -> dict:
-        closure = PrerequisiteGraphIndex(self.snapshot).closure(
-            target=target_concept_id, max_nodes=100, max_edges=200
-        )
-        return {
-            "target_exists": closure.target_exists, "target_concept_id": target_concept_id,
-            "node_ids": list(closure.node_ids), "edges": list(closure.edges),
-            "has_cycle": closure.has_cycle, "truncated": closure.truncated,
-            "max_depth": closure.max_depth, "dataset_hash": closure.content_hash,
-            "planner_strategy": "cached_graph_ancestor_closure",
-        }
-
-    def get_relation_corpus(self, relation_types=("PREREQUISITE_OF",)) -> list[dict]:
-        names = {row["concept_id"]: row["name"] for row in self.concepts}
-        return [{**row, "from_name": names[row["from_concept_id"]], "to_name": names[row["to_concept_id"]], "source_chapters": ["Public Sample"]} for row in self.relations if row["relation_type"] in relation_types]
 
 
 def test_public_sample_is_bilingual_curated_and_connected() -> None:
@@ -58,10 +38,13 @@ def test_cross_language_public_sample_runs_full_graphrag_chain(monkeypatch, tmp_
     assert result["path"][-1] == "c_006"
     assert result["answer_language"] == "en"
     assert result["answer_source"] == "fallback"
-    assert result["evidence_pack"]["items"]
+    assert result["status"] == "ok"
+    assert result["full_evidence_pack"]["items"]
+    assert result["selected_answer_evidence"]["items"]
+    assert result["meta"]["path_edge_evidence_coverage"] == 1.0
     assert result["meta"]["citation_integrity"] == 1.0
     assert result["meta"]["invalid_evidence_id_count"] == 0
-    assert set(result["cited_evidence_ids"]) <= {item["evidence_id"] for item in result["evidence_pack"]["items"]}
+    assert set(result["cited_evidence_ids"]) <= {item["evidence_id"] for item in result["selected_answer_evidence"]["items"]}
 
 
 def test_cross_platform_entrypoints_exist() -> None:
