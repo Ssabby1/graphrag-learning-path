@@ -1,79 +1,48 @@
 $ErrorActionPreference = "Stop"
 
 $root = Split-Path -Parent $MyInvocation.MyCommand.Path
-$neo4jBin = Join-Path $root "neo4j\neo4j-community-2025.12.1\bin"
-$neo4jBat = Join-Path $neo4jBin "neo4j.bat"
 $backendDir = Join-Path $root "backend"
-$backendPython = Join-Path $backendDir ".venv\Scripts\python.exe"
-$backendRun = Join-Path $backendDir "run.py"
-$backendEnv = Join-Path $backendDir ".env"
-$backendEnvExample = Join-Path $backendDir ".env.example"
 $frontendDir = Join-Path $root "frontend"
-$frontendEnv = Join-Path $frontendDir ".env"
-$frontendEnvExample = Join-Path $frontendDir ".env.example"
-$npmCmd = "npm.cmd"
+$backendPython = Join-Path $backendDir ".venv-windows\Scripts\python.exe"
+$runDir = Join-Path $root ".codex-tmp\runtime"
 
-function Assert-Exists {
-    param(
-        [string]$Path,
-        [string]$Label
-    )
-
-    if (-not (Test-Path $Path)) {
-        throw "$Label not found: $Path"
-    }
-}
-
-Assert-Exists -Path $neo4jBat -Label "Neo4j launcher"
 if (-not (Test-Path $backendPython)) {
-    throw "Backend Python virtual environment not found. Please run .\setup.ps1 first."
+    throw "Windows virtual environment not found. Run .\setup.ps1 first."
 }
-Assert-Exists -Path $backendRun -Label "Backend entry"
-Assert-Exists -Path $frontendDir -Label "Frontend directory"
-
-if (-not (Test-Path $backendEnv)) {
-    Copy-Item -LiteralPath $backendEnvExample -Destination $backendEnv
-    Write-Host "Created backend\.env from backend\.env.example. If Neo4j auth fails, update NEO4J_PASSWORD in backend\.env." -ForegroundColor Yellow
+if (-not (Get-Command "npm.cmd" -ErrorAction SilentlyContinue)) {
+    throw "npm.cmd is unavailable. Install Node.js 18+ first."
 }
 
-if (-not (Test-Path $frontendEnv)) {
-    Copy-Item -LiteralPath $frontendEnvExample -Destination $frontendEnv
-}
+New-Item -ItemType Directory -Force -Path $runDir | Out-Null
 
-Write-Host ""
-Write-Host "[1/3] Starting Neo4j..." -ForegroundColor Cyan
-& $neo4jBat start | Out-Host
-& $neo4jBat status | Out-Host
+# Children inherit these values. CSV is the portable default on a clean clone.
+$env:GRAPH_BACKEND = if ($env:GRAPH_BACKEND) { $env:GRAPH_BACKEND } else { "csv" }
+$env:GRAPH_CONCEPTS_CSV = if ($env:GRAPH_CONCEPTS_CSV) { $env:GRAPH_CONCEPTS_CSV } else { Join-Path $root "data\seed\concepts.csv" }
+$env:GRAPH_RELATIONS_CSV = if ($env:GRAPH_RELATIONS_CSV) { $env:GRAPH_RELATIONS_CSV } else { Join-Path $root "data\seed\relations.csv" }
+$env:HF_HOME = if ($env:HF_HOME) { $env:HF_HOME } else { Join-Path $backendDir ".cache\huggingface" }
+$env:LLM_ENABLED = if ($env:LLM_ENABLED) { $env:LLM_ENABLED } else { "false" }
+$env:PYTHONPATH = $backendDir
 
-Write-Host ""
-Write-Host "[2/3] Starting backend..." -ForegroundColor Cyan
-$backendCommand = @(
-    '$env:PYTHONPATH=''.''',
-    '& ''.\.venv\Scripts\python.exe'' ''run.py'''
-) -join '; '
-Start-Process -FilePath "powershell.exe" -ArgumentList @(
-    "-NoExit",
-    "-Command",
-    "Set-Location '$backendDir'; $backendCommand"
-) | Out-Null
+Write-Host "[1/2] Starting backend in $($env:GRAPH_BACKEND) mode..." -ForegroundColor Cyan
+$backendProcess = Start-Process -FilePath $backendPython `
+    -ArgumentList "run.py" `
+    -WorkingDirectory $backendDir `
+    -RedirectStandardOutput (Join-Path $runDir "backend.log") `
+    -RedirectStandardError (Join-Path $runDir "backend-error.log") `
+    -PassThru
+$backendProcess.Id | Set-Content -LiteralPath (Join-Path $runDir "backend.pid") -Encoding ASCII
 
-Write-Host ""
-Write-Host "[3/3] Starting frontend..." -ForegroundColor Cyan
-$frontendCommand = @(
-    'if (-not (Test-Path ''.\node_modules'')) { & npm.cmd install }',
-    '& npm.cmd run dev'
-) -join '; '
-Start-Process -FilePath "powershell.exe" -ArgumentList @(
-    "-NoExit",
-    "-Command",
-    "Set-Location '$frontendDir'; $frontendCommand"
-) | Out-Null
+Write-Host "[2/2] Starting frontend..." -ForegroundColor Cyan
+$frontendProcess = Start-Process -FilePath "cmd.exe" `
+    -ArgumentList @("/d", "/c", "npm run dev") `
+    -WorkingDirectory $frontendDir `
+    -RedirectStandardOutput (Join-Path $runDir "frontend.log") `
+    -RedirectStandardError (Join-Path $runDir "frontend-error.log") `
+    -PassThru
+$frontendProcess.Id | Set-Content -LiteralPath (Join-Path $runDir "frontend.pid") -Encoding ASCII
 
-Write-Host ""
-Write-Host "All services have been triggered." -ForegroundColor Green
+Write-Host "Services started." -ForegroundColor Green
 Write-Host "Frontend: http://127.0.0.1:5173"
-Write-Host "Backend docs: http://127.0.0.1:8000/docs"
-Write-Host ""
-Write-Host "If you need to stop Neo4j later:"
-Write-Host "  cd '$neo4jBin'"
-Write-Host "  .\neo4j.bat stop"
+Write-Host "API docs: http://127.0.0.1:8000/docs"
+Write-Host "Graph backend: $($env:GRAPH_BACKEND)"
+Write-Host "Logs: $runDir"

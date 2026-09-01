@@ -36,6 +36,8 @@
 
 使用 `./stop-dev.sh` 停止服务。
 
+默认是完全离线的轻量演示，不安装或暗中下载模型，前端会明确显示“降级 Hashing”。如需真实多语言 E5 检索，运行 `./setup.sh --embeddings`；该显式选项会安装 `sentence-transformers` 并下载约 470 MB 模型。
+
 ## Windows PowerShell
 
 ```powershell
@@ -44,7 +46,9 @@
 .\stop-dev.ps1
 ```
 
-访问地址：前端 <http://127.0.0.1:5173>，API 文档 <http://127.0.0.1:8000/docs>，Neo4j Browser <http://127.0.0.1:7474>。
+Windows 默认同样使用公开 CSV 样例，全新 clone 不再依赖未跟踪的 Neo4j 目录。使用 `.\setup.ps1 -Embeddings` 显式安装和下载 E5。
+
+访问地址：前端 <http://127.0.0.1:5173>，API 文档 <http://127.0.0.1:8000/docs>。
 
 ## 验证
 

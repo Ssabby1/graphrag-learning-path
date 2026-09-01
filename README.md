@@ -88,9 +88,11 @@ Prerequisites: Python 3.11–3.13 and Node.js 18+. The public CSV graph mode doe
 
 Stop the services with `./stop-dev.sh`.
 
+The default is a lightweight, fully offline demo. It deliberately skips the optional model runtime and the UI labels retrieval as **Degraded Hashing**. To install `sentence-transformers` and explicitly download the approximately 470 MB multilingual E5 model, run `./setup.sh --embeddings`. Normal startup never downloads model weights.
+
 ### Windows PowerShell
 
-The original Windows scripts remain supported and use the bundled Neo4j runtime:
+The Windows scripts use the same public CSV sample by default, so a clean clone does not require Java, Docker, or a bundled Neo4j directory:
 
 ```powershell
 .\setup.ps1
@@ -99,7 +101,9 @@ The original Windows scripts remain supported and use the bundled Neo4j runtime:
 
 Stop with `.\stop-dev.ps1`.
 
-Open the frontend at <http://127.0.0.1:5173>, API docs at <http://127.0.0.1:8000/docs>, and Neo4j Browser at <http://127.0.0.1:7474>.
+Use `.\setup.ps1 -Embeddings` to opt into the real multilingual E5 runtime and model download.
+
+Open the frontend at <http://127.0.0.1:5173> and API docs at <http://127.0.0.1:8000/docs>.
 
 For the full local graph, set `GRAPH_BACKEND=neo4j` and start Neo4j with `docker compose up -d neo4j` or your local installation. The Compose password is for development only; set `NEO4J_PASSWORD` to override it.
 
@@ -118,7 +122,7 @@ npm run build
 
 The public end-to-end test runs the English question above through graph closure, evidence retrieval, Evidence Pack construction, bilingual fallback generation, and citation validation without Neo4j or a network call.
 
-GitHub Actions runs the same offline backend suite, regenerates and validates the Stage 6 reports, builds the frontend, and checks the Unix and Windows entrypoints. CI never requires an LLM API key or downloads the optional embedding model.
+GitHub Actions runs the same offline backend suite, regenerates and validates the Stage 6 reports, audits and builds the frontend, checks Unix shell syntax, and performs a real clean-clone setup/start/API/frontend smoke test on Windows. CI never requires an LLM API key or downloads the optional embedding model.
 
 ## Repository Map
 

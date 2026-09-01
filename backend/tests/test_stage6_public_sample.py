@@ -1,6 +1,9 @@
 from __future__ import annotations
 
+import csv
 from pathlib import Path
+import subprocess
+import sys
 
 from app.repositories.csv_graph_repository import CsvGraphRepository
 from app.services.graphrag_service import query_graphrag
@@ -50,3 +53,40 @@ def test_cross_language_public_sample_runs_full_graphrag_chain(monkeypatch, tmp_
 def test_cross_platform_entrypoints_exist() -> None:
     for name in ("setup.sh", "start-dev.sh", "stop-dev.sh", "setup.ps1", "start-dev.ps1", "stop-dev.ps1", "compose.yaml"):
         assert (ROOT / name).exists()
+
+
+def test_unix_setup_documents_explicit_embedding_opt_in() -> None:
+    result = subprocess.run(
+        ["bash", str(ROOT / "setup.sh"), "--help"],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    assert "--embeddings" in result.stdout
+    assert "multilingual E5" in result.stdout
+
+
+def test_relationship_review_queue_requires_human_decisions(tmp_path) -> None:
+    output = tmp_path / "review.csv"
+    subprocess.run(
+        [
+            sys.executable,
+            str(ROOT / "scripts/build_relationship_review_queue.py"),
+            "--concepts-csv",
+            str(ROOT / "data/seed/concepts.csv"),
+            "--relations-csv",
+            str(ROOT / "data/seed/relations.csv"),
+            "--output",
+            str(output),
+            "--limit",
+            "30",
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    with output.open(encoding="utf-8-sig", newline="") as handle:
+        rows = list(csv.DictReader(handle))
+    assert rows
+    assert all(row["review_status"] == "pending" for row in rows)
+    assert all(row["evidence_id"].startswith("prereq:") for row in rows)

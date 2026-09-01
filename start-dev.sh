@@ -11,6 +11,7 @@ cd "$PROJECT_ROOT/backend"
 GRAPH_BACKEND="${GRAPH_BACKEND:-csv}" \
 GRAPH_CONCEPTS_CSV="${GRAPH_CONCEPTS_CSV:-$PROJECT_ROOT/data/seed/concepts.csv}" \
 GRAPH_RELATIONS_CSV="${GRAPH_RELATIONS_CSV:-$PROJECT_ROOT/data/seed/relations.csv}" \
+HF_HOME="${HF_HOME:-$PROJECT_ROOT/backend/.cache/huggingface}" \
 LLM_ENABLED="${LLM_ENABLED:-false}" \
 PYTHONPATH=. "$VENV_DIR/bin/python" run.py >"$RUN_DIR/backend.log" 2>&1 &
 echo $! >"$RUN_DIR/backend.pid"

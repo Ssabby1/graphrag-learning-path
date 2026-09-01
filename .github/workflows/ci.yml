@@ -80,12 +80,16 @@ jobs:
         working-directory: frontend
         run: npm ci
 
+      - name: Audit production dependencies
+        working-directory: frontend
+        run: npm audit --omit=dev --audit-level=moderate
+
       - name: Build frontend
         working-directory: frontend
         run: npm run build
 
   portability:
-    name: Cross-platform entrypoint checks
+    name: Unix entrypoint checks
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -95,9 +99,71 @@ jobs:
       - name: Validate Unix entrypoints
         run: bash -n setup.sh start-dev.sh stop-dev.sh
 
-      - name: Verify Windows entrypoints are versioned
+
+  windows-smoke:
+    name: Windows CSV setup and smoke test
+    runs-on: windows-latest
+    timeout-minutes: 15
+    env:
+      EMBEDDING_BACKEND: unicode_hashing
+      LLM_ENABLED: "false"
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: backend/requirements.txt
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Run clean-clone setup
+        shell: pwsh
+        run: .\setup.ps1
+
+      - name: Start and exercise the public sample
         shell: pwsh
         run: |
-          $required = @('setup.ps1', 'start-dev.ps1', 'stop-dev.ps1')
-          $missing = $required | Where-Object { -not (Test-Path $_ -PathType Leaf) }
-          if ($missing) { throw "Missing Windows entrypoints: $($missing -join ', ')" }
+          try {
+            .\start-dev.ps1
+            $deadline = (Get-Date).AddSeconds(60)
+            do {
+              try {
+                $health = Invoke-RestMethod -Uri 'http://127.0.0.1:8000/health' -TimeoutSec 2
+              } catch {
+                Start-Sleep -Seconds 1
+              }
+            } until ($health.status -eq 'ok' -or (Get-Date) -gt $deadline)
+            if ($health.status -ne 'ok') { throw 'Backend did not become healthy within 60 seconds.' }
+
+            $body = @{
+              question = 'What should I learn before studying Karnaugh maps?'
+              target_concept_id = 'c_006'
+              mastered_concepts = @()
+              response_language = 'en'
+            } | ConvertTo-Json
+            $result = Invoke-RestMethod -Method Post -Uri 'http://127.0.0.1:8000/graphrag/query' -ContentType 'application/json' -Body $body
+            if ($result.status -ne 'ok') { throw "Unexpected GraphRAG status: $($result.status)" }
+            if ($result.meta.path_edge_evidence_coverage -ne 1) { throw 'Path evidence coverage is incomplete.' }
+
+            $frontend = $null
+            $frontendDeadline = (Get-Date).AddSeconds(30)
+            do {
+              try {
+                $frontend = Invoke-WebRequest -Uri 'http://127.0.0.1:5173' -TimeoutSec 2
+              } catch {
+                Start-Sleep -Seconds 1
+              }
+            } until ($frontend.StatusCode -eq 200 -or (Get-Date) -gt $frontendDeadline)
+            if ($frontend.StatusCode -ne 200) { throw 'Frontend did not become ready within 30 seconds.' }
+          } finally {
+            .\stop-dev.ps1
+          }

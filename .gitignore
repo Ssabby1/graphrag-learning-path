@@ -49,6 +49,7 @@ docs/毕业论文大纲_*.md
 !/scripts/demo_data_reset.py
 !/scripts/import_data.py
 !/scripts/init_db.cypher
+!/scripts/build_relationship_review_queue.py
 !/scripts/validate_graph.py
 
 # OS / editor
