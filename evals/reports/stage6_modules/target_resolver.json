@@ -1,0 +1,33 @@
+{
+  "module": "Target Resolver",
+  "generated_at": "2026-08-31T07:59:27.349127+00:00",
+  "git_commit": "7149efe8a9e40f77b9456eb89b8fd9bb3847c712",
+  "source_report": "stage2_retrieval.json",
+  "configuration": {
+    "embedding": {
+      "backend": "sentence_transformers",
+      "model_id": "intfloat/multilingual-e5-small",
+      "dimension": 384,
+      "normalization": true,
+      "allow_download": false,
+      "min_score": 0.8,
+      "min_margin": 0.01,
+      "threshold_source": "stage2_directional_development_set"
+    },
+    "concept_corpus": {
+      "document_count": 190,
+      "hash": "bf7d22c23d8723c19bf3302f08dfeeb5860ad913ba0dcdfba17c6b9ee6328d2d"
+    }
+  },
+  "metrics": {
+    "Top-1 Accuracy": "100.0%",
+    "Recall@5": "100.0%",
+    "Cross-Lingual Top-1": "100.0%",
+    "Rejection Accuracy": "100.0%",
+    "P95 Latency": "24.1 ms"
+  },
+  "limits": [
+    "36 directional fixtures; results are not a population estimate.",
+    "Curated aliases are versioned and auditable."
+  ]
+}

@@ -1,3 +1,19 @@
 from_concept_id,to_concept_id,relation_type,evidence_text,source_images,confidence_max,verification_status
-c_001,c_002,PREREQUISITE_OF,组合逻辑设计建立在基本逻辑门行为之上,synthetic_01,0.95,unreviewed
-c_002,c_003,PREREQUISITE_OF,时序逻辑电路包含组合逻辑与存储状态,synthetic_02,0.92,unreviewed
+c_001,c_003,PREREQUISITE_OF,真值表需要枚举二进制输入组合；Truth tables enumerate binary input combinations.,public_sample,1.00,public_sample_curated
+c_002,c_003,PREREQUISITE_OF,真值表用于记录逻辑门的输入输出行为；Truth tables record the input-output behavior of logic gates.,public_sample,1.00,public_sample_curated
+c_003,c_004,PREREQUISITE_OF,布尔表达式与真值表描述同一逻辑函数；Boolean expressions and truth tables describe the same logic function.,public_sample,1.00,public_sample_curated
+c_004,c_005,PREREQUISITE_OF,规范最小项和最大项由布尔变量及其反变量构成；Canonical terms are built from Boolean variables and their complements.,public_sample,1.00,public_sample_curated
+c_005,c_006,PREREQUISITE_OF,卡诺图的每个单元对应一个最小项；Each Karnaugh-map cell corresponds to a minterm.,public_sample,1.00,public_sample_curated
+c_006,c_007,PREREQUISITE_OF,正确构造卡诺图后才能按相邻规则分组化简；A correctly constructed K-map is required before grouping adjacent cells.,public_sample,1.00,public_sample_curated
+c_002,c_008,PREREQUISITE_OF,组合逻辑电路由基本逻辑门实现；Combinational circuits are implemented with basic logic gates.,public_sample,1.00,public_sample_curated
+c_004,c_008,PREREQUISITE_OF,组合逻辑设计使用布尔表达式表示电路功能；Combinational design uses Boolean expressions to represent circuit behavior.,public_sample,1.00,public_sample_curated
+c_007,c_008,PREREQUISITE_OF,化简后的逻辑函数可减少组合电路所需门数；Simplified logic functions can reduce gate count.,public_sample,1.00,public_sample_curated
+c_001,c_009,PREREQUISITE_OF,半加器对两个二进制位执行加法；A half adder adds two binary bits.,public_sample,1.00,public_sample_curated
+c_002,c_009,PREREQUISITE_OF,半加器的和与进位由逻辑门实现；Half-adder sum and carry are implemented with logic gates.,public_sample,1.00,public_sample_curated
+c_009,c_010,PREREQUISITE_OF,全加器可由两个半加器和进位逻辑组成；A full adder can be composed from two half adders and carry logic.,public_sample,1.00,public_sample_curated
+c_008,c_011,PREREQUISITE_OF,编码器是具有特定输入输出映射的组合逻辑电路；An encoder is a combinational circuit with a defined input-output mapping.,public_sample,1.00,public_sample_curated
+c_002,c_012,PREREQUISITE_OF,锁存器使用交叉耦合逻辑门形成反馈；Latches use cross-coupled gates to create feedback.,public_sample,1.00,public_sample_curated
+c_012,c_013,PREREQUISITE_OF,触发器在锁存结构基础上增加时钟控制；Flip-flops add clock control to latch structures.,public_sample,1.00,public_sample_curated
+c_013,c_014,PREREQUISITE_OF,寄存器由多个同步触发器组成；Registers are composed of multiple synchronized flip-flops.,public_sample,1.00,public_sample_curated
+c_013,c_015,PREREQUISITE_OF,计数器用触发器保存并更新离散状态；Counters use flip-flops to store and update discrete states.,public_sample,1.00,public_sample_curated
+c_001,c_015,PREREQUISITE_OF,二进制计数器的状态采用二进制编码；Binary-counter states use binary encoding.,public_sample,1.00,public_sample_curated

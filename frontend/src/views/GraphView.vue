@@ -1,329 +1,66 @@
-﻿
 <template>
-  <div class="page">
-    <section class="hero card">
-      <div class="hero-topline">
-        <span class="eyebrow">{{ t('heroEyebrow') }}</span>
-        <button class="lang-toggle" @click="toggleLanguage">{{ language === 'zh' ? 'ZH / EN' : 'EN / ZH' }}</button>
+  <div class="page" :lang="language">
+    <a class="skip-link" href="#agent-workspace">Skip to Agent Workspace</a>
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="GraphRAG Learning Path home"><span class="brand-mark" aria-hidden="true"></span><span>{{ copy.brand }}</span></a>
+      <div class="header-actions">
+        <span class="service-pill" :class="{ online: health.status === 'ok' }" aria-live="polite"><span aria-hidden="true"></span>{{ copy.service }} · {{ health.status === 'ok' ? copy.online : copy.offline }}</span>
+        <button type="button" class="text-button" @click="toggleLanguage">{{ copy.language }}</button>
       </div>
-      <h1>{{ t('heroTitle') }}</h1>
-      <p class="hero-text">{{ t('heroBody') }}</p>
-      <div v-if="showGuide" class="guide-box">
-        <strong>{{ t('guideTitle') }}</strong>
-        <span>{{ nextHint }}</span>
-        <button class="ghost-button" @click="showGuide = false">{{ t('hideGuide') }}</button>
-      </div>
-      <div class="status-strip">
-        <span class="status-chip" :class="serviceStatusClass">{{ t('serviceStatus') }} / {{ serviceStatusLabel }}</span>
-        <span class="status-chip muted">{{ t('selectedTarget') }} / {{ selectedTarget ? displayConcept(selectedTarget) : t('notSelected') }}</span>
-      </div>
-    </section>
-
-    <div v-if="uiError" class="error-banner card">
-      <strong>{{ t('serviceNotice') }}</strong>
-      <span>{{ uiError }}</span>
-    </div>
-
-    <section class="workspace card">
-      <div class="section-head">
-        <div>
-          <div class="section-kicker">{{ t('plannerInput') }}</div>
-          <h2>{{ t('plannerTitle') }}</h2>
-          <p class="section-text">{{ t('plannerDescription') }}</p>
+    </header>
+    <main id="top">
+      <section class="hero">
+        <div class="hero-copy"><span class="eyebrow">{{ copy.eyebrow }}</span><h1>{{ copy.title }}</h1><p>{{ copy.intro }}</p><button type="button" class="demo-link" @click="loadDemo">{{ copy.sample }} <span aria-hidden="true">↗</span></button></div>
+        <aside class="pipeline" aria-labelledby="pipeline-heading"><span class="pipeline-label" id="pipeline-heading">{{ copy.pipeline }}</span><ol><li v-for="(item,index) in copy.pipelineItems" :key="item"><span>{{ String(index+1).padStart(2,'0') }}</span>{{ item }}</li></ol></aside>
+      </section>
+      <div v-if="uiError" class="error-banner" role="alert">{{ uiError }}</div>
+      <section id="agent-workspace" class="workspace" aria-labelledby="question-heading">
+        <div class="workspace-main">
+          <div class="field"><label id="question-heading" for="learning-question">{{ copy.questionLabel }}</label><p id="question-help">{{ copy.questionHelp }}</p><textarea id="learning-question" v-model="question" name="learning-question" rows="4" autocomplete="off" :placeholder="copy.questionPlaceholder" aria-describedby="question-help"></textarea></div>
+          <div class="primary-actions"><button type="button" class="button button-secondary" :disabled="plannerPending || !question.trim()" @click="interpretQuestion">{{ plannerPending ? copy.identifying : copy.identify }}</button><button type="button" class="button button-primary" :disabled="agentPending || !selectedTargetId" @click="runAgent">{{ agentPending ? copy.running : copy.run }}</button></div>
         </div>
-        <button class="ghost-button" @click="bootstrap">{{ t('refreshData') }}</button>
-      </div>
-
-      <div class="step-row">
-        <div v-for="step in steps" :key="step.key" class="step-card" :class="{ active: step.active, done: step.done }">
-          <span class="step-index">{{ step.index }}</span>
-          <div>
-            <strong>{{ step.title }}</strong>
-            <p>{{ step.desc }}</p>
+        <aside class="context-panel">
+          <div class="context-header"><span>Context</span><button type="button" class="text-button" @click="bootstrap">{{ copy.refresh }}</button></div>
+          <div class="field compact-field">
+            <label for="target-search">{{ copy.targetLabel }}</label><div class="input-wrap"><input id="target-search" v-model="targetQuery" name="target-search" type="search" autocomplete="off" role="combobox" :aria-expanded="showTargetDropdown" aria-controls="target-options" :placeholder="copy.targetPlaceholder" @focus="showTargetDropdown=true" @input="showTargetDropdown=true" /><button v-if="selectedTargetId" type="button" class="clear-button" @click="clearTarget">{{ copy.clear }}</button></div>
+            <div v-if="showTargetDropdown && targetOptions.length" id="target-options" class="option-list" role="listbox"><button v-for="item in targetOptions" :key="item.concept_id" type="button" role="option" class="option" @click="selectTarget(item)"><strong>{{ displayConceptName(item) }}</strong><span translate="no">{{ item.concept_id }}</span><small>{{ displayDescription(item) }}</small></button></div>
           </div>
-        </div>
-      </div>
-
-      <div class="field command-bar">
-        <label class="command-label">{{ t('targetConcept') }}</label>
-        <input v-model="targetQuery" class="text-input command-input" :placeholder="t('targetPlaceholder')" @focus="showTargetDropdown = true" />
-        <button v-if="selectedTarget" class="chip-button" @click="clearTarget">{{ t('clearSelection') }}</button>
-        <div v-if="showTargetDropdown && targetOptions.length" class="search-panel command-panel">
-          <button v-for="item in targetOptions" :key="item.concept_id" class="search-option" @click="selectTarget(item)">
-            <span class="option-title">{{ displayConcept(item) }}</span>
-            <span class="option-meta">{{ item.concept_id }}</span>
-            <span class="option-desc">{{ item.description || t('noDescription') }}</span>
-          </button>
-        </div>
-      </div>
-
-      <div class="planner-grid">
-        <div class="planner-main">
-          <div class="field">
-            <label>{{ t('masteredConcepts') }}</label>
-            <p class="field-hint">{{ t('masteredHelp') }}</p>
-            <input v-model="masteredQuery" class="text-input" :placeholder="t('masteredPlaceholder')" @focus="showMasteredDropdown = true" />
-            <div v-if="masteredConcepts.length" class="token-list">
-              <span v-for="item in masteredConcepts" :key="item.concept_id" class="token">
-                <span>{{ displayConcept(item) }}</span>
-                <button class="token-remove" @click="removeMastered(item.concept_id)" :aria-label="t('removeMasteredAria')">x</button>
-              </span>
-            </div>
-            <div v-if="showMasteredDropdown && masteredOptions.length" class="search-panel">
-              <button v-for="item in masteredOptions" :key="item.concept_id" class="search-option" @click="addMastered(item)">
-                <span class="option-title">{{ displayConcept(item) }}</span>
-                <span class="option-meta">{{ item.concept_id }}</span>
-                <span class="option-desc">{{ item.description || t('noDescription') }}</span>
-              </button>
-            </div>
-          </div>
-
-          <div class="field">
-            <label>{{ t('learningQuestion') }}</label>
-            <p class="field-hint">{{ t('questionHelp') }}</p>
-            <textarea v-model="question" class="text-area" :placeholder="t('questionPlaceholder')" rows="4"></textarea>
-          </div>
-
-          <div class="planner-actions">
-            <button class="ghost-button" @click="interpretQuestion">{{ plannerPending ? t('identifying') : t('identifyTarget') }}</button>
-            <button class="primary-button" @click="recommendPath">{{ recommendPending ? t('generatePathPending') : t('recommendPath') }}</button>
-            <button class="secondary-button" @click="runGraphRagQuery">{{ graphragPending ? t('generateExplanationPending') : t('generateExplanation') }}</button>
-          </div>
-        </div>
-
-        <aside class="snapshot">
-          <div class="section-kicker">{{ t('targetSnapshot') }}</div>
-          <h3>{{ selectedTarget ? displayConcept(selectedTarget) : t('pickTarget') }}</h3>
-          <p class="snapshot-copy">{{ selectedConceptDetail.description || t('targetSnapshotPlaceholder') }}</p>
-          <div class="snapshot-list">
-            <div class="info-stack"><span>{{ t('internalId') }}</span><strong>{{ selectedTarget?.concept_id || '-' }}</strong></div>
-            <div class="info-stack"><span>{{ t('chapter') }}</span><strong>{{ selectedConceptDetail.chapter_name || '-' }}</strong></div>
-            <div class="info-stack"><span>{{ t('plannerInterpretation') }}</span><strong>{{ plannerSourceLabel }}</strong><small class="muted-copy">{{ plannerSummaryText }}</small></div>
+          <div class="target-readout"><span class="target-node" aria-hidden="true"></span><div><span>{{ copy.targetLabel }}</span><strong>{{ selectedTarget ? displayConcept(selectedTarget) : copy.noTarget }}</strong></div></div>
+          <div class="field compact-field">
+            <label for="mastered-search">{{ copy.masteredLabel }}</label><input id="mastered-search" v-model="masteredQuery" name="mastered-search" type="search" autocomplete="off" :placeholder="copy.masteredPlaceholder" @focus="showMasteredDropdown=true" @input="showMasteredDropdown=true" />
+            <div v-if="showMasteredDropdown && masteredOptions.length" class="option-list" role="listbox"><button v-for="item in masteredOptions" :key="item.concept_id" type="button" role="option" class="option" @click="addMastered(item)"><strong>{{ displayConceptName(item) }}</strong><span>{{ item.concept_id }}</span></button></div>
+            <div v-if="masteredConcepts.length" class="token-list"><span v-for="item in masteredConcepts" :key="item.concept_id" class="token">{{ displayConceptName(item) }}<button type="button" :aria-label="`${copy.remove}: ${displayConceptName(item)}`" @click="removeMastered(item.concept_id)">×</button></span></div>
           </div>
         </aside>
-      </div>
-    </section>
-
-    <section ref="graphSectionRef" class="graph-section card" :class="{ fullscreen: isGraphFullscreen }">
-      <div class="graph-toolbar">
-        <div>
-          <div class="section-kicker">图谱视图</div>
-          <h2>学习路径图谱</h2>
-          <p class="section-text">图中将按顺序高亮展示系统生成的学习路径。</p>
-        </div>
-        <button class="secondary-button graph-fullscreen-button" @click="toggleGraphFullscreen">
-          {{ isGraphFullscreen ? '退出全屏' : '全屏查看' }}
-        </button>
-      </div>
-      <div ref="chartRef" class="chart"></div>
-    </section>
-
-    <section class="results-grid">
-      <article class="card result-card">
-        <div class="section-kicker">{{ t('pathResult') }}</div>
-        <h2>{{ t('recommendationSummary') }}</h2>
-        <p class="section-text">{{ recommendResult.explanation || t('pathPlaceholder') }}</p>
-        <div class="chip-list">
-          <span v-for="item in recommendPathCards" :key="item.concept_id" class="summary-tag">{{ item.label }}</span>
-        </div>
-        <div v-if="recommendResult.reasoning_steps?.length" class="list-block">
-          <strong>{{ t('reasoningSteps') }}</strong>
-          <ul>
-            <li v-for="(item, index) in recommendResult.reasoning_steps" :key="index">{{ item }}</li>
-          </ul>
-        </div>
-      </article>
-
-      <article class="card result-card">
-        <div class="section-kicker">{{ t('graphRagAnswer') }}</div>
-        <h2>{{ t('naturalLanguageExplanation') }}</h2>
-        <p class="section-text">{{ graphragResult.answer || t('graphRagPlaceholder') }}</p>
-        <div class="chip-list">
-          <span v-for="item in citationCards" :key="item.key" class="summary-tag soft">{{ item.label }} / {{ item.meta }}</span>
-        </div>
-      </article>
-    </section>
+      </section>
+      <section class="result-section" aria-labelledby="path-heading">
+        <header class="result-header"><span class="eyebrow">{{ copy.resultEyebrow }}</span><div v-if="answerMeta.length" class="result-meta"><span v-for="item in answerMeta" :key="item.label"><b>{{ item.label }}</b>{{ item.value }}</span></div></header>
+        <div class="result-grid"><article><h2 id="path-heading">{{ copy.pathTitle }}</h2><ol v-if="pathCards.length" class="path-list"><li v-for="(item,index) in pathCards" :key="item.id"><span>{{ index+1 }}</span><div><strong>{{ item.name }}</strong><small translate="no">{{ item.id }}</small></div></li></ol><p v-else class="empty-copy">{{ copy.emptyPath }}</p></article><article class="answer-panel"><h2>{{ copy.answerTitle }}</h2><p :class="{ 'empty-copy': !graphragResult.answer }">{{ graphragResult.answer || copy.emptyAnswer }}</p></article></div>
+      </section>
+      <EvidencePanel :items="graphragResult.evidence_pack?.items || []" :copy="copy" :language="language" />
+      <LearningPathGraph :result="graphResult" :mastered-ids="masteredIds" :concept-map="conceptMap" :copy="copy" :language="language" />
+    </main>
+    <p class="sr-only" aria-live="polite">{{ liveStatus }}</p>
   </div>
 </template>
-
 <script setup>
-import * as echarts from 'echarts';
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
-import { fetchConceptCorpus, fetchConceptDetail, fetchGraphOverview, fetchGraphRagQuery, fetchHealth, fetchPlannerInterpret, fetchRecommendPath } from '../api/client';
-const zh = { heroEyebrow:'本科毕业设计系统演示',heroTitle:'基于知识图谱的个性化学习路径推荐系统',heroBody:'面向课程知识点学习场景，提供目标识别、先修关系分析、路径生成与可解释结果展示。',guideTitle:'你可以这样开始',hideGuide:'收起',serviceStatus:'服务状态',selectedTarget:'当前目标',notSelected:'未选择',serviceNotice:'服务提示',plannerInput:'路径输入',plannerTitle:'从目标知识点开始规划',plannerDescription:'先选目标，再补充已掌握知识点或学习问题。',refreshData:'刷新数据',targetConcept:'目标知识点',targetPlaceholder:'输入知识点名称、ID 或描述关键词',noDescription:'暂无描述',masteredConcepts:'已掌握知识点',masteredHelp:'这里支持和目标知识点一样的检索下拉，你可以按名称查看对应编号再选择。',masteredPlaceholder:'输入已掌握知识点名称、ID 或描述关键词',learningQuestion:'学习问题',questionHelp:'例如：如果我想学习布尔代数，应该先掌握什么？',questionPlaceholder:'输入一句自然语言问题',identifying:'正在识别...',identifyTarget:'从问题中识别目标',generatePathPending:'正在生成路径...',recommendPath:'生成学习路径',generateExplanationPending:'正在生成解释...',generateExplanation:'生成文字解释',targetSnapshot:'目标概览',pickTarget:'请选择一个目标知识点',targetSnapshotPlaceholder:'选中目标后，这里会显示基础信息。',internalId:'内部 ID',chapter:'章节',plannerInterpretation:'问题识别结果',plannerInterpretationIdle:'你还没有解析学习问题。',pathResult:'路径结果',recommendationSummary:'推荐摘要',pathPlaceholder:'点击“生成学习路径”后，这里会显示推荐结果。',reasoningSteps:'推理步骤',graphRagAnswer:'文字解释',naturalLanguageExplanation:'自然语言说明',graphRagPlaceholder:'点击“生成文字解释”后，这里会显示回答。',clearSelection:'清除',removeMasteredAria:'移除已掌握知识点',online:'在线',checkRequired:'需要检查',backendUnavailable:'后端不可用',conceptNotFound:'未找到知识点',requestFailed:'请求失败',chooseTargetFirst:'请先选择一个目标知识点。',stepTargetTitle:'选定目标',stepTargetDescription:'先确认你想学的知识点。',stepQuestionTitle:'补充背景',stepQuestionDescription:'告诉系统你已经会什么，或直接写问题。',stepResultTitle:'查看结果',stepResultDescription:'生成路径和解释。',hintSelectTarget:'先搜索并选择一个目标知识点。',hintAddBackground:'目标已经选好了，现在可以补充已掌握知识点或学习问题。',hintGeneratePath:'信息已经足够，可以直接生成学习路径。',hintReadResult:'路径已经生成，可以继续生成文字解释。' };
-const en = { heroEyebrow:'Undergraduate Thesis Demo',heroTitle:'Personalized Learning Path Recommendation System Based on Knowledge Graphs',heroBody:'Designed for course-level concept learning, with goal identification, prerequisite analysis, path generation, and explainable result presentation.',guideTitle:'You can start here',hideGuide:'Hide',serviceStatus:'Service',selectedTarget:'Current target',notSelected:'Not selected',serviceNotice:'Service notice',plannerInput:'Path input',plannerTitle:'Start from the concept you want to learn',plannerDescription:'Choose a target, then add mastered concepts or a learning question.',refreshData:'Refresh data',targetConcept:'Target concept',targetPlaceholder:'Type a concept name, ID, or description keyword',noDescription:'No description',masteredConcepts:'Mastered concepts',masteredHelp:'This field now supports the same searchable dropdown as the target field, so you can see names and IDs before selecting.',masteredPlaceholder:'Type a mastered concept name, ID, or keyword',learningQuestion:'Learning question',questionHelp:'Example: If I want to learn Boolean algebra, what should I study first?',questionPlaceholder:'Enter one natural-language question',identifying:'Identifying...',identifyTarget:'Identify from question',generatePathPending:'Generating path...',recommendPath:'Generate learning path',generateExplanationPending:'Generating explanation...',generateExplanation:'Generate explanation',targetSnapshot:'Target snapshot',pickTarget:'Choose a target concept',targetSnapshotPlaceholder:'Basic information will appear here after you choose a target.',internalId:'Internal ID',chapter:'Chapter',plannerInterpretation:'Question interpretation',plannerInterpretationIdle:'You have not parsed a learning question yet.',pathResult:'Path result',recommendationSummary:'Recommendation summary',pathPlaceholder:'Click “Generate learning path” to see the result here.',reasoningSteps:'Reasoning steps',graphRagAnswer:'Written explanation',naturalLanguageExplanation:'Natural-language explanation',graphRagPlaceholder:'Click “Generate explanation” to see the answer here.',clearSelection:'Clear',removeMasteredAria:'Remove mastered concept',online:'Online',checkRequired:'Check required',backendUnavailable:'Backend unavailable',conceptNotFound:'Concept not found',requestFailed:'Request failed',chooseTargetFirst:'Please choose a target concept first.',stepTargetTitle:'Choose a target',stepTargetDescription:'Start with the concept you want to learn.',stepQuestionTitle:'Add context',stepQuestionDescription:'Tell the system what you already know, or ask a question.',stepResultTitle:'Read the result',stepResultDescription:'Generate the path and explanation.',hintSelectTarget:'Start by searching for a target concept.',hintAddBackground:'The target is ready. Now add mastered concepts or a learning question.',hintGeneratePath:'You have enough context. Generate the learning path next.',hintReadResult:'The path is ready. You can generate the written explanation next.' };
-const COPY = { zh, en };
-const language = ref('zh');
-const uiError = ref('');
-const health = ref({});
-const overview = ref({});
-const conceptCorpus = ref([]);
-const targetQuery = ref('');
-const masteredQuery = ref('');
-const selectedTargetId = ref('');
-const masteredIds = ref([]);
-const selectedConceptDetail = ref({});
-const recommendResult = ref({});
-const graphragResult = ref({});
-const question = ref('');
-const showTargetDropdown = ref(false);
-const showMasteredDropdown = ref(false);
-const plannerResult = ref({});
-const plannerPending = ref(false);
-const recommendPending = ref(false);
-const graphragPending = ref(false);
-const showGuide = ref(false);
-const graphSectionRef = ref(null);
-const chartRef = ref(null);
-const chartIns = ref(null);
-const isGraphFullscreen = ref(false);
-const t = (k) => COPY[language.value][k] || k;
-const conceptMap = computed(() => conceptCorpus.value.reduce((acc, item) => ((acc[item.concept_id] = item), acc), {}));
-const selectedTarget = computed(() => conceptMap.value[selectedTargetId.value] || null);
-const masteredConcepts = computed(() => masteredIds.value.map((id) => conceptMap.value[id]).filter(Boolean));
-const serviceStatusClass = computed(() => (health.value?.status === 'ok' ? 'ok' : 'warning'));
-const serviceStatusLabel = computed(() => (health.value?.status === 'ok' ? t('online') : t('checkRequired')));
-const targetOptions = computed(() => filterConcepts(targetQuery.value));
-const masteredOptions = computed(() => filterConcepts(masteredQuery.value, masteredIds.value));
-const heroMetrics = computed(() => [{ label: 'Courses', value: overview.value.course_count ?? '-', note: 'Graph' }, { label: 'Chapters', value: overview.value.chapter_count ?? '-', note: 'Structure' }, { label: 'Concepts', value: overview.value.concept_count ?? conceptCorpus.value.length ?? '-', note: 'Corpus' }, { label: 'Prereqs', value: overview.value.prerequisite_rel_count ?? '-', note: 'Edges' }]);
-const steps = computed(() => [{ key:'target', index:'01', title:t('stepTargetTitle'), desc:t('stepTargetDescription'), active:!selectedTargetId.value, done:Boolean(selectedTargetId.value) }, { key:'context', index:'02', title:t('stepQuestionTitle'), desc:t('stepQuestionDescription'), active:Boolean(selectedTargetId.value) && !recommendResult.value.path?.length, done:Boolean(masteredIds.value.length || question.value.trim()) }, { key:'result', index:'03', title:t('stepResultTitle'), desc:t('stepResultDescription'), active:Boolean(recommendResult.value.path?.length), done:Boolean(recommendResult.value.path?.length || graphragResult.value.answer) }]);
-const nextHint = computed(() => !selectedTargetId.value ? t('hintSelectTarget') : !masteredIds.value.length && !question.value.trim() ? t('hintAddBackground') : !recommendResult.value.path?.length ? t('hintGeneratePath') : t('hintReadResult'));
-const plannerSourceLabel = computed(() => plannerPending.value ? t('identifying') : plannerResult.value.interpretation_source || '-');
-const plannerSummaryText = computed(() => plannerResult.value.summary || t('plannerInterpretationIdle'));
-const recommendPathCards = computed(() => (recommendResult.value.path || []).map((id) => ({ concept_id:id, label:displayConceptById(id) })));
-const citationCards = computed(() => (graphragResult.value.citations || []).map((item, index) => ({ key:`${item.concept_id}-${index}`, label:displayConceptById(item.concept_id), meta:[item.kind, item.source, item.score != null ? `score ${Number(item.score).toFixed(2)}` : ''].filter(Boolean).join(' / ') })));
-function normalizeQuery(v) { return v.trim().toLowerCase(); }
-function filterConcepts(query, excludeIds = []) { const q = normalizeQuery(query); const excluded = new Set(excludeIds); const pool = conceptCorpus.value.filter((item) => !excluded.has(item.concept_id)); return (!q ? pool : pool.filter((item) => `${item.concept_id} ${item.name} ${item.description}`.toLowerCase().includes(q))).slice(0, 8); }
-function displayConcept(item) { if (!item) return t('notSelected'); return item.name ? `${item.name} (${item.concept_id})` : item.concept_id; }
-function displayConceptById(id) { return displayConcept(conceptMap.value[id] || { concept_id:id, name:'' }); }
-function mapError(resp) { if (!resp || resp.ok) return ''; if (resp.status === 503) return `${t('backendUnavailable')}: ${resp.detail}`; if (resp.status === 404) return `${t('conceptNotFound')}: ${resp.detail}`; return `${t('requestFailed')}: ${resp.detail}`; }
-function selectTarget(item) { selectedTargetId.value = item.concept_id; targetQuery.value = item.name || item.concept_id; showTargetDropdown.value = false; if (!question.value.trim()) question.value = language.value === 'zh' ? `如果我想学习${item.name || item.concept_id}，应该先掌握什么？` : `If I want to learn ${item.name || item.concept_id}, what should I study first?`; }
-function clearTarget() { selectedTargetId.value = ''; targetQuery.value = ''; selectedConceptDetail.value = {}; recommendResult.value = {}; graphragResult.value = {}; }
-function addMastered(item) { if (!masteredIds.value.includes(item.concept_id)) masteredIds.value = [...masteredIds.value, item.concept_id]; masteredQuery.value = ''; showMasteredDropdown.value = true; }
-function removeMastered(id) { masteredIds.value = masteredIds.value.filter((value) => value !== id); }
-async function bootstrap() { uiError.value = ''; const [healthResp, overviewResp, corpusResp] = await Promise.all([fetchHealth(), fetchGraphOverview(), fetchConceptCorpus()]); if (healthResp.ok) health.value = healthResp.data; else uiError.value = mapError(healthResp); if (overviewResp.ok) overview.value = overviewResp.data; else uiError.value = uiError.value || mapError(overviewResp); if (corpusResp.ok) conceptCorpus.value = corpusResp.data.items || []; else uiError.value = uiError.value || mapError(corpusResp); }
-async function interpretQuestion() { uiError.value = ''; if (!question.value.trim() || plannerPending.value) return; plannerPending.value = true; const res = await fetchPlannerInterpret({ question: question.value.trim() }); plannerPending.value = false; if (res.ok) { plannerResult.value = res.data; if (res.data.target_concept_id && conceptMap.value[res.data.target_concept_id]) selectTarget(conceptMap.value[res.data.target_concept_id]); if (Array.isArray(res.data.mastered_concepts) && res.data.mastered_concepts.length) masteredIds.value = [...new Set(res.data.mastered_concepts.filter((id) => conceptMap.value[id]))]; return; } uiError.value = mapError(res); }
-async function recommendPath() { uiError.value = ''; if (!selectedTargetId.value || recommendPending.value) { if (!selectedTargetId.value) uiError.value = t('chooseTargetFirst'); return; } recommendPending.value = true; const res = await fetchRecommendPath({ target_concept_id: selectedTargetId.value, mastered_concepts: masteredIds.value }); recommendPending.value = false; if (res.ok) { recommendResult.value = res.data; return; } uiError.value = mapError(res); }
-async function runGraphRagQuery() { uiError.value = ''; if (!selectedTargetId.value || graphragPending.value) { if (!selectedTargetId.value) uiError.value = t('chooseTargetFirst'); return; } graphragPending.value = true; const fallbackQuestion = question.value.trim() || (language.value === 'zh' ? `如果我想学习${selectedTarget.value?.name || selectedTargetId.value}，应该先掌握什么？` : `If I want to learn ${selectedTarget.value?.name || selectedTargetId.value}, what should I study first?`); const res = await fetchGraphRagQuery({ question: fallbackQuestion, target_concept_id: selectedTargetId.value, mastered_concepts: masteredIds.value }); graphragPending.value = false; if (res.ok) { graphragResult.value = res.data; return; } uiError.value = mapError(res); }
-function toggleLanguage() { language.value = language.value === 'zh' ? 'en' : 'zh'; }
-function dismissGuide() { showGuide.value = false; window.localStorage.setItem('graph-planner-guide-dismissed', 'true'); }
-async function toggleGraphFullscreen() {
-  const section = graphSectionRef.value;
-  if (!section) return;
-  if (document.fullscreenElement === section) {
-    await document.exitFullscreen?.();
-  } else if (section.requestFullscreen) {
-    await section.requestFullscreen();
-  }
-  nextTick(() => chartIns.value?.resize());
-}
-function handleFullscreenChange() {
-  isGraphFullscreen.value = document.fullscreenElement === graphSectionRef.value;
-  nextTick(() => chartIns.value?.resize());
-}
-function renderChart(result = {}) {
-  if (!chartIns.value) return;
-  const path = Array.isArray(result) ? result : (Array.isArray(result?.path) ? result.path : []);
-  const graphNodes = Array.isArray(result?.graph_nodes) && result.graph_nodes.length ? result.graph_nodes : path;
-  const graphEdges = Array.isArray(result?.graph_edges) && result.graph_edges.length
-    ? result.graph_edges
-    : path.slice(0, -1).map((source, i) => [source, path[i + 1]]);
-
-  if (!Array.isArray(graphNodes) || !graphNodes.length) {
-    chartIns.value.setOption({
-      backgroundColor: 'transparent',
-      tooltip: {},
-      series: [{
-        type: 'graph',
-        layout: 'force',
-        roam: true,
-        label: { show: true, color: '#334155', fontWeight: 600 },
-        data: [{ id: 'EMPTY', name: 'Generate a path to see the graph', symbolSize: 84, itemStyle: { color: '#E8EDF2', borderColor: '#B8C3D1', borderWidth: 1.5 } }],
-        links: [],
-        force: { repulsion: 520, edgeLength: 220, layoutAnimation: true }
-      }]
-    });
-    return;
-  }
-  const pathSet = new Set(path);
-  const masteredSet = new Set(masteredIds.value);
-  const targetId = path.length ? path[path.length - 1] : graphNodes[graphNodes.length - 1];
-  const nodes = graphNodes.map((id) => {
-    const isTarget = id === targetId;
-    const isMastered = masteredSet.has(id);
-    const isPathNode = pathSet.has(id);
-    return {
-      id,
-      name: displayConceptById(id),
-      symbolSize: isTarget ? 88 : (isMastered ? 58 : 64),
-      itemStyle: {
-        color: isTarget ? '#E7D2A8' : (isMastered ? '#DDF8E6' : (isPathNode ? '#C9D7E7' : '#E2E8F0')),
-        borderColor: isTarget ? '#8E6D35' : (isMastered ? '#2F8F5B' : (isPathNode ? '#58789A' : '#94A3B8')),
-        borderWidth: isMastered ? 2 : 1.8
-      },
-      label: { color: '#1E293B', fontWeight: 600, width: 150, overflow: 'break' }
-    };
-  });
-  const links = graphEdges.map(([source, target]) => {
-    const isPathEdge = pathSet.has(source) && pathSet.has(target);
-    const touchesMastered = masteredSet.has(source) || masteredSet.has(target);
-    return {
-      source,
-      target,
-      lineStyle: {
-        color: isPathEdge ? '#8FA6BE' : (touchesMastered ? '#8AB89B' : '#CBD5E1'),
-        width: isPathEdge ? 2.2 : 1.6,
-        opacity: touchesMastered ? 0.72 : 0.85,
-        type: touchesMastered && !isPathEdge ? 'dashed' : 'solid'
-      }
-    };
-  });
-  const spacingBoost = isGraphFullscreen.value ? 1.35 : 1;
-  chartIns.value.setOption({
-    backgroundColor: 'transparent',
-    tooltip: {},
-    series: [{
-      type: 'graph',
-      layout: 'force',
-      roam: true,
-      draggable: true,
-      edgeSymbol: ['none', 'arrow'],
-      edgeSymbolSize: [0, 10],
-      force: {
-        repulsion: Math.round((graphNodes.length > 12 ? 720 : 560) * spacingBoost),
-        edgeLength: Math.round((graphNodes.length > 12 ? 210 : 190) * spacingBoost),
-        gravity: 0.045,
-        layoutAnimation: true
-      },
-      emphasis: { focus: 'adjacency' },
-      label: { show: true },
-      data: nodes,
-      links
-    }]
-  });
-}
-function handleDocumentClick(event) { const target = event.target; if (!(target instanceof HTMLElement)) return; if (!target.closest('.field') && !target.closest('.command-bar')) { showTargetDropdown.value = false; showMasteredDropdown.value = false; } }
-watch(isGraphFullscreen, () => { nextTick(() => renderChart(recommendResult.value.path?.length ? recommendResult.value : { path: graphragResult.value.path || [] })); });
-watch(selectedTargetId, async (id) => { if (!id) return; const res = await fetchConceptDetail(id); if (res.ok) selectedConceptDetail.value = res.data; });
-watch(recommendResult, (result) => { nextTick(() => renderChart(result || {})); }, { deep: true });
-watch(() => graphragResult.value.path, (path) => { if (!recommendResult.value.path?.length) nextTick(() => renderChart({ path: path || [] })); });
-onMounted(async () => {
-  showGuide.value = window.localStorage.getItem('graph-planner-guide-dismissed') !== 'true';
-  document.addEventListener('click', handleDocumentClick);
-  document.addEventListener('fullscreenchange', handleFullscreenChange);
-  chartIns.value = echarts.init(chartRef.value);
-  renderChart({});
-  await bootstrap();
-});
-onBeforeUnmount(() => {
-  document.removeEventListener('click', handleDocumentClick);
-  document.removeEventListener('fullscreenchange', handleFullscreenChange);
-  if (chartIns.value) chartIns.value.dispose();
-});
+import { computed,onBeforeUnmount,onMounted,ref,watch } from 'vue';
+import EvidencePanel from '../components/EvidencePanel.vue';import LearningPathGraph from '../components/LearningPathGraph.vue';import { COPY } from '../content/copy';
+import { fetchConceptCorpus,fetchGraphOverview,fetchGraphRagQuery,fetchHealth,fetchPlannerInterpret,fetchRecommendPath } from '../api/client';
+const language=ref('en'),health=ref({}),overview=ref({}),conceptCorpus=ref([]),question=ref(''),targetQuery=ref(''),masteredQuery=ref(''),selectedTargetId=ref(''),masteredIds=ref([]),plannerPending=ref(false),agentPending=ref(false),showTargetDropdown=ref(false),showMasteredDropdown=ref(false),uiError=ref(''),liveStatus=ref(''),recommendResult=ref({}),graphragResult=ref({});
+const copy=computed(()=>COPY[language.value]);const conceptMap=computed(()=>Object.fromEntries(conceptCorpus.value.map((item)=>[item.concept_id,item])));const selectedTarget=computed(()=>conceptMap.value[selectedTargetId.value]||null);const masteredConcepts=computed(()=>masteredIds.value.map((id)=>conceptMap.value[id]).filter(Boolean));const targetOptions=computed(()=>filterConcepts(targetQuery.value));const masteredOptions=computed(()=>filterConcepts(masteredQuery.value,masteredIds.value));const graphResult=computed(()=>recommendResult.value.path?.length?recommendResult.value:graphragResult.value);const pathCards=computed(()=>(graphResult.value.path||[]).map((id)=>({id,name:displayConceptName(conceptMap.value[id]||{concept_id:id})})));
+const answerMeta=computed(()=>{if(!graphragResult.value.answer)return[];const meta=graphragResult.value.meta||{};return[{label:copy.value.source,value:graphragResult.value.answer_source||meta.answer_source||'—'},{label:copy.value.languageMeta,value:graphragResult.value.answer_language||meta.answer_language||'—'},{label:copy.value.citations,value:String(graphragResult.value.cited_evidence_ids?.length||0)},{label:copy.value.integrity,value:formatPercent(meta.citation_integrity)}];});
+function displayConceptName(item){return language.value==='en'?item.name_en||item.name||item.concept_id:item.name||item.name_en||item.concept_id;}function displayDescription(item){return language.value==='en'?item.description_en||item.description:item.description||item.description_en;}function displayConcept(item){return`${displayConceptName(item)} (${item.concept_id})`;}function normalize(value){return String(value||'').trim().toLowerCase();}
+function filterConcepts(query,excluded=[]){const needle=normalize(query),excludedSet=new Set(excluded);return conceptCorpus.value.filter((item)=>!excludedSet.has(item.concept_id)).filter((item)=>!needle||normalize([item.concept_id,item.name,item.name_en,item.description,item.description_en,...(item.aliases||[]),...(item.aliases_en||[])].join(' ')).includes(needle)).slice(0,8);}function formatPercent(value){return value==null?'—':new Intl.NumberFormat(undefined,{style:'percent',maximumFractionDigits:0}).format(value);}
+function selectTarget(item){selectedTargetId.value=item.concept_id;targetQuery.value=displayConceptName(item);showTargetDropdown.value=false;recommendResult.value={};graphragResult.value={};}function clearTarget(){selectedTargetId.value='';targetQuery.value='';recommendResult.value={};graphragResult.value={};}function addMastered(item){masteredIds.value=[...new Set([...masteredIds.value,item.concept_id])];masteredQuery.value='';showMasteredDropdown.value=false;}function removeMastered(id){masteredIds.value=masteredIds.value.filter((value)=>value!==id);}function toggleLanguage(){language.value=language.value==='en'?'zh':'en';if(selectedTarget.value)targetQuery.value=displayConceptName(selectedTarget.value);}function mapError(response){return response?.detail?`${copy.value.requestFailed} ${response.detail}`:copy.value.requestFailed;}
+async function bootstrap(){uiError.value='';const[healthResponse,overviewResponse,corpusResponse]=await Promise.all([fetchHealth(),fetchGraphOverview(),fetchConceptCorpus()]);if(healthResponse.ok)health.value=healthResponse.data;if(overviewResponse.ok)overview.value=overviewResponse.data;if(corpusResponse.ok)conceptCorpus.value=corpusResponse.data.items||[];if(!healthResponse.ok||!overviewResponse.ok||!corpusResponse.ok)uiError.value=copy.value.serviceNotice;}
+async function interpretQuestion(){if(!question.value.trim()||plannerPending.value)return;uiError.value='';plannerPending.value=true;liveStatus.value=copy.value.identifying;const response=await fetchPlannerInterpret({question:question.value.trim()});plannerPending.value=false;if(!response.ok){uiError.value=mapError(response);liveStatus.value=uiError.value;return;}const id=response.data.target_concept_id;if(id&&conceptMap.value[id])selectTarget(conceptMap.value[id]);if(response.data.mastered_concepts?.length)masteredIds.value=response.data.mastered_concepts.filter((value)=>conceptMap.value[value]);liveStatus.value=id?`${copy.value.targetLabel}: ${id}`:copy.value.noTarget;}
+async function runAgent(){if(!selectedTargetId.value){uiError.value=copy.value.chooseTarget;return;}uiError.value='';agentPending.value=true;liveStatus.value=copy.value.running;const payload={question:question.value.trim()||copy.value.demoQuestion,target_concept_id:selectedTargetId.value,mastered_concepts:masteredIds.value,response_language:language.value};const[pathResponse,answerResponse]=await Promise.all([fetchRecommendPath({target_concept_id:payload.target_concept_id,mastered_concepts:payload.mastered_concepts}),fetchGraphRagQuery(payload)]);agentPending.value=false;if(pathResponse.ok)recommendResult.value=pathResponse.data;if(answerResponse.ok)graphragResult.value=answerResponse.data;if(!pathResponse.ok||!answerResponse.ok)uiError.value=mapError(!answerResponse.ok?answerResponse:pathResponse);liveStatus.value=uiError.value||`${copy.value.pathTitle}: ${(graphResult.value.path||[]).length}`;}
+function loadDemo(){question.value=copy.value.demoQuestion;const item=conceptCorpus.value.find((concept)=>concept.concept_id==='c_006'||concept.name_en==='Karnaugh Map Construction');if(item)selectTarget(item);}function handleDocumentClick(event){if(!(event.target instanceof Element)||!event.target.closest('.compact-field')){showTargetDropdown.value=false;showMasteredDropdown.value=false;}}
+watch(language,(value)=>{document.documentElement.lang=value==='zh'?'zh-CN':'en';});
+onMounted(()=>{document.documentElement.lang='en';document.addEventListener('click',handleDocumentClick);bootstrap();});onBeforeUnmount(()=>document.removeEventListener('click',handleDocumentClick));
 </script>
-
 <style scoped>
-.page{width:min(1320px,calc(100% - 48px));margin:0 auto;padding:clamp(24px,4vw,52px) 0 64px}.card{position:relative;overflow:hidden;border:1px solid rgba(15,23,42,.07);background:rgba(255,255,255,.9);border-radius:22px;box-shadow:0 10px 30px rgba(15,23,42,.05)}.hero,.overview-row,.workspace,.results-grid,.graph-section{display:grid;gap:20px;margin-bottom:20px}.hero,.overview-row,.workspace,.graph-section{grid-template-columns:1fr}.hero,.workspace,.graph-section{padding:26px}.hero-topline,.section-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}.section-head.compact{margin-bottom:12px}.eyebrow,.section-kicker,.summary-label{display:inline-flex;color:#7c4a1d;font-size:.74rem;letter-spacing:.14em;text-transform:uppercase}.hero h1,.workspace h2,.graph-section h2,.result-card h2,.overview h2,.guide-box strong,.snapshot h3{margin:0;color:#0f172a;font-family:"Georgia","Times New Roman","Source Han Serif SC","Songti SC",serif;font-weight:600;line-height:1.08}.hero h1{max-width:13ch;font-size:clamp(2.4rem,4vw,4.2rem)}.hero-text,.section-text,.field-hint,.option-desc,.snapshot-copy,.metric small,.guide-box span,.step-card p,.list-block li{color:#475569;line-height:1.7}.guide-box{display:grid;gap:10px;padding:16px 18px;border-radius:18px;border:1px solid rgba(148,163,184,.14);background:rgba(248,250,252,.84)}.hero-actions,.planner-actions,.status-strip,.token-list,.chip-list{display:flex;gap:12px;flex-wrap:wrap}.overview{padding:22px}.hero-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.metric,.step-card,.snapshot{display:grid;gap:8px;padding:14px 16px;border-radius:16px;background:rgba(255,255,255,.72);border:1px solid rgba(148,163,184,.12)}.metric strong{color:#0f172a;font-size:clamp(1.7rem,3vw,2.5rem);font-family:"Georgia","Times New Roman","Source Han Serif SC","Songti SC",serif}.error-banner{display:flex;gap:10px;align-items:flex-start;padding:18px 22px;color:#9a3412;background:rgba(255,247,237,.96);border-color:rgba(234,88,12,.12)}.primary-button,.secondary-button,.ghost-button,.lang-toggle,.search-option,.token-remove,.chip-button{border:none;cursor:pointer;font:inherit}.primary-button,.secondary-button,.ghost-button,.lang-toggle,.chip-button{min-height:44px;padding:0 18px;border-radius:999px;transition:transform .18s ease,box-shadow .18s ease,background-color .18s ease,color .18s ease}.primary-button{color:#f8fafc;background:#1e3a5f}.secondary-button,.lang-toggle,.chip-button{color:#35506f;background:rgba(226,232,240,.8)}.ghost-button{color:#334155;background:rgba(241,245,249,.78)}.primary-button:hover,.secondary-button:hover,.ghost-button:hover,.lang-toggle:hover,.search-option:hover,.token-remove:hover,.chip-button:hover{transform:translateY(-1px)}.primary-button:focus-visible,.secondary-button:focus-visible,.ghost-button:focus-visible,.lang-toggle:focus-visible,.text-input:focus,.text-area:focus,.search-option:focus-visible,.token-remove:focus-visible,.chip-button:focus-visible{outline:none;box-shadow:0 0 0 4px rgba(37,99,235,.14)}.status-chip{display:inline-flex;align-items:center;min-height:38px;padding:0 14px;border-radius:999px;background:rgba(248,250,252,.9);color:#334155;border:1px solid rgba(148,163,184,.16)}.status-chip.ok{background:rgba(240,253,244,.92);color:#166534}.status-chip.warning{background:rgba(255,247,237,.92);color:#9a3412}.planner-flow{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.72fr);gap:22px;margin-top:18px}.planner-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.step-card{grid-template-columns:auto 1fr;align-items:flex-start}.step-card.active{border-color:rgba(30,58,95,.28)}.step-card.done{background:rgba(245,248,251,.92)}.step-index{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:999px;background:#e8eef4;color:#1e3a5f;font-weight:700;font-size:.88rem}.command-bar,.field{position:relative}.command-bar{margin-top:22px;padding:18px 0;border-top:1px solid rgba(148,163,184,.16);border-bottom:1px solid rgba(148,163,184,.16);display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center}.command-label,.field label{color:#1e293b;font-weight:600}.planner-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(280px,.7fr);gap:28px;margin-top:24px}.planner-main{display:grid;gap:22px}.text-input,.text-area{width:100%;padding:15px 17px;border-radius:14px;border:1px solid rgba(148,163,184,.18);background:rgba(255,255,255,.94);color:#0f172a;transition:border-color .18s ease,box-shadow .18s ease}.command-input{min-height:52px}.text-area{min-height:120px;resize:vertical}.text-input::placeholder,.text-area::placeholder{color:#94a3b8}.search-panel{position:absolute;inset:calc(100% + 10px) 0 auto;z-index:12;max-height:300px;overflow:auto;padding:10px;border-radius:18px;border:1px solid rgba(148,163,184,.14);background:rgba(255,255,255,.98);box-shadow:0 16px 40px rgba(15,23,42,.08)}.search-option{width:100%;text-align:left;display:grid;gap:5px;margin-bottom:8px;padding:12px 14px;border-radius:18px;background:transparent;transition:background-color .18s ease,transform .18s ease}.search-option:last-child{margin-bottom:0}.search-option:hover{background:rgba(241,245,249,.92)}.option-title{color:#0f172a;font-weight:600}.option-meta,.info-stack span{color:#64748b}.token{display:inline-flex;align-items:center;gap:8px;min-height:38px;padding:0 12px;border-radius:999px;background:rgba(241,245,249,.95);color:#0f172a}.token-remove{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:999px;background:rgba(255,255,255,.9);color:#1e3a8a}.snapshot-list{display:grid;gap:14px;margin-top:12px}.info-stack{display:grid;gap:6px;padding-top:14px;border-top:1px solid rgba(148,163,184,.16)}.result-card{padding:22px}.chart{min-height:460px;border-radius:18px;background:linear-gradient(180deg,rgba(251,252,253,.98) 0%,rgba(243,246,249,.96) 100%)}.summary-tag{display:inline-flex;align-items:center;min-height:36px;padding:0 12px;border-radius:999px;background:rgba(241,245,249,.95);color:#334155}.summary-tag.soft{background:rgba(255,247,237,.9);color:#9a3412}.list-block ul{margin:8px 0 0;padding-left:18px}.results-grid{grid-template-columns:repeat(2,minmax(0,1fr))}@media (max-width:1200px){.planner-flow,.planner-grid,.hero-metrics,.command-bar,.planner-steps,.results-grid{grid-template-columns:1fr}.hero h1{max-width:none}}@media (max-width:720px){.page{width:min(100% - 20px,1320px);padding-top:18px}.hero,.workspace,.graph-section,.overview,.result-card{padding:20px;border-radius:18px}.hero-topline,.section-head,.guide-box{display:grid}}
-.graph-toolbar{display:flex;justify-content:space-between;align-items:center;gap:16px}.graph-fullscreen-button{white-space:nowrap}.chart{min-height:540px}.graph-section:fullscreen{width:100vw;height:100vh;margin:0;padding:28px;background:#f8fafc;border-radius:0;overflow:hidden}.graph-section.fullscreen{grid-template-rows:auto minmax(0,1fr)}.graph-section.fullscreen .chart{height:calc(100vh - 150px);min-height:0}@media (max-width:720px){.graph-toolbar{display:grid}.graph-section.fullscreen .chart{height:calc(100vh - 190px)}}
+.page{width:min(1240px,calc(100% - 40px));margin:0 auto;padding:0 0 72px}.skip-link{position:fixed;top:10px;left:10px;z-index:100;transform:translateY(-180%);padding:12px 16px;background:var(--ink);color:white}.skip-link:focus{transform:translateY(0)}.site-header{display:flex;justify-content:space-between;align-items:center;min-height:76px;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:11px;color:var(--ink);font:700 .9rem/1 var(--font-data);text-decoration:none}.brand-mark{width:13px;height:13px;border:3px solid var(--accent);border-radius:50%;box-shadow:10px 0 0 -3px var(--page),10px 0 0 0 var(--ink-soft)}.header-actions,.service-pill{display:flex;align-items:center}.header-actions{gap:18px}.service-pill{gap:7px;color:var(--quiet);font:600 .72rem/1 var(--font-data);text-transform:uppercase;letter-spacing:.05em}.service-pill>span{width:7px;height:7px;border-radius:50%;background:#b76854}.service-pill.online>span{background:var(--accent)}.text-button,.demo-link{padding:0;border:0;background:transparent;color:var(--ink-soft);font:650 .78rem/1 var(--font-data);cursor:pointer;text-decoration:underline;text-decoration-color:transparent;text-underline-offset:4px}.text-button:hover,.demo-link:hover{text-decoration-color:currentColor}.hero{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(320px,.6fr);gap:clamp(40px,7vw,96px);padding:clamp(70px,10vw,126px) 0}.hero-copy{align-self:center}.eyebrow,.pipeline-label{color:var(--accent-strong);font:700 .72rem/1 var(--font-data);letter-spacing:.12em;text-transform:uppercase}.hero h1{max-width:820px;margin:20px 0 24px;font:600 clamp(3rem,6.8vw,6.35rem)/.94 var(--font-display);letter-spacing:-.055em;text-wrap:balance}.hero-copy>p{max-width:690px;margin:0;color:var(--muted);font-size:clamp(1rem,1.7vw,1.24rem);line-height:1.7}.demo-link{margin-top:30px;color:var(--accent-strong);font-size:.82rem}.pipeline{align-self:end;padding:28px;border-top:2px solid var(--ink);border-bottom:1px solid var(--line)}.pipeline ol{margin:24px 0 0;padding:0;list-style:none}.pipeline li{display:grid;grid-template-columns:34px 1fr;gap:10px;padding:15px 0;border-top:1px solid var(--line);color:var(--ink-soft);font-size:.9rem}.pipeline li span{color:var(--quiet);font:600 .72rem/1.4 var(--font-data)}.error-banner{margin-bottom:18px;padding:16px 18px;border:1px solid #dcbcaf;background:#fff7f3;color:#873f2f;line-height:1.5}.workspace{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(340px,.75fr);border:1px solid var(--line);background:var(--surface)}.workspace-main{display:grid;align-content:space-between;min-height:480px;padding:clamp(26px,5vw,58px);border-right:1px solid var(--line)}.field{position:relative}.field label{display:block;margin-bottom:10px;color:var(--ink);font:650 .82rem/1.2 var(--font-data)}.field>p{margin:0 0 22px;color:var(--muted);line-height:1.6}.field textarea,.field input{width:100%;border:1px solid var(--line-strong);border-radius:0;background:white;color:var(--ink);font:inherit}.field textarea{min-height:190px;padding:20px;resize:vertical;font:500 clamp(1.15rem,2.2vw,1.55rem)/1.55 var(--font-display)}.field input{min-height:48px;padding:0 13px}.field textarea::placeholder,.field input::placeholder{color:#8b999e}.primary-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}.button{min-height:46px;padding:0 18px;border:1px solid transparent;border-radius:0;font:700 .78rem/1 var(--font-data);cursor:pointer;transition:background-color .18s ease,color .18s ease,border-color .18s ease,transform .18s ease}.button:hover:not(:disabled){transform:translateY(-1px)}.button:disabled{cursor:not-allowed;opacity:.48}.button-primary{background:var(--ink);color:white}.button-primary:hover:not(:disabled){background:var(--accent-strong)}.button-secondary{border-color:var(--line-strong);background:transparent;color:var(--ink-soft)}.button-secondary:hover:not(:disabled){border-color:var(--ink);color:var(--ink)}.context-panel{display:grid;align-content:start;gap:28px;padding:clamp(24px,4vw,38px);background:var(--surface-alt)}.context-header{display:flex;justify-content:space-between;align-items:center;color:var(--quiet);font:700 .68rem/1 var(--font-data);letter-spacing:.1em;text-transform:uppercase}.compact-field label{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em}.input-wrap{position:relative}.input-wrap input{padding-right:68px}.clear-button{position:absolute;inset:1px 1px 1px auto;border:0;background:white;color:var(--accent-strong);font:650 .72rem var(--font-data);cursor:pointer}.option-list{position:absolute;z-index:20;top:calc(100% + 6px);width:100%;max-height:290px;overflow:auto;border:1px solid var(--line-strong);background:white;box-shadow:0 16px 30px rgba(22,37,45,.1)}.option{display:grid;width:100%;gap:4px;padding:13px;text-align:left;border:0;border-bottom:1px solid var(--line);background:white;color:var(--ink);cursor:pointer}.option:hover,.option:focus-visible{background:var(--accent-soft)}.option span,.option small{color:var(--muted);font:500 .72rem/1.4 var(--font-data)}.target-readout{display:grid;grid-template-columns:18px minmax(0,1fr);gap:12px;align-items:start;padding:18px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.target-node{width:12px;height:12px;margin-top:3px;border:3px solid var(--accent);border-radius:50%}.target-readout div{display:grid;gap:6px;min-width:0}.target-readout span{color:var(--quiet);font:600 .67rem/1 var(--font-data);letter-spacing:.06em;text-transform:uppercase}.target-readout strong{overflow-wrap:anywhere}.token-list{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}.token{display:inline-flex;align-items:center;gap:7px;padding:6px 7px 6px 10px;background:white;border:1px solid var(--line);font-size:.78rem}.token button{display:grid;place-items:center;width:26px;height:26px;border:0;background:var(--surface-alt);color:var(--ink);cursor:pointer}.result-section{margin-top:22px;padding:clamp(24px,4vw,44px);border:1px solid var(--line);background:var(--surface)}.result-header{display:flex;justify-content:space-between;gap:20px;padding-bottom:28px;border-bottom:1px solid var(--line)}.result-meta{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:12px 22px}.result-meta span{color:var(--muted);font:500 .72rem/1.4 var(--font-data)}.result-meta b{display:block;margin-bottom:4px;color:var(--quiet);font-size:.63rem;text-transform:uppercase;letter-spacing:.06em}.result-grid{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr)}.result-grid article{min-width:0;padding:34px 34px 10px 0}.result-grid article+article{padding-left:34px;border-left:1px solid var(--line)}.result-grid h2{margin:0 0 24px;font:600 clamp(1.5rem,3vw,2.1rem)/1.15 var(--font-display);letter-spacing:-.025em}.path-list{margin:0;padding:0;list-style:none}.path-list li{position:relative;display:grid;grid-template-columns:34px minmax(0,1fr);gap:14px;min-height:68px}.path-list li:not(:last-child)::after{content:"";position:absolute;top:31px;left:15px;width:2px;height:36px;background:var(--accent)}.path-list li>span{display:grid;place-items:center;width:32px;height:32px;border:2px solid var(--accent);border-radius:50%;background:var(--surface);color:var(--accent-strong);font:700 .72rem/1 var(--font-data)}.path-list li div{display:grid;align-content:start;gap:4px;padding-top:4px}.path-list small{color:var(--quiet);font:500 .68rem/1 var(--font-data)}.answer-panel p{margin:0;color:var(--ink-soft);font-size:1.02rem;line-height:1.85;white-space:pre-wrap;overflow-wrap:anywhere}.empty-copy{color:var(--muted)!important;font-style:italic}.result-section+*{margin-top:22px}.graph-section{margin-top:22px}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}@media(max-width:900px){.hero,.workspace,.result-grid{grid-template-columns:1fr}.hero{gap:48px}.workspace-main{min-height:0;border-right:0;border-bottom:1px solid var(--line)}.result-grid article+article{padding-left:0;border-left:0;border-top:1px solid var(--line)}.result-grid article{padding:28px 0}}@media(max-width:620px){.page{width:min(100% - 24px,1240px)}.site-header{align-items:flex-start;padding:18px 0}.header-actions{display:grid;justify-items:end;gap:10px}.hero{padding:56px 0}.hero h1{font-size:clamp(2.7rem,13vw,4rem)}.workspace-main,.context-panel,.result-section{padding:22px}.primary-actions{display:grid}.button{width:100%}.result-header{display:grid}.result-meta{justify-content:flex-start}}
+.text-button,.demo-link{display:inline-flex;align-items:center;min-height:44px;padding-inline:8px}.header-actions{gap:10px}.token button{width:44px;height:44px}
 </style>
-

@@ -291,8 +291,10 @@ class GraphRepository:
         OPTIONAL MATCH (target_chapter:Chapter)-[:HAS_CONCEPT]->(target)
         RETURN source.concept_id AS from_concept_id,
                source.name AS from_name,
+               source.name_en AS from_name_en,
                target.concept_id AS to_concept_id,
                target.name AS to_name,
+               target.name_en AS to_name_en,
                type(r) AS relation_type,
                r.evidence_text AS evidence_text,
                r.source_images AS source_images,
@@ -309,8 +311,10 @@ class GraphRepository:
                     {
                         "from_concept_id": record.get("from_concept_id"),
                         "from_name": record.get("from_name") or "",
+                        "from_name_en": record.get("from_name_en") or "",
                         "to_concept_id": record.get("to_concept_id"),
                         "to_name": record.get("to_name") or "",
+                        "to_name_en": record.get("to_name_en") or "",
                         "relation_type": record.get("relation_type") or "",
                         "evidence_text": record.get("evidence_text") or "",
                         "source_images": record.get("source_images") or [],

@@ -46,7 +46,9 @@ def build_evidence_pack(
         from_id = str(metadata.get("from_concept_id") or "").strip()
         to_id = str(metadata.get("to_concept_id") or "").strip()
         from_name = str(metadata.get("from_name") or "").strip()
+        from_name_en = str(metadata.get("from_name_en") or "").strip()
         to_name = str(metadata.get("to_name") or "").strip()
+        to_name_en = str(metadata.get("to_name_en") or "").strip()
         evidence_text = str(metadata.get("evidence_text") or "").strip()
         reason = evidence_text or (
             f"后置知识点：{to_name or to_id}；前置知识点：{from_name or from_id}"
@@ -59,9 +61,9 @@ def build_evidence_pack(
                     if relation == "PREREQUISITE_OF"
                     else "supplemental_context"
                 ),
-                "from_concept": {"id": from_id, "name": from_name},
+                "from_concept": {"id": from_id, "name": from_name, "name_en": from_name_en},
                 "relation": relation,
-                "to_concept": {"id": to_id, "name": to_name},
+                "to_concept": {"id": to_id, "name": to_name, "name_en": to_name_en},
                 "reason": reason,
                 "source_chapters": _strings(metadata.get("source_chapters")),
                 "source_images": _strings(metadata.get("source_images")),

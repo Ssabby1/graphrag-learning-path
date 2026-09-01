@@ -38,6 +38,18 @@ def _pack_items(evidence_pack: dict[str, Any]) -> list[dict[str, Any]]:
     return [item for item in evidence_pack.get("items", []) if item.get("evidence_id")]
 
 
+def _concept_label(concept: dict[str, Any], language: str) -> str:
+    preferred = concept.get("name_en") if language == "en" else concept.get("name")
+    return str(preferred or concept.get("name") or concept.get("name_en") or concept.get("id") or "")
+
+
+def _localized_reason(reason: str, language: str) -> str:
+    parts = [part.strip() for part in re.split(r"[；;]", reason or "") if part.strip()]
+    if len(parts) < 2:
+        return reason
+    return parts[-1] if language == "en" else parts[0]
+
+
 def _fallback_answer(
     target_concept_id: str,
     path: list[str],
@@ -54,9 +66,9 @@ def _fallback_answer(
                 [],
             )
         reasons = [
-            f"{item.get('from_concept', {}).get('name') or item.get('from_concept', {}).get('id')}"
-            f" 是 {item.get('to_concept', {}).get('name') or item.get('to_concept', {}).get('id')} 的前置知识"
-            f"（{item.get('reason') or '关系证据已记录'}）"
+            f"{_concept_label(item.get('from_concept', {}), 'zh')}"
+            f" 是 {_concept_label(item.get('to_concept', {}), 'zh')} 的前置知识"
+            f"（{_localized_reason(item.get('reason') or '关系证据已记录', 'zh')}）"
             for item in items
         ]
         return f"建议按顺序学习：{path_text}。" + "；".join(reasons) + "。", citations
@@ -68,9 +80,9 @@ def _fallback_answer(
             [],
         )
     reasons = [
-        f"{item.get('from_concept', {}).get('name') or item.get('from_concept', {}).get('id')}"
-        f" is a prerequisite for {item.get('to_concept', {}).get('name') or item.get('to_concept', {}).get('id')}"
-        f" ({item.get('reason') or 'relationship evidence is recorded'})"
+        f"{_concept_label(item.get('from_concept', {}), 'en')}"
+        f" is a prerequisite for {_concept_label(item.get('to_concept', {}), 'en')}"
+        f" ({_localized_reason(item.get('reason') or 'relationship evidence is recorded', 'en')})"
         for item in items
     ]
     return f"Follow this learning order: {path_text}. " + "; ".join(reasons) + ".", citations

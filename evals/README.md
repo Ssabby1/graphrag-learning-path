@@ -73,3 +73,12 @@ PYTHONPATH="$PWD" backend/.venv-macos-embeddings/bin/python \
 ```
 
 This evaluation never calls an external LLM. It separately measures the real deterministic bilingual fallback, a deterministic fake-LLM structured-output contract, and malformed JSON/timeout/hallucinated-citation guardrails. The fake fixture is not an LLM quality result. Unsupported Claim Rate and human Faithfulness remain explicitly unmeasured until a reviewed real-model evaluation is available.
+
+## Reproduce the stage-6 scorecards and feature ablation
+
+```bash
+PYTHONPATH="$PWD" backend/.venv-macos-embeddings/bin/python \
+  evals/stage6_report.py
+```
+
+The runner reads the versioned stage reports and writes four independent JSON/Markdown module scorecards plus a consolidated ablation table. It does not rerun or reinterpret model experiments. The public-sample end-to-end contract is covered by `backend/tests/test_stage6_public_sample.py`.

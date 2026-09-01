@@ -19,6 +19,9 @@ class Settings:
     neo4j_user: str = "neo4j"
     neo4j_password: str = ""
     neo4j_database: str = "neo4j"
+    graph_backend: str = "neo4j"
+    graph_concepts_csv: str = str(BACKEND_ROOT.parent / "data" / "seed" / "concepts.csv")
+    graph_relations_csv: str = str(BACKEND_ROOT.parent / "data" / "seed" / "relations.csv")
     graph_max_nodes: int = 2000
     graph_max_edges: int = 10000
     graph_query_timeout_seconds: float = 10.0
@@ -59,6 +62,9 @@ class Settings:
             neo4j_user=os.getenv("NEO4J_USER", cls.neo4j_user),
             neo4j_password=os.getenv("NEO4J_PASSWORD", ""),
             neo4j_database=os.getenv("NEO4J_DATABASE", cls.neo4j_database),
+            graph_backend=os.getenv("GRAPH_BACKEND", cls.graph_backend).strip().lower(),
+            graph_concepts_csv=os.getenv("GRAPH_CONCEPTS_CSV", cls.graph_concepts_csv).strip(),
+            graph_relations_csv=os.getenv("GRAPH_RELATIONS_CSV", cls.graph_relations_csv).strip(),
             graph_max_nodes=_positive_int("GRAPH_MAX_NODES", cls.graph_max_nodes),
             graph_max_edges=_positive_int("GRAPH_MAX_EDGES", cls.graph_max_edges),
             graph_query_timeout_seconds=_positive_float(

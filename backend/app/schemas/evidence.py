@@ -6,6 +6,7 @@ from pydantic import BaseModel, Field
 class EvidenceConcept(BaseModel):
     id: str
     name: str = ""
+    name_en: str = ""
 
 
 class EvidenceRetrievalTrace(BaseModel):

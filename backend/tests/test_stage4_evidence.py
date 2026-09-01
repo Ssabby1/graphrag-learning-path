@@ -40,8 +40,8 @@ def test_evidence_pack_is_deterministic_traceable_and_deduplicated() -> None:
     item = pack["items"][0]
     assert item["evidence_id"] == "prereq:C1:C2"
     assert item["evidence_type"] == "required_prerequisite"
-    assert item["from_concept"] == {"id": "C1", "name": "逻辑函数表达式"}
-    assert item["to_concept"] == {"id": "C2", "name": "卡诺图构成"}
+    assert item["from_concept"] == {"id": "C1", "name": "逻辑函数表达式", "name_en": ""}
+    assert item["to_concept"] == {"id": "C2", "name": "卡诺图构成", "name_en": ""}
     assert item["source_chapters"] == ["第一章", "第三章"]
     assert item["source_images"] == ["img-1", "img-2"]
     assert item["confidence"] == 0.92

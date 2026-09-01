@@ -1,0 +1,40 @@
+export const COPY = {
+  en: {
+    brand: "GraphRAG Learning Path", eyebrow: "Prerequisite-Constrained AI Agent",
+    title: "Ask for a goal. Get a path you can verify.",
+    intro: "The graph decides what must be learned. Retrieval finds relationship evidence. The answer cites only that evidence.",
+    language: "切换到中文", service: "API", online: "Online", offline: "Unavailable",
+    sample: "Load Cross-Language Demo", pipeline: "Agent Boundary",
+    pipelineItems: ["Resolve the target", "Plan from prerequisites", "Retrieve relationship evidence", "Answer with validated citations"],
+    questionLabel: "What do you want to learn?", questionHelp: "Ask in English, Chinese, or both. The response follows your selected interface language.",
+    questionPlaceholder: "What should I learn before studying Karnaugh maps?…", identify: "Resolve Target", identifying: "Resolving…",
+    targetLabel: "Resolved Target", targetPlaceholder: "Search by concept name, ID, or description…", masteredLabel: "Already Mastered",
+    masteredPlaceholder: "Add a concept you already know…", noTarget: "No target selected", clear: "Clear", remove: "Remove mastered concept",
+    run: "Build Explainable Path", running: "Building Path…", refresh: "Refresh Graph Data", resultEyebrow: "Traceable Recommendation",
+    pathTitle: "Learning Path", emptyPath: "Run the agent to generate a prerequisite-safe learning path.", answerTitle: "Grounded Answer",
+    emptyAnswer: "The answer and its validated citations will appear here.", whyTitle: "Why This Was Recommended",
+    whyIntro: "Each step below is backed by a relationship from the Evidence Pack.", noEvidence: "No additional prerequisite relationship is required for this target.",
+    graphTitle: "Inspect the Graph", graphHelp: "The highlighted chain is the recommended order. Drag nodes or open the canvas full screen.",
+    fullscreen: "Open Full Screen", exitFullscreen: "Exit Full Screen", source: "Answer Source", languageMeta: "Language",
+    citations: "Validated Citations", integrity: "Citation Integrity", evidenceId: "Evidence ID", verification: "Verification",
+    confidence: "Extraction Confidence", retrieval: "Retrieved Via", serviceNotice: "The backend is not ready. Start the local services, then refresh graph data.",
+    chooseTarget: "Resolve or select a target before running the agent.", requestFailed: "The request failed. Check the backend log and try again.",
+    demoQuestion: "What should I learn before studying Karnaugh maps?", graphEmpty: "Generate a path to inspect the graph"
+  },
+  zh: {
+    brand: "GraphRAG 学习路径", eyebrow: "先修约束 AI Agent", title: "提出学习目标，获得可验证的路径。",
+    intro: "图谱决定必须学习什么，检索寻找关系证据，回答只引用这些证据。", language: "Switch to English", service: "接口", online: "在线", offline: "不可用",
+    sample: "载入跨语言演示", pipeline: "Agent 职责边界", pipelineItems: ["识别目标知识点", "按先修关系规划路径", "检索关系级证据", "用校验后的引用生成回答"],
+    questionLabel: "你想学习什么？", questionHelp: "支持中文、英文和混合提问；回答跟随当前界面语言。", questionPlaceholder: "学习卡诺图之前需要掌握什么？…",
+    identify: "识别目标", identifying: "正在识别…", targetLabel: "识别出的目标", targetPlaceholder: "按名称、ID 或描述搜索知识点…",
+    masteredLabel: "已经掌握", masteredPlaceholder: "添加一个已经掌握的知识点…", noTarget: "尚未选择目标", clear: "清除", remove: "移除已掌握知识点",
+    run: "生成可解释路径", running: "正在生成路径…", refresh: "刷新图谱数据", resultEyebrow: "可追溯推荐", pathTitle: "学习路径",
+    emptyPath: "运行 Agent 后，这里会显示满足先修约束的学习路径。", answerTitle: "基于证据的回答", emptyAnswer: "回答和经过校验的引用会显示在这里。",
+    whyTitle: "为什么推荐这些内容", whyIntro: "下面每一步都对应 Evidence Pack 中的一条关系证据。", noEvidence: "该目标不需要额外的先修关系。",
+    graphTitle: "检查图谱", graphHelp: "高亮链路是推荐顺序；可以拖动节点或全屏查看。", fullscreen: "全屏查看", exitFullscreen: "退出全屏",
+    source: "回答来源", languageMeta: "回答语言", citations: "有效引用", integrity: "引用完整性", evidenceId: "证据 ID", verification: "审核状态",
+    confidence: "抽取置信度", retrieval: "检索来源", serviceNotice: "后端尚未就绪。请启动本地服务，然后刷新图谱数据。",
+    chooseTarget: "请先识别或选择目标知识点。", requestFailed: "请求失败，请检查后端日志后重试。",
+    demoQuestion: "What should I learn before studying Karnaugh maps?", graphEmpty: "生成路径后可在这里检查图谱"
+  }
+};

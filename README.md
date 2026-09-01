@@ -1,80 +1,125 @@
-# 基于知识图谱的个性化学习路径推荐系统
+# GraphRAG Learning Path
 
-本仓库是一个可本地运行的毕业设计项目，主题为“基于知识图谱的个性化学习路径推荐系统”。系统围绕数字逻辑课程构建知识图谱，并结合先修依赖推理、路径排序、检索增强解释与前端可视化，支持从目标知识点到个性化学习路径的生成与展示。
+[中文说明](README.zh-CN.md) · [Evaluation Summary](evals/reports/stage6_summary.md) · [Implementation Roadmap](IMPLEMENTATION_ROADMAP.md)
 
-## 快速运行
+A multilingual, prerequisite-constrained GraphRAG system that combines complete prerequisite-graph reasoning, cross-lingual retrieval, relationship-level Evidence Packs, deterministic citation validation, and modular evaluation to produce explainable and traceable learning paths.
 
-第一次使用请先安装 Python、Node.js 和 JDK。详细步骤见：
+![English cross-language demo](docs/assets/cross-language-demo.gif)
 
-[项目运行说明.md](./项目运行说明.md)
+## Why This Project Exists
 
-初始化：
+A semantic match can suggest relevant concepts, but relevance alone cannot guarantee a valid learning order. This project separates the responsibilities that are often blended inside a RAG pipeline:
+
+- the graph determines the complete prerequisite path;
+- multilingual retrieval resolves a target and selects evidence, but never changes the path;
+- the Answer Generator can cite only relationship IDs in the current Evidence Pack;
+- a deterministic validator removes unknown citations before the API responds.
+
+## Architecture
+
+```mermaid
+flowchart LR
+    Q[English / Chinese / Mixed Query] --> R[Target Resolver]
+    R -->|Resolved Concept ID| P[Path Planner]
+    G[(Prerequisite Graph)] --> P
+    P -->|Ordered Ancestor Closure| E[Evidence Retriever]
+    G -->|Allowed Relationship IDs| E
+    E --> EP[Evidence Pack 1.0]
+    EP --> A[Answer Generator]
+    A --> V[Citation Validator]
+    V --> UI[Path + Why Recommended + Sources]
+```
+
+The core contract is deliberately narrow:
+
+```text
+query → resolved target → graph-safe path → scoped relationship evidence
+      → grounded answer → validated citations
+```
+
+## Cross-Language Example
+
+```text
+Query:    What should I learn before studying Karnaugh maps?
+Target:   卡诺图构成 / Karnaugh Map Construction (c_006)
+Path:     Binary fundamentals → Truth tables → Boolean algebra
+          → Minterms and maxterms → Karnaugh map construction
+Evidence: Stable prerequisite relationship IDs from Evidence Pack 1.0
+Answer:   English by default; Chinese can be selected explicitly
+```
+
+The public sample contains 15 synthetic, curated bilingual concepts and 18 relationship-level evidence records. The full local validation graph contains 190 Chinese concepts and 409 prerequisite relationships; it is not redistributed because its source material is not public.
+
+## Measured Results
+
+| Module | Primary Result | Scope |
+| --- | ---: | --- |
+| Target Resolver | Top-1 30/30; cross-language Top-1 10/10 | 36 directional fixtures |
+| Path Planner | Closure recall 1514/1514; 0 structural violations | all 190 local targets |
+| Evidence Retriever | Graph-scoped Recall@5 6/6; Citation Integrity 6/6 | 6 labelled fixtures |
+| Answer Generator | Language match 6/6; invalid evidence IDs 0 | offline fallback + fake contract tests |
+
+These are directional engineering evaluations, not claims of statistical generalisation. No external LLM was called for the versioned Answer Generator report: deterministic fallback claim lineage measured `0/6` unsupported claim templates, while real-model unsupported-claim rate and human faithfulness remain explicitly unmeasured. See the [four independent scorecards and feature ablation](evals/reports/stage6_summary.md).
+
+Key decisions supported by the ablation:
+
+- keep `intfloat/multilingual-e5-small` for multilingual retrieval;
+- keep complete cached graph closure instead of depth-limited traversal;
+- keep relationship retrieval constrained to the planned graph path;
+- leave the evaluated CrossEncoder reranker disabled because it reduced overall and English Top-1 quality;
+- always retain deterministic bilingual answer fallback and citation validation.
+
+## Run the Public Sample
+
+### macOS / Linux
+
+Prerequisites: Python 3.11–3.13 and Node.js 18+. The public CSV graph mode does not require Docker or Java.
+
+```bash
+./setup.sh
+./start-dev.sh
+```
+
+Stop the services with `./stop-dev.sh`.
+
+### Windows PowerShell
+
+The original Windows scripts remain supported and use the bundled Neo4j runtime:
 
 ```powershell
 .\setup.ps1
-```
-
-启动：
-
-```powershell
 .\start-dev.ps1
 ```
 
-停止：
+Stop with `.\stop-dev.ps1`.
 
-```powershell
-.\stop-dev.ps1
-```
+Open the frontend at <http://127.0.0.1:5173>, API docs at <http://127.0.0.1:8000/docs>, and Neo4j Browser at <http://127.0.0.1:7474>.
 
-启动后访问：
+For the full local graph, set `GRAPH_BACKEND=neo4j` and start Neo4j with `docker compose up -d neo4j` or your local installation. The Compose password is for development only; set `NEO4J_PASSWORD` to override it.
 
-- 前端页面：http://127.0.0.1:5173
-- 后端接口文档：http://127.0.0.1:8000/docs
-- Neo4j 浏览器：http://127.0.0.1:7474
+## Test and Reproduce Reports
 
-## 目录结构
-
-- `backend/`：FastAPI 后端源码，包含图谱查询、路径推荐、GraphRAG 和解释服务。
-- `frontend/`：Vue 3 前端源码，包含知识点选择、路径展示和问答交互界面。
-- `neo4j/`：Neo4j Community 本地运行目录。
-- `章节数据/`：课程知识点与关系抽取、整理、汇总后的数据。
-- `scripts/`：Neo4j 数据导入、图谱校验等脚本。
-- `docs/`：项目综述、系统架构、数据模型、接口与实验说明。
-- `成果材料/`：论文、答辩 PPT、演示稿和关键图片等成果文件。
-
-## 技术栈
-
-- 前端：Vue 3、Vite、Axios、ECharts
-- 后端：FastAPI、Uvicorn、NetworkX、LangChain Core
-- 数据库：Neo4j Community
-- 数据处理：Python CSV 脚本
-
-## 常用命令
-
-后端测试：
-
-```powershell
+```bash
 cd backend
-.\.venv\Scripts\python.exe -m pytest
-```
-
-前端构建：
-
-```powershell
+.venv-unix/bin/python -m pytest
+cd ..
+backend/.venv-unix/bin/python evals/stage6_report.py
 cd frontend
 npm run build
 ```
 
-重新导入图谱数据：
+The public end-to-end test runs the English question above through graph closure, evidence retrieval, Evidence Pack construction, bilingual fallback generation, and citation validation without Neo4j or a network call.
 
-```powershell
-$env:NEO4J_PASSWORD="kg_learning_path_2026"
-.\backend\.venv\Scripts\python.exe scripts\import_data.py --clear-target
-```
+## Repository Map
 
-图谱质量校验：
+- `backend/app/graph/` — immutable graph snapshots and complete prerequisite closure.
+- `backend/app/retrieval/` — multilingual concept and relationship retrieval, caches, fusion, and optional reranking.
+- `backend/app/evidence/` — Evidence Pack construction and citation validation.
+- `backend/app/services/` — target resolution, planning, GraphRAG orchestration, and answer generation.
+- `frontend/` — English-first Vue interface with path, evidence, and graph inspection.
+- `data/seed/` — public bilingual synthetic sample.
+- `evals/` — versioned datasets, runners, JSON reports, Markdown scorecards, and ablations.
 
-```powershell
-$env:NEO4J_PASSWORD="kg_learning_path_2026"
-.\backend\.venv\Scripts\python.exe scripts\validate_graph.py --report backend\docs\graph_validation_report.md
-```
+## Technology
+
+FastAPI · Neo4j · Vue 3 · ECharts · multilingual E5 · optional CrossEncoder · deterministic structured fallback
