@@ -1,5 +1,7 @@
 # GraphRAG Learning Path
 
+[![CI](https://github.com/Ssabby1/graphrag-learning-path/actions/workflows/ci.yml/badge.svg)](https://github.com/Ssabby1/graphrag-learning-path/actions/workflows/ci.yml)
+
 [中文说明](README.zh-CN.md) · [Evaluation Summary](evals/reports/stage6_summary.md) · [Implementation Roadmap](IMPLEMENTATION_ROADMAP.md)
 
 A multilingual, prerequisite-constrained GraphRAG system that combines complete prerequisite-graph reasoning, cross-lingual retrieval, relationship-level Evidence Packs, deterministic citation validation, and modular evaluation to produce explainable and traceable learning paths.
@@ -109,6 +111,8 @@ npm run build
 ```
 
 The public end-to-end test runs the English question above through graph closure, evidence retrieval, Evidence Pack construction, bilingual fallback generation, and citation validation without Neo4j or a network call.
+
+GitHub Actions runs the same offline backend suite, regenerates and validates the Stage 6 reports, builds the frontend, and checks the Unix and Windows entrypoints. CI never requires an LLM API key or downloads the optional embedding model.
 
 ## Repository Map
 

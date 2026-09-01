@@ -1,7 +1,7 @@
 # Path Planner
 
 Source: `graph_validation_report_stage1.json`  
-Git commit: `7149efe8a9e40f77b9456eb89b8fd9bb3847c712`
+Git commit: `135ad27adfcc256602504be78fb40b0a4af4e0a0`
 
 ## Metrics
 

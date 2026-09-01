@@ -1041,8 +1041,8 @@ uncertain
 - [ ] embedding/reranker 不可用时降级；
 - [ ] 前端可以展示 evidence；
 - [ ] sample dataset 端到端演示；
-- [ ] CI 不依赖真实 LLM API Key；
-- [ ] CI 不自动下载大型模型。
+- [x] CI 不依赖真实 LLM API Key；
+- [x] CI 不自动下载大型模型。
 
 ---
 
@@ -1264,4 +1264,4 @@ uncertain
 | 2026-08-31 | 阶段 3 | `6e9c61e` | 实现可插拔 CrossEncoder、离线加载、显式 token fallback、稳定 tie-break 与降级元数据；以固定 E5 Top-8 候选对比 none、token-overlap 和 `cross-encoder/mmarco-mMiniLMv2-L12-H384-v1`；按预先声明的质量、语言分组与 P95 延迟门槛决定默认策略 | 后端 `58 passed`；无重排 Top-1 `26/30=86.7%`、MRR@5 `0.925`；token Top-1 `25/30=83.3%`、MRR@5 `0.911`；CrossEncoder Top-1 `25/30=83.3%`、MRR@5 `0.897`，英文分组回退；CPU P50/P95 `54.7/110.0 ms`，MPS `31.3/137.0 ms`；CPU/MPS 排序一致 | CrossEncoder 质量门槛未通过，默认继续使用 `hybrid_rrf` 且不启用 reranker；MPS 在受限沙箱内不可见，宿主环境验证通过；小样本仅为方向性结论。下一轮从阶段 4 开始 |
 | 2026-08-31 | 阶段 4 | `d3a821d` | 新增关系级 Evidence Pack 1.0、必要先修/补充背景类型、关系属性追踪、图范围 Evidence Retriever 与 Citation Validator；GraphRAG 引用由 concept ID 切换为稳定 relationship evidence ID；未知引用由确定性后处理拒绝；抽取置信度与人工审核状态保持分离 | 后端 `61 passed`；708 条关系语料全局 Vector Recall@5 `5/6=83.3%`、MRR@5 `0.708`、nDCG@5 `0.738`；Graph-scoped Recall/MRR/nDCG/Top-1 均 `6/6=100%`；Citation Integrity `6/6=100%`；Invalid Evidence ID `0`；热缓存全局 P50/P95 `57.6/58.3 ms`、图范围 `51.7/52.4 ms` | 仅 6 条人工标注方向性 fixture，不能代表总体 Citation Correctness；生产关系仍以 `verification_status` 独立标记，大部分为 `unreviewed`；自然语言 Answer Generator 留待阶段 5。下一轮从阶段 5 开始 |
 | 2026-08-31 | 阶段 5 | `7149efe` | 新增结构化 AnswerGenerator 接口和 Evidence Pack 限定 Prompt；支持 OpenAI-compatible JSON 输出、生成后 Citation Validator、自动/显式中英文选择、确定性双语 fallback、生成来源/模型/延迟/完整率元数据；删除旧 PromptTemplate formatter 与未使用的 LangChain 依赖 | 后端 `68 passed`；离线 fallback 结构成功、语言匹配、Citation Integrity、必要引用完整率、关系方向表达均 `6/6=100%`，Prompt 泄漏 `0/6`；结构化 fake-LLM 契约 `6/6`；格式错误、超时、幻觉引用 guardrail `3/3`，最终 Invalid Evidence ID `0` | 本轮未调用外部 LLM，fake LLM 只验证结构契约，不能代表真实模型质量；Unsupported Claim Rate 与人工 Faithfulness 明确未测量。下一轮进入阶段 6 |
-| 2026-08-31 | 阶段 6 | `7149efe`（阶段 5 检查点；阶段 6 工作区实现） | 扩展 15 概念/18 关系的人工确认双语公开样例；新增只读 CSV graph backend 与 macOS/Linux shell 启停入口，Windows PowerShell 入口继续保留；重构英文优先 Agent 前端，加入可交互学习路径图和关系级 “Why This Was Recommended”；补齐英文 README、中文入口、架构图、真实浏览器跨语言演示 GIF、四模块报告和消融汇总 | 后端 `71 passed`；前端生产构建成功；真实浏览器验证英文问题定位中文概念并生成 6 节点路径、5 条可验证引用，Citation Integrity `100%`；公开样例 DAG/闭包端到端测试通过；确定性 fallback Unsupported Claim `0/6` | 报告仍是小型方向性工程评估；本轮未调用外部 LLM，真实模型 Unsupported Claim Rate 与人工 Faithfulness 仍未测；Neo4j 保留为可选生产后端，零依赖演示默认使用 CSV |
+| 2026-08-31 | 阶段 6 | `135ad27` | 扩展 15 概念/18 关系的人工确认双语公开样例；新增只读 CSV graph backend 与 macOS/Linux shell 启停入口，Windows PowerShell 入口继续保留；重构英文优先 Agent 前端，加入可交互学习路径图和关系级 “Why This Was Recommended”；补齐英文 README、中文入口、架构图、真实浏览器跨语言演示 GIF、四模块报告和消融汇总 | 后端 `71 passed`；前端生产构建成功；真实浏览器验证英文问题定位中文概念并生成 6 节点路径、5 条可验证引用，Citation Integrity `100%`；公开样例 DAG/闭包端到端测试通过；确定性 fallback Unsupported Claim `0/6` | 报告仍是小型方向性工程评估；本轮未调用外部 LLM，真实模型 Unsupported Claim Rate 与人工 Faithfulness 仍未测；Neo4j 保留为可选生产后端，零依赖演示默认使用 CSV |

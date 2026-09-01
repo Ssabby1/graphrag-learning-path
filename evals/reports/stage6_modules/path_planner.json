@@ -1,7 +1,7 @@
 {
   "module": "Path Planner",
-  "generated_at": "2026-08-31T07:59:27.353925+00:00",
-  "git_commit": "7149efe8a9e40f77b9456eb89b8fd9bb3847c712",
+  "generated_at": "2026-09-01T05:32:21.465773+00:00",
+  "git_commit": "135ad27adfcc256602504be78fb40b0a4af4e0a0",
   "source_report": "graph_validation_report_stage1.json",
   "configuration": {
     "dataset_hash": "b679cc2133f4531fc023e65fd7ae1ecf76ce67aa8fdfd227a79ac9b98501b264",
