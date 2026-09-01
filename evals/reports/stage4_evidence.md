@@ -17,7 +17,7 @@
 
 - Citation Integrity: `6/6 = 100.0%`
 - Invalid Evidence IDs: `0`
-- Human-labeled Top-1 correctness: `6/6 = 100.0%`
+- Author-curated Top-1 correctness: `6/6 = 100.0%`
 
 > Graph-scoped retrieval can rank only relationships already selected by the prerequisite graph; vector similarity cannot alter the learning path.
 

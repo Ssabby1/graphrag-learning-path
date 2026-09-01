@@ -23,7 +23,7 @@ def test_graph_analysis_reports_full_depth_hash_and_evidence_completeness() -> N
             "evidence_text": "evidence",
             "source_images": ["image"],
             "confidence_max": 0.9,
-            "verification_status": "human_verified" if source == "C" else "unreviewed",
+            "verification_status": "author_curated",
         }
         for source, target in [("A", "B"), ("B", "C"), ("C", "T")]
     ]
@@ -39,7 +39,7 @@ def test_graph_analysis_reports_full_depth_hash_and_evidence_completeness() -> N
     assert metrics["structural_closure_recall_denominator"] == 6
     assert len(metrics["dataset_hash"]) == 64
     assert metrics["evidence_text_present_count"] == 3
-    assert metrics["human_verified_relation_count"] == 1
+    assert metrics["relationship_provenance"] == "project_curated_input"
 
 
 def test_graph_analysis_detects_arbitrary_cycle_and_self_loop() -> None:

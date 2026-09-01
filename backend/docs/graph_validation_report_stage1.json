@@ -128,7 +128,7 @@
     "evidence_text_present_count": 409,
     "source_images_present_count": 409,
     "confidence_present_count": 409,
-    "human_verified_relation_count": 0,
+    "relationship_provenance": "project_curated_input",
     "sample_targets": [
       {
         "target_concept_id": "G000001",

@@ -1,6 +1,6 @@
 # Stage 2 multilingual retrieval report
 
-- Generated at: `2026-08-30T12:54:31.296556+00:00`
+- Generated at: `2026-09-01T08:43:21.463411+00:00`
 - Dataset profile: `full_local`
 - Embedding model: `intfloat/multilingual-e5-small`
 - Dimension: `384`
@@ -20,8 +20,8 @@
 | Cross-lingual Top-1 accuracy | 10/10 | 100.0% |
 
 - MRR@5: `1.0`
-- Latency P50/P95: `22.106 / 24.123 ms`
-- Cache rebuilt/hit: `1 / 35`
+- Latency P50/P95: `21.334 / 22.72 ms`
+- Cache rebuilt/hit: `0 / 36`
 - Stage 0 vector Top-1: `0.03333333333333333`
 - Stage 0 vector Recall@5: `0.06666666666666667`
 

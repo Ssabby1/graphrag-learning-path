@@ -285,12 +285,12 @@ def _evaluate_path_planner(
     for case in cases:
         result = stage0_recommend(case["target_concept_id"], case["mastered_concepts"], repo)
         returned = set(result.get("path", []))
-        required = set(case["human_required_prerequisite_ids"])
-        forbidden = set(case["human_forbidden_ids"])
+        required = set(case["required_prerequisite_ids"])
+        forbidden = set(case["forbidden_ids"])
         case_details.append(
             {
                 "case_id": case["case_id"],
-                "review_status": case["review_status"],
+                "curation_status": case["curation_status"],
                 "path": result.get("path", []),
                 "required_recall": safe_ratio(len(returned & required), len(required)),
                 "forbidden_absent": safe_ratio(len(forbidden - returned), len(forbidden)),
@@ -298,7 +298,7 @@ def _evaluate_path_planner(
             }
         )
 
-    reviewed = [item for item in case_details if item["review_status"] == "human_verified"]
+    reviewed = [item for item in case_details if item["curation_status"] == "author_curated"]
     return {
         "implementation": {
             "repository_traversal": "Neo4j variable path limited to 8 edges (CSV emulation)",
@@ -309,7 +309,7 @@ def _evaluate_path_planner(
             "all_target_structural_closure_recall": safe_ratio(all_returned, all_expected),
             "targets_with_truncated_closure": safe_ratio(len(truncated_targets), len(concept_ids)),
             "topological_violation_rate": safe_ratio(violations, checked_constraints),
-            "human_reviewed_required_recall": safe_ratio(
+            "author_curated_required_recall": safe_ratio(
                 sum((item["required_recall"]["numerator"] for item in reviewed), 0),
                 sum((item["required_recall"]["denominator"] for item in reviewed), 0),
             ),

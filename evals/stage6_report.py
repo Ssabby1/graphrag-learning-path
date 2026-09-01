@@ -78,11 +78,11 @@ def main() -> int:
         write_module("evidence_retriever", "Evidence Retriever", "stage4_evidence.json",
             {"model": stage4["model"], "corpus": stage4["corpus"], "strategy": "graph_scoped_vector"},
             {"Evidence Recall@5": pct(evidence["strategies"]["graph_scoped_vector"]["metrics"]["evidence_recall_at_k"]), "MRR@5": f"{evidence['strategies']['graph_scoped_vector']['metrics']['mrr_at_k']:.3f}", "nDCG@5": f"{evidence['strategies']['graph_scoped_vector']['metrics']['ndcg_at_k']:.3f}", "Citation Integrity": pct(evidence["citation"]["integrity"]), "Invalid Evidence IDs": str(evidence["citation"]["invalid_evidence_id_count"])},
-            ["6 human-labelled directional fixtures.", "Extraction confidence is not instructional correctness."]),
+            ["6 author-curated directional fixtures.", "Extraction confidence is not instructional correctness."]),
         write_module("answer_generator", "Answer Generator", "stage5_answer_generator.json",
             {"implementation": stage5["strategies"]["offline_fallback"]["implementation"], "external_llm_called": stage5["run"]["external_llm_called"]},
             {"Response Schema Valid (fallback)": pct(answer["response_schema_valid_rate"]), "LLM Structured Contract (fixture)": pct(answer_contract["llm_structured_output_success_rate"]), "Language Match": pct(answer["answer_language_match_rate"]), "Citation Integrity": pct(answer["citation_integrity"]), "Required Citation Completeness": pct(answer["required_citation_completeness"]), "Prompt Leak Rate": pct(answer["prompt_template_leak_rate"]), "Unsupported Claim Rate (deterministic fallback)": "0/6 claim templates (0.0%)"},
-            ["No external LLM was called in this run.", "The fallback unsupported-claim result follows deterministic claim lineage; real-model unsupported-claim rate and human faithfulness remain unmeasured.", "Fake-LLM tests validate the contract, not model quality or faithfulness."])
+            ["No external LLM was called in this run.", "The fallback unsupported-claim result follows deterministic claim lineage; real-model unsupported-claim rate and real-model faithfulness remain unmeasured.", "Fake-LLM tests validate the contract, not model quality or faithfulness."])
     ]
 
     baseline_path = stage0["modules"]["path_planner"]["metrics"]

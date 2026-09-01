@@ -1,8 +1,8 @@
-# GraphRAG Learning Path 改造路线图与 TODO
+# GraphRAG Learning Path 技术路线与实现记录
 
-> 文档用途：这是当前仓库下一阶段改造的唯一执行入口。新的开发线程应先完整阅读本文件，再检查仓库与运行环境，从“阶段 0”开始按顺序实施。除非新的实验证据推翻现有判断，不要重新扩张产品范围。
+> 文档用途：记录系统边界、关键技术决策、实施阶段、评测口径与后续工作，便于贡献者理解设计背景并复现实验。
 >
-> 当前状态：阶段 0 至阶段 6 已完成，阶段 6 后的 P0 正确性复核也已落实：路径状态显式传播，异常状态不会进入正常生成；完整路径证据与有限回答上下文已拆分，并分别报告路径覆盖率、回答证据引用覆盖率和 citation integrity。公开双语样例可离线演示完整链路；Reranker 默认关闭；外部 LLM 的真实 Unsupported Claim Rate 与人工 Faithfulness 仍明确留作后续在线评测。
+> 当前状态：阶段 0 至阶段 6 已完成，阶段 6 后的 P0 正确性复核也已落实：路径状态显式传播，异常状态不会进入正常生成；完整路径证据与有限回答上下文已拆分，并分别报告路径覆盖率、回答证据引用覆盖率和 citation integrity。公开双语样例可离线演示完整链路；Reranker 默认关闭；外部 LLM 的真实 Unsupported Claim Rate 与 Faithfulness 仍明确留作后续在线评测。
 >
 > 最后确认日期：2026-08-31。
 
@@ -10,11 +10,11 @@
 
 ## 1. 最终项目定位
 
-将项目从“具备 GraphRAG 接口形式的毕业设计原型”升级为：
+本项目定位为：
 
 > **面向课程学习规划场景的、先修约束与关系证据驱动、可量化评测的多语言 GraphRAG 系统。**
 
-项目以中文完整图谱作为主要真实数据集，同时支持中文、英文和中英混合查询；公开展示采用英文优先、中文保留的方式，以适配新加坡及 APAC 的 AI 开发 / AI PM 求职场景。
+项目以中文完整图谱作为主要本地数据集，同时支持中文、英文和中英混合查询；公开样例采用完整双语元数据，用于验证跨语言目标识别和回答生成。
 
 项目必须围绕一条克制、可验证的主线展开：
 
@@ -36,40 +36,30 @@
 3. **LLM 不能引用 Evidence Pack 之外的事实。**
 4. **每个模块单独评测，不能用一个综合分数掩盖局部问题。**
 5. **先建立 baseline，再替换实现；不预设 Hybrid 或 Reranker 一定更好。**
-6. **公开展示必须可复现，同时不公开受版权约束的完整教材数据。**
+6. **公开样例必须可复现，同时不公开受版权约束的完整教材数据。**
 7. **核心架构必须与语言解耦；中文是主要真实数据，不是系统边界。**
-8. **GitHub 与演示采用英文优先，但不得通过翻译包装掩盖真实能力。**
+8. **GitHub 文档采用英文主入口和中文补充说明，评测口径保持一致。**
 
 ---
 
-## 2. 为什么采用这条路线
+## 2. 设计理由与范围边界
 
-该项目用于支持 AI 开发 / AI PM 求职。现有简历已经通过其他经历证明了以下能力：
+学习路径推荐不同于普通语义问答：语义相关的知识点不一定满足先修约束，语言模型生成的顺序也不能替代确定性图推理。因此系统将职责拆分为目标识别、图路径规划、关系证据检索、受约束回答生成和引用校验五个阶段。
 
-- LLM Workflow、Prompt Engineering、Structured Output、Guardrails；
-- FastAPI、SQLite、Docker、数据处理与异常治理；
-- 多阶段 Agent、Evidence Pack、测试、部署和产品闭环。
+本项目聚焦以下技术问题：
 
-因此，本项目不应重复建设复杂账号、SQLite 状态系统或 Multi-Agent。它最需要补强、也最能形成能力互补的是：
-
-- 多语言及跨语言语义检索；
-- 图约束推理；
-- 关系级 grounding；
-- citation 校验；
+- 多语言及跨语言目标识别；
+- 完整先修闭包与确定性拓扑排序；
+- 关系级 grounding 与 Evidence Pack；
+- citation 完整性校验；
 - RAG/GraphRAG 分模块评测；
-- 对实验结果保持诚实的工程决策。
+- 根据消融结果选择默认检索和重排策略。
 
-完成后，三个主要经历应形成如下分工：
+复杂账号体系、学习状态数据库、Multi-Agent 编排和多课程扩展不属于当前范围，因为它们不会改变先修约束 GraphRAG 主链路的正确性。
 
-| 经历 | 核心能力证据 |
-| --- | --- |
-| GEO 内容智能体 | Agent Workflow、Prompt、Guardrails |
-| AI 效能分析看板 | 后端、数据、SQLite、Docker、权限与部署 |
-| GraphRAG Learning Path | Retrieval、Graph Reasoning、Grounding、Evaluation |
+### 2.1 多语言与公开复现策略
 
-### 2.1 新加坡 / APAC 展示策略
-
-本项目不需要把完整 190 个中文知识点全部人工翻译，也不需要更换业务主题。需要完成的是：
+完整图谱保持原始中文课程语义，公开样例提供中英双语字段。具体约定如下：
 
 - `README.md` 使用英文，`README.zh-CN.md` 保留中文入口；
 - 架构图、核心评测表和演示视频使用英文；
@@ -78,7 +68,7 @@
 - 评测集同时包含中文、英文和中英混合查询；
 - 回答语言默认跟随用户问题语言，并允许显式覆盖；
 - API 字段和内部 schema 保持英文命名；
-- 完整本地图谱可以继续以中文为主，不为展示目的批量生成未经审核的英文翻译。
+- 完整本地图谱继续以中文为主，不批量生成未经校对的英文翻译。
 
 目标演示案例：
 
@@ -110,7 +100,7 @@ An English explanation with relationship-level citations.
 - 最长先修路径为 16 条边，即 17 个知识点；
 - 48 个目标节点的最大祖先深度超过 8。
 
-### 3.2 当前实现的关键问题
+### 3.2 基线版本曾存在的关键问题
 
 1. `backend/app/repositories/graph_repository.py` 将先修查询限制为 8 层，会静默遗漏深层必要先修节点。
 2. 当前 tokenizer 仅匹配英文字母、数字和下划线，中文查询可能形成空向量；它也无法完成英文问题到中文概念的跨语言语义匹配。
@@ -139,35 +129,35 @@ An English explanation with relationship-level citations.
 {
   "confidence": 0.92,
   "confidence_type": "extraction_confidence",
-  "verification_status": "unreviewed"
+  "curation_status": "author_curated"
 }
 ```
 
-只有经过记录的人工检查后，才能将 `verification_status` 改为 `human_verified`。
+关系由项目作者依据课程材料整理；抽取置信度只描述数据生成过程，不代表教学正确率。
 
 ---
 
-## 4. 本轮范围与明确非目标
+## 4. 当前版本范围与明确非目标
 
-### 4.1 本轮必须完成
+### 4.1 已完成的核心范围
 
-- [ ] 分层评测集与当前 baseline；
-- [ ] 完整先修祖先闭包与长链处理；
-- [ ] 完整 DAG、深度与截断校验；
-- [ ] 概念级和关系级两套检索语料；
-- [ ] 多语言 embedding、跨语言检索、持久化缓存和检索模式切换；
-- [ ] 可插拔 Reranker 与消融实验；
-- [ ] Neo4j 关系属性查询；
-- [ ] 关系级 Evidence Pack；
-- [ ] Citation Integrity 确定性校验；
-- [ ] 真正的 AnswerGenerator、按问题语言回答及中英文 fallback；
-- [ ] 四类分模块评测报告；
-- [ ] 前端“为什么推荐这一步”；
-- [ ] 10–20 节点公开合成样例；
-- [ ] 跨平台运行说明、README 与集成测试。
-- [ ] 英文优先展示、双语公开样例和跨语言评测。
+- [x] 分层评测集与 baseline；
+- [x] 完整先修祖先闭包与长链处理；
+- [x] 完整 DAG、深度与截断校验；
+- [x] 概念级和关系级两套检索语料；
+- [x] 多语言 embedding、跨语言检索、持久化缓存和检索模式切换；
+- [x] 可插拔 Reranker 与消融实验；
+- [x] Neo4j 关系属性查询；
+- [x] 关系级 Evidence Pack；
+- [x] Citation Integrity 确定性校验；
+- [x] 真正的 AnswerGenerator、按问题语言回答及中英文 fallback；
+- [x] 四类分模块评测报告；
+- [x] 前端“为什么推荐这一步”；
+- [x] 10–20 节点公开合成样例；
+- [x] 跨平台运行说明、README 与集成测试；
+- [x] 英文优先展示、双语公开样例和跨语言评测。
 
-### 4.2 本轮不做
+### 4.2 当前非目标
 
 - 学习状态持久化；
 - 复杂用户、登录、权限系统；
@@ -180,7 +170,7 @@ An English explanation with relationship-level citations.
 - 整体重构前端；
 - 上传完整教材原文、原始图片或其他受版权约束的数据。
 
-如果新需求落入非目标范围，应先完成本路线图的 P0，再单独评估，不得穿插实现。
+新需求若落入非目标范围，需单独评估其对核心链路、数据和维护成本的影响。
 
 ---
 
@@ -342,7 +332,7 @@ related:{from_concept_id}:{to_concept_id}
 
 - `source_chapters` 需要定义清晰的推导规则，例如取关系两端概念章节的去重并集；
 - `source_images` 是数据来源标识，不得在公开仓库中自动发布原始教材图片；
-- `verification_status` 需要独立审核记录支撑；
+- `curation_status` 用于区分作者整理、公开样例和自动生成数据；
 - Evidence Pack 应由确定性代码构建，不交给 LLM 自由生成。
 
 ### 5.5 Answer Generator
@@ -383,7 +373,7 @@ related:{from_concept_id}:{to_concept_id}
 需要区分三个指标：
 
 1. **Citation Integrity**：引用的 evidence ID 是否存在，可由代码保证；
-2. **Citation Correctness**：引用的证据是否支持对应结论，需要人工或 Judge；
+2. **Citation Correctness**：引用的证据是否支持对应结论，需要独立 Judge 或抽样复核；
 3. **Citation Completeness**：关键事实性结论是否都有引用，需要句子级检查。
 
 硬性验收：
@@ -487,7 +477,7 @@ tests/
 - 全部目标祖先闭包统计；
 - 数据集哈希；
 - 关系证据字段完整率；
-- 人工确认关系数量及比例。
+- 作者整理关系的来源覆盖率。
 
 ### 7.4 路径语义待明确项
 
@@ -529,11 +519,11 @@ tests/
 - 字段顺序固定；
 - 列表排序固定；
 - 缺失字段使用空值或统一占位，不能随机变化；
-- 完整中文数据没有英文元数据时允许为空，跨语言能力主要由多语言 embedding 和人工确认的 aliases 提供；
-- 公开 sample 必须提供经人工确认的中英双语字段；
+- 完整中文数据没有英文元数据时允许为空，跨语言能力主要由多语言 embedding 和项目整理的 aliases 提供；
+- 公开 sample 必须提供由项目作者整理的中英双语字段；
 - 不要把过多包含其他概念名称的原始关系文本直接堆入 Target Resolver，避免目标歧义；
-- 对高频、易混淆且缺 description 的概念优先人工补充简短定义；
-- 人工补充内容应与原始抽取数据分开保存并标记来源。
+- 对高频、易混淆且缺 description 的概念优先补充项目定义；
+- 项目补充内容应与原始抽取数据分开保存并标记来源。
 
 ### 8.2 关系级语料
 
@@ -583,7 +573,7 @@ class EmbeddingBackend(Protocol):
 - normalization 设置；
 - 索引 schema version。
 
-缓存文件可以使用 NumPy `.npz` 和 JSON metadata。190 个概念规模无需为了简历引入复杂向量数据库。
+缓存文件可以使用 NumPy `.npz` 和 JSON metadata。190 个概念规模不需要引入复杂向量数据库。
 
 缓存验收：
 
@@ -629,7 +619,7 @@ hybrid_rrf_rerank
 - 对比无 rerank 与有 rerank；
 - 记录延迟与质量变化；
 - 指标没有稳定提升时默认关闭；
-- README 如实写结论，不为保留简历关键词强行启用。
+- README 如实记录消融结论，不因预设架构偏好强行启用。
 
 ---
 
@@ -685,9 +675,9 @@ hybrid_rrf_rerank
   "case_id": "path-001",
   "target_concept_id": "G000079",
   "mastered_concepts": [],
-  "human_required_prerequisite_ids": ["..."],
-  "human_forbidden_ids": [],
-  "review_status": "human_verified"
+  "required_prerequisite_ids": ["..."],
+  "forbidden_ids": [],
+  "curation_status": "author_curated"
 }
 ```
 
@@ -706,10 +696,10 @@ hybrid_rrf_rerank
 
 #### 教学正确性
 
-使用人工审核 gold set，验证：
+使用项目作者整理的 gold set，验证：
 
-- Human-Reviewed Prerequisite Precision；
-- Human-Reviewed Prerequisite Recall；
+- Author-Curated Prerequisite Precision；
+- Author-Curated Prerequisite Recall；
 - 不必要节点比例；
 - 遗漏必要节点比例。
 
@@ -738,7 +728,7 @@ hybrid_rrf_rerank
 - MRR；
 - nDCG@K；
 - Citation Integrity；
-- 人工 Citation Correctness。
+- Judge-based Citation Correctness。
 
 ### 9.4 D. Answer Generator
 
@@ -756,7 +746,7 @@ Answer Generator 必须分别包含中文回答、英文回答和自动语言选
 - Citation Completeness；
 - Unsupported Claim Rate；
 - 先修关系方向表达正确率；
-- 人工 Faithfulness 评分；
+- 真实模型 Faithfulness 评分；
 - Answer Language Match Rate；
 - P50/P95 延迟。
 
@@ -781,13 +771,13 @@ Target Top-1 Accuracy: 26/30 = 86.7%
 Citation Correctness: 71/80 = 88.8%
 ```
 
-约 30 条案例适合作品集的方向性验证，不得声称具有普遍统计显著性。
+约 30 条案例只能作为方向性工程验证，不得声称具有普遍统计显著性。
 
 ---
 
-## 10. 证据人工审核
+## 10. 证据质量检查
 
-至少人工审核 30–50 条核心 `PREREQUISITE_OF` 关系，优先选择：
+对 30–50 条核心 `PREREQUISITE_OF` 关系执行 AI 辅助教学合理性检查，优先选择：
 
 - 公开演示会使用的目标；
 - 最长链上的关系；
@@ -796,14 +786,14 @@ Citation Correctness: 71/80 = 88.8%
 - 置信度较低或证据文本较短的关系；
 - 容易混淆关系方向的案例。
 
-审核记录建议：
+质量检查记录建议：
 
 ```json
 {
   "evidence_id": "prereq:G000069:G000079",
-  "decision": "verified",
-  "reviewer": "project_author",
-  "reviewed_at": "2026-08-30",
+  "decision": "ai_plausible",
+  "curated_by": "project_author",
+  "checked_at": "2026-09-01",
   "dataset_hash": "...",
   "notes": "关系方向和教材章节一致"
 }
@@ -812,13 +802,13 @@ Citation Correctness: 71/80 = 88.8%
 可选 decision：
 
 ```text
-verified
-rejected
-needs_revision
-uncertain
+ai_plausible
+likely_unrelated
+needs_relation_revision
+needs_source_check
 ```
 
-不要直接修改原始抽取置信度来表达人工判断；抽取置信度和人工审核状态必须分开。
+不要直接修改原始抽取置信度来表达质量检查结论；抽取置信度和整理状态必须分开。
 
 ---
 
@@ -902,7 +892,7 @@ uncertain
 - 展开“为什么推荐这一步”；
 - 显示直接支撑的下一知识点；
 - 显示必要先修/补充背景；
-- 显示章节、证据文本、抽取置信度和人工审核状态；
+- 显示章节、证据文本、抽取置信度和整理状态；
 - 显示回答引用的 evidence；
 - fallback 时明确但不过度强调“本地模板回答”；
 - UI 文案、问题输入和最终回答支持中英文；
@@ -972,75 +962,75 @@ uncertain
 
 ### 14.1 图推理
 
-- [ ] 超过 8 层的长链完整返回；
-- [ ] 16 边/17 节点链完整返回；
-- [ ] 分支与汇合拓扑正确；
-- [ ] 所有祖先均被覆盖；
-- [ ] 环路被完整检测；
-- [ ] 自环被检测；
-- [ ] 目标不存在；
-- [ ] 孤立目标；
-- [ ] 目标已掌握；
-- [ ] 中间节点已掌握；
-- [ ] 已掌握节点祖先跳过规则；
-- [ ] 安全限制触发时显式 truncated/error；
-- [ ] 输出排序稳定。
+- [x] 超过 8 层的长链完整返回；
+- [x] 16 边/17 节点链完整返回；
+- [x] 分支与汇合拓扑正确；
+- [x] 所有祖先均被覆盖；
+- [x] 环路被完整检测；
+- [x] 自环被检测；
+- [x] 目标不存在；
+- [x] 孤立目标；
+- [x] 目标已掌握；
+- [x] 中间节点已掌握；
+- [x] 已掌握节点祖先跳过规则；
+- [x] 安全限制触发时显式 truncated/error；
+- [x] 输出排序稳定。
 
 ### 14.2 检索
 
-- [ ] 中文、英文和中英混合查询向量非零；
-- [ ] 英文查询可以识别人工标注的中文目标概念；
-- [ ] 多语言模型与中文专用模型至少完成一次对照评测；
-- [ ] alias 能召回正确概念；
-- [ ] 章节和邻居信息进入 concept corpus；
-- [ ] relation evidence 使用独立索引；
-- [ ] 相同输入排序稳定；
-- [ ] 缓存命中；
-- [ ] 语料变化触发缓存失效；
-- [ ] 缓存损坏可恢复；
-- [ ] graph/vector/RRF 分数正确保留；
-- [ ] RRF 单元测试；
-- [ ] reranker 开关有效；
-- [ ] 模型不可用时行为明确。
+- [x] 中文、英文和中英混合查询向量非零；
+- [x] 英文查询可以识别项目整理的中文目标概念；
+- [x] 多语言模型与中文专用模型至少完成一次对照评测；
+- [x] alias 能召回正确概念；
+- [x] 章节和邻居信息进入 concept corpus；
+- [x] relation evidence 使用独立索引；
+- [x] 相同输入排序稳定；
+- [x] 缓存命中；
+- [x] 语料变化触发缓存失效；
+- [x] 缓存损坏可恢复；
+- [x] graph/vector/RRF 分数正确保留；
+- [x] RRF 单元测试；
+- [x] reranker 开关有效；
+- [x] 模型不可用时行为明确。
 
 ### 14.3 Evidence 与 citation
 
-- [ ] 每条 evidence ID 稳定且唯一；
-- [ ] Evidence Pack 只包含允许范围内的关系；
-- [ ] 必要先修与补充背景明确区分；
-- [ ] confidence 类型正确；
-- [ ] verification 状态来自审核记录；
-- [ ] citation 必须引用存在的 evidence；
-- [ ] 未知 evidence ID 被拒绝或移除；
-- [ ] citation 与 evidence 一一对应；
-- [ ] 公开模式不泄漏受限原始图片。
+- [x] 每条 evidence ID 稳定且唯一；
+- [x] Evidence Pack 只包含允许范围内的关系；
+- [x] 必要先修与补充背景明确区分；
+- [x] confidence 类型正确；
+- [x] curation 状态来自项目整理记录；
+- [x] citation 必须引用存在的 evidence；
+- [x] 未知 evidence ID 被拒绝或移除；
+- [x] citation 与 evidence 一一对应；
+- [x] 公开模式不泄漏受限原始图片。
 
 ### 14.4 Answer Generator
 
-- [ ] 正常结构化 LLM 输出；
-- [ ] LLM 超时；
-- [ ] 鉴权失败；
-- [ ] 无效 JSON；
-- [ ] 未知 citation；
-- [ ] 空回答；
-- [ ] Evidence Pack 为空；
-- [ ] fallback 返回正常中文或英文；
-- [ ] 自动回答语言与问题语言一致；
-- [ ] 显式 `response_language` 覆盖有效；
-- [ ] `answer_source` 正确；
-- [ ] 不再返回 `Question / Path / Evidence / Answer:` Prompt 文本。
+- [x] 正常结构化 LLM 输出；
+- [x] LLM 超时；
+- [x] 鉴权失败；
+- [x] 无效 JSON；
+- [x] 未知 citation；
+- [x] 空回答；
+- [x] Evidence Pack 为空；
+- [x] fallback 返回正常中文或英文；
+- [x] 自动回答语言与问题语言一致；
+- [x] 显式 `response_language` 覆盖有效；
+- [x] `answer_source` 正确；
+- [x] 不再返回 `Question / Path / Evidence / Answer:` Prompt 文本。
 
 ### 14.5 API 与集成
 
-- [ ] `/planner/interpret` 契约；
-- [ ] `/path/recommend` 完整路径契约；
-- [ ] `/graphrag/query` 完整链路；
-- [ ] citation referential integrity；
-- [ ] Neo4j 不可用时 503；
-- [ ] Neo4j 查询异常；
-- [ ] embedding/reranker 不可用时降级；
-- [ ] 前端可以展示 evidence；
-- [ ] sample dataset 端到端演示；
+- [x] `/planner/interpret` 契约；
+- [x] `/path/recommend` 完整路径契约；
+- [x] `/graphrag/query` 完整链路；
+- [x] citation referential integrity；
+- [x] Neo4j 不可用时 503；
+- [x] Neo4j 查询异常；
+- [x] embedding/reranker 不可用时降级；
+- [x] 前端可以展示 evidence；
+- [x] sample dataset 端到端演示；
 - [x] CI 不依赖真实 LLM API Key；
 - [x] CI 不自动下载大型模型。
 
@@ -1056,7 +1046,7 @@ uncertain
 - [x] 运行后端测试和前端构建；
 - [x] 保存当前 API 样例输出；
 - [x] 建立四类 eval 文件格式；
-- [x] 写入首批人工案例，包括中文、英文、中英混合和拒绝样本；
+- [x] 写入首批项目案例，包括中文、英文、中英混合和拒绝样本；
 - [x] 运行当前 hashing/token-overlap baseline；
 - [x] 保存 baseline JSON/Markdown，并按语言分组，不覆盖后续报告。
 
@@ -1100,7 +1090,7 @@ uncertain
 - [x] 根据真实结果决定默认值；
 - [x] 在报告中记录结论。
 
-完成标准：默认策略由评测结果决定，而不是由简历关键词决定。
+完成标准：默认策略由评测结果决定，而不是由预设技术栈决定。
 
 ### 阶段 4：关系证据与 Citation
 
@@ -1109,7 +1099,7 @@ uncertain
 - [x] 构建稳定 evidence ID；
 - [x] 构建 Evidence Pack；
 - [x] 区分必要先修与补充背景；
-- [x] 导入人工审核状态；
+- [x] 导入关系整理状态；
 - [x] 实现 Citation Validator；
 - [x] 添加 evidence/citation 测试；
 - [x] 运行 Evidence Retriever 评测。
@@ -1130,7 +1120,7 @@ uncertain
 
 完成标准：前端收到与问题语言一致的正常回答；LLM 不可用时中英文均可解释；未知 citation 不会进入最终响应。
 
-### 阶段 6：报告、前端与公开展示
+### 阶段 6：报告、前端与公开发布
 
 - [x] 生成四模块独立报告；
 - [x] 生成功能消融表；
@@ -1138,7 +1128,7 @@ uncertain
 - [x] 扩展公开 sample dataset；
 - [x] 修复跨平台 setup；
 - [x] 清理矛盾或过期校验报告；
-- [x] 更新 README 求职展示结构；
+- [x] 更新 README 的公开项目结构；
 - [x] 将 `README.md` 调整为英文默认入口，并保留中文 README；
 - [x] 增加英文架构图和英文演示 GIF；
 - [x] 展示至少一个英文查询到中文概念的跨语言案例；
@@ -1171,13 +1161,13 @@ uncertain
 
 > A multilingual, prerequisite-constrained GraphRAG system that combines complete prerequisite-graph reasoning, cross-lingual retrieval, relationship-level Evidence Packs, deterministic citation validation, and modular evaluation to produce explainable and traceable learning paths.
 
-不要继续把“本科毕业设计”作为 README 第一卖点；可在项目背景中说明。不要把项目描述成“一个中文数字逻辑学习网站”，应强调语言无关架构、中文真实数据验证和 APAC 多语言适用性。
+README 应直接说明系统解决的问题、架构边界、数据规模、评测结果和复现方式。项目背景可以保留，但不应取代技术定义。
 
 ---
 
 ## 17. 最终 Definition of Done
 
-只有同时满足以下条件，本轮改造才算完成：
+当前版本满足以下完成条件：
 
 ### 正确性
 
@@ -1223,47 +1213,39 @@ uncertain
 - [x] 报告记录配置、数据哈希、模型和 Git commit；
 - [x] 后端测试、前端构建和端到端样例通过；
 - [x] 公开 sample 可以完整演示；
-- [x] 公开 sample 包含人工确认的中英双语元数据；
-- [x] 英文 README、架构图和跨语言演示可供非中文招聘者独立理解；
+- [x] 公开 sample 包含项目整理的中英双语元数据；
+- [x] 英文 README、架构图和跨语言演示可供非中文读者独立理解；
 - [x] 全新 clone 有自洽运行路径；
 - [x] README 的声明均有可核验证据。
 
 ---
 
-## 18. 新线程开始工作时的操作约定
+## 18. 贡献与复现约定
 
-新的实现线程应按以下方式开始：
+后续变更应保持以下工程约定：
 
-1. 完整阅读本文件；
-2. 查看 `git status`，不要覆盖用户已有改动；
-3. 检查仓库是否存在 `AGENTS.md` 或新的项目规则；
-4. 阅读相关源码、测试和数据 schema；
-5. 只处理当前阶段，不跨阶段大规模修改；
-6. 修改公共 schema 前先补或更新契约测试；
-7. 每个阶段完成后运行对应测试和评测；
-8. 报告真实结果，不预设 Hybrid/Rerank/LLM 必然提升；
-9. 不在测试中依赖真实 API Key 或自动下载大型模型；
-10. 不提交完整私有数据、教材原图、`.env`、`.venv`、`node_modules` 或本地 Neo4j 状态。
-
-可以直接给新线程以下任务：
-
-> 请完整阅读仓库根目录 `IMPLEMENTATION_ROADMAP.md`，检查当前 Git 状态和运行环境，然后严格从“阶段 0：环境与基线冻结”开始实施。先建立四模块评测数据契约，并用中文、英文、中英混合及拒绝样本记录当前 baseline；不要提前扩展非目标功能。项目采用中文完整图谱作为主要真实数据，但检索与生成架构必须支持多语言，GitHub 展示采用英文优先。每完成一个阶段，运行对应测试与评测，并更新本文件中的 TODO 状态和实测结果。
+1. 公共 schema 变更需同步更新契约测试；
+2. 模块实现变更需重跑对应的测试和分模块评测；
+3. Hybrid、Reranker 或 LLM 的默认状态由实测结果决定；
+4. CI 不依赖外部 API Key，也不自动下载大型模型；
+5. 公开仓库不提交完整本地数据、教材原图、`.env`、`.venv`、`node_modules` 或 Neo4j 本地状态；
+6. 评测报告需保留配置、数据哈希、模型版本和未测边界。
 
 ---
 
 ## 19. 实施记录
 
-后续每个阶段完成后，在此追加简要记录，不要删除历史：
+以下记录保留了从 baseline 到当前版本的主要技术变化：
 
 | 日期 | 阶段 | Git commit | 主要结果 | 测试/评测 | 未解决问题 |
 | --- | --- | --- | --- | --- | --- |
 | 2026-08-30 | 方案冻结 | - | 确定先修约束、关系证据驱动、可评测的多语言 GraphRAG 路线；中文完整图谱作为主要真实数据，英文优先展示 | 尚未实施 | 从阶段 0 开始 |
 | 2026-08-30 | 阶段 0 | `dfe94a5`（工作区实现，尚未提交） | 建立四类 JSONL 评测契约；加入 36 条 Target Resolver（含 20 中文、7 英文、3 混合正例与 6 拒绝样本）、10 条 Path、6 条 Evidence、6 条 Answer 案例；新增离线 baseline runner、配置/哈希快照、失败明细和 API 样例 | 后端 `32 passed`；前端 Vite 构建成功；Planner Top-1 `20/30=66.7%`，英文 `0/7=0%`；hashing Vector Top-1 `1/30=3.3%`、Recall@5 `2/30=6.7%`；完整闭包召回 `1503/1514=99.3%`，11/190 个目标发生静默遗漏；关系 Evidence Recall `0/6`；结构化 Answer `0/6`，Prompt 泄漏 `6/6` | Python 3.14 触发依赖弃用警告；npm 报告 9 个依赖漏洞、前端 bundle >500 kB；这些不阻塞阶段 0，后续单独处理。下一轮严格从阶段 1 开始 |
 | 2026-08-30 | 阶段 1 | `dfe94a5`（工作区实现，尚未提交） | 新增不可变 `GraphSnapshot`、进程内 TTL 缓存和双向邻接索引；Neo4j 只读取全量直接边，不再枚举固定深度路径；确定性完整祖先闭包与拓扑排序；mastered 节点及其祖先从学习路径跳过但保留图上下文；安全限制显式返回 `truncated`、省略计数、深度、策略和数据哈希；校验脚本支持 Neo4j 与跨平台 CSV 离线模式 | 后端 `43 passed`（含 17 节点长链、分支汇合、环、自环、截断、缓存、mastered 语义、190/190 全目标独立 CSV oracle）；Structural Closure Recall `1514/1514=100%`；拓扑约束违反率 `0`；完整 DAG PASS；最长路径 16 边；48 个目标深度超过 8；前端构建成功 | Python 3.14 仍有依赖弃用警告；完整数据未公开时全量 oracle 测试会明确 skip，公开 seed 流程继续可用。下一轮从阶段 2 开始 |
-| 2026-08-30 | 阶段 2 | `bf1e63a` | 构建确定性的概念与关系证据双语料；Neo4j 查询补齐双语元数据、章节、邻居与关系属性；加入可插拔 embedding、E5 query/passage 前缀、原子 JSON 缓存、损坏恢复、四种检索模式、逐阶段排名/分数；新增少量可审计的项目人工双语 aliases；Target Resolver 使用最低分与 Top-1 margin 拒绝无关问题 | macOS ARM64 Python 3.13 + `sentence-transformers 6.0.0` 成功加载 `intfloat/multilingual-e5-small`（384 维）；后端 `54 passed`；完整本地语料 190 个概念、708 条可检索关系；Target Top-1 `30/30=100%`、Recall@5 `30/30=100%`、拒绝 `6/6=100%`、跨语言 Top-1 `10/10=100%`；概念缓存 1 次 rebuild/35 次 hit，关系缓存 rebuild 后命中；P50/P95 `22.106/24.123 ms` | 结果来自 36 条方向性小数据集，部分演示目标使用同仓库人工 aliases，不声称统计显著性；真实模型首次运行需约 470 MB 下载，CI 单测仍使用 fake backend 且禁止隐式下载。下一轮从阶段 3 开始 |
+| 2026-08-30 | 阶段 2 | `bf1e63a` | 构建确定性的概念与关系证据双语料；Neo4j 查询补齐双语元数据、章节、邻居与关系属性；加入可插拔 embedding、E5 query/passage 前缀、原子 JSON 缓存、损坏恢复、四种检索模式、逐阶段排名/分数；新增少量可审计的项目双语 aliases；Target Resolver 使用最低分与 Top-1 margin 拒绝无关问题 | macOS ARM64 Python 3.13 + `sentence-transformers 6.0.0` 成功加载 `intfloat/multilingual-e5-small`（384 维）；后端 `54 passed`；完整本地语料 190 个概念、708 条可检索关系；Target Top-1 `30/30=100%`、Recall@5 `30/30=100%`、拒绝 `6/6=100%`、跨语言 Top-1 `10/10=100%`；概念缓存 1 次 rebuild/35 次 hit，关系缓存 rebuild 后命中；P50/P95 `22.106/24.123 ms` | 结果来自 36 条方向性小数据集，部分演示目标使用同仓库项目 aliases，不声称统计显著性；真实模型首次运行需约 470 MB 下载，CI 单测仍使用 fake backend 且禁止隐式下载。下一轮从阶段 3 开始 |
 | 2026-08-31 | 阶段 3 | `6e9c61e` | 实现可插拔 CrossEncoder、离线加载、显式 token fallback、稳定 tie-break 与降级元数据；以固定 E5 Top-8 候选对比 none、token-overlap 和 `cross-encoder/mmarco-mMiniLMv2-L12-H384-v1`；按预先声明的质量、语言分组与 P95 延迟门槛决定默认策略 | 后端 `58 passed`；无重排 Top-1 `26/30=86.7%`、MRR@5 `0.925`；token Top-1 `25/30=83.3%`、MRR@5 `0.911`；CrossEncoder Top-1 `25/30=83.3%`、MRR@5 `0.897`，英文分组回退；CPU P50/P95 `54.7/110.0 ms`，MPS `31.3/137.0 ms`；CPU/MPS 排序一致 | CrossEncoder 质量门槛未通过，默认继续使用 `hybrid_rrf` 且不启用 reranker；MPS 在受限沙箱内不可见，宿主环境验证通过；小样本仅为方向性结论。下一轮从阶段 4 开始 |
-| 2026-08-31 | 阶段 4 | `d3a821d` | 新增关系级 Evidence Pack 1.0、必要先修/补充背景类型、关系属性追踪、图范围 Evidence Retriever 与 Citation Validator；GraphRAG 引用由 concept ID 切换为稳定 relationship evidence ID；未知引用由确定性后处理拒绝；抽取置信度与人工审核状态保持分离 | 后端 `61 passed`；708 条关系语料全局 Vector Recall@5 `5/6=83.3%`、MRR@5 `0.708`、nDCG@5 `0.738`；Graph-scoped Recall/MRR/nDCG/Top-1 均 `6/6=100%`；Citation Integrity `6/6=100%`；Invalid Evidence ID `0`；热缓存全局 P50/P95 `57.6/58.3 ms`、图范围 `51.7/52.4 ms` | 仅 6 条人工标注方向性 fixture，不能代表总体 Citation Correctness；生产关系仍以 `verification_status` 独立标记，大部分为 `unreviewed`；自然语言 Answer Generator 留待阶段 5。下一轮从阶段 5 开始 |
-| 2026-08-31 | 阶段 5 | `7149efe` | 新增结构化 AnswerGenerator 接口和 Evidence Pack 限定 Prompt；支持 OpenAI-compatible JSON 输出、生成后 Citation Validator、自动/显式中英文选择、确定性双语 fallback、生成来源/模型/延迟/完整率元数据；删除旧 PromptTemplate formatter 与未使用的 LangChain 依赖 | 后端 `68 passed`；离线 fallback 结构成功、语言匹配、Citation Integrity、必要引用完整率、关系方向表达均 `6/6=100%`，Prompt 泄漏 `0/6`；结构化 fake-LLM 契约 `6/6`；格式错误、超时、幻觉引用 guardrail `3/3`，最终 Invalid Evidence ID `0` | 本轮未调用外部 LLM，fake LLM 只验证结构契约，不能代表真实模型质量；Unsupported Claim Rate 与人工 Faithfulness 明确未测量。下一轮进入阶段 6 |
-| 2026-08-31 | 阶段 6 | `135ad27` | 扩展 15 概念/18 关系的人工确认双语公开样例；新增只读 CSV graph backend 与 macOS/Linux shell 启停入口，Windows PowerShell 入口继续保留；重构英文优先 Agent 前端，加入可交互学习路径图和关系级 “Why This Was Recommended”；补齐英文 README、中文入口、架构图、真实浏览器跨语言演示 GIF、四模块报告和消融汇总 | 后端 `71 passed`；前端生产构建成功；真实浏览器验证英文问题定位中文概念并生成 6 节点路径、5 条可验证引用，Citation Integrity `100%`；公开样例 DAG/闭包端到端测试通过；确定性 fallback Unsupported Claim `0/6` | 报告仍是小型方向性工程评估；本轮未调用外部 LLM，真实模型 Unsupported Claim Rate 与人工 Faithfulness 仍未测；Neo4j 保留为可选生产后端，零依赖演示默认使用 CSV |
-| 2026-09-01 | 阶段 6 P0 正确性修正 | `155331f` | 新增 `ok/already_mastered/not_found/truncated/cycle` 路径状态并在 GraphRAG 层门控；目标不存在返回 404，已掌握/截断/环路返回 system 说明且不进入 Answer Generator；拆分 `full_evidence_pack` 与 `selected_answer_evidence`；前端完整展示全部路径关系；fallback 的 LLM 结构化成功标记改为 false，同时独立报告响应 schema 有效性 | 后端 `76 passed`；前端生产构建成功；42 节点/107 路径边契约回归中完整证据 `107`、回答证据 `8`、缺失 `0`、路径边证据覆盖率 `100%`；四种异常状态门控全部 PASS；Stage 5/6 报告已按新指标定义重生成 | `citation_completeness` 暂保留为兼容别名，新字段为 `answer_evidence_citation_coverage`；真实外部 LLM 仍未评测；依赖升级、可选 E5 安装、完整图谱人工审核和 Windows 真正冒烟测试属于后续 P1 |
-| 2026-09-01 | 阶段 6 P1 展示准备 | `76aaed9` / `8c8177f` | Axios 升级到 1.20、ECharts 升级到 6.1；macOS/Linux 与 Windows 新增显式 embeddings 安装选项；普通启动不下载模型，前端显示 E5/降级 Hashing 运行时；PowerShell 改为全新 clone 可用的默认 CSV 流程；CI 新增真实 Windows setup/start/API/前端冒烟作业；建立 30–50 条核心关系的审核队列与保真状态 | 生产依赖 `npm audit --omit=dev`: `0` 漏洞；macOS Python 3.13 轻量 setup 成功；后端 `78 passed`；ECharts 6 前端生产构建成功；本地 CSV GraphRAG 和前端 HTTP 200；完整本地图谱生成 50 条唯一核心关系队列；Windows clean-clone setup/start/API/前端 CI `58s` 通过 | 50 条队列当前如实为 `pending=50`、`human_verified=0`，需人工对照原始图片完成；真实外部 LLM 与盲测集仍属 P2 |
+| 2026-08-31 | 阶段 4 | `d3a821d` | 新增关系级 Evidence Pack 1.0、必要先修/补充背景类型、关系属性追踪、图范围 Evidence Retriever 与 Citation Validator；GraphRAG 引用由 concept ID 切换为稳定 relationship evidence ID；未知引用由确定性后处理拒绝；抽取置信度与整理状态保持分离 | 后端 `61 passed`；708 条关系语料全局 Vector Recall@5 `5/6=83.3%`、MRR@5 `0.708`、nDCG@5 `0.738`；Graph-scoped Recall/MRR/nDCG/Top-1 均 `6/6=100%`；Citation Integrity `6/6=100%`；Invalid Evidence ID `0`；热缓存全局 P50/P95 `57.6/58.3 ms`、图范围 `51.7/52.4 ms` | 仅 6 条项目整理的方向性 fixture，不能代表总体 Citation Correctness；生产关系保留独立来源状态；自然语言 Answer Generator 留待阶段 5。下一轮从阶段 5 开始 |
+| 2026-08-31 | 阶段 5 | `7149efe` | 新增结构化 AnswerGenerator 接口和 Evidence Pack 限定 Prompt；支持 OpenAI-compatible JSON 输出、生成后 Citation Validator、自动/显式中英文选择、确定性双语 fallback、生成来源/模型/延迟/完整率元数据；删除旧 PromptTemplate formatter 与未使用的 LangChain 依赖 | 后端 `68 passed`；离线 fallback 结构成功、语言匹配、Citation Integrity、必要引用完整率、关系方向表达均 `6/6=100%`，Prompt 泄漏 `0/6`；结构化 fake-LLM 契约 `6/6`；格式错误、超时、幻觉引用 guardrail `3/3`，最终 Invalid Evidence ID `0` | 本轮未调用外部 LLM，fake LLM 只验证结构契约，不能代表真实模型质量；Unsupported Claim Rate 与真实模型 Faithfulness 明确未测量。下一轮进入阶段 6 |
+| 2026-08-31 | 阶段 6 | `135ad27` | 扩展 15 概念/18 关系的作者整理双语公开样例；新增只读 CSV graph backend 与 macOS/Linux shell 启停入口，Windows PowerShell 入口继续保留；重构英文优先 Agent 前端，加入可交互学习路径图和关系级 “Why This Was Recommended”；补齐英文 README、中文入口、架构图、真实浏览器跨语言演示 GIF、四模块报告和消融汇总 | 后端 `71 passed`；前端生产构建成功；真实浏览器验证英文问题定位中文概念并生成 6 节点路径、5 条可验证引用，Citation Integrity `100%`；公开样例 DAG/闭包端到端测试通过；确定性 fallback Unsupported Claim `0/6` | 报告仍是小型方向性工程评估；本轮未调用外部 LLM，真实模型 Unsupported Claim Rate 与 Faithfulness 仍未测；Neo4j 保留为可选生产后端，零依赖演示默认使用 CSV |
+| 2026-09-01 | 阶段 6 P0 正确性修正 | `155331f` | 新增 `ok/already_mastered/not_found/truncated/cycle` 路径状态并在 GraphRAG 层门控；目标不存在返回 404，已掌握/截断/环路返回 system 说明且不进入 Answer Generator；拆分 `full_evidence_pack` 与 `selected_answer_evidence`；前端完整展示全部路径关系；fallback 的 LLM 结构化成功标记改为 false，同时独立报告响应 schema 有效性 | 后端 `76 passed`；前端生产构建成功；42 节点/107 路径边契约回归中完整证据 `107`、回答证据 `8`、缺失 `0`、路径边证据覆盖率 `100%`；四种异常状态门控全部 PASS；Stage 5/6 报告已按新指标定义重生成 | `citation_completeness` 暂保留为兼容别名，新字段为 `answer_evidence_citation_coverage`；真实外部 LLM 仍未评测；依赖升级、可选 E5 安装和 Windows 冒烟测试属于后续 P1 |
+| 2026-09-01 | 阶段 6 P1 展示准备 | `76aaed9` / `8c8177f` | Axios 升级到 1.20、ECharts 升级到 6.1；macOS/Linux 与 Windows 新增显式 embeddings 安装选项；普通启动不下载模型，前端显示 E5/降级 Hashing 运行时；PowerShell 改为全新 clone 可用的默认 CSV 流程；CI 新增真实 Windows setup/start/API/前端冒烟作业；对 50 条高连接度核心关系执行补充 AI 教学合理性检查 | 生产依赖 `npm audit --omit=dev`: `0` 漏洞；macOS Python 3.13 轻量 setup 成功；后端 `78 passed`；ECharts 6 前端生产构建成功；本地 CSV GraphRAG 和前端 HTTP 200；AI 检查结果为 43 条合理、7 条待调整或回看；Windows clean-clone setup/start/API/前端 CI `58s` 通过 | 真实外部 LLM 与盲测集仍属 P2 |

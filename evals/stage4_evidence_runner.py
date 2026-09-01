@@ -154,7 +154,7 @@ def _evaluate(
                 {
                     "case_id": case["case_id"],
                     "question": case["question"],
-                    "review_status": case["review_status"],
+                    "curation_status": case["curation_status"],
                     "relevant_evidence_ids": sorted(relevant),
                     "scope_evidence_ids": allowed,
                     "ranked_evidence_ids": ranked_ids,
@@ -198,7 +198,7 @@ def _evaluate(
     reviewed_cases = [
         case
         for case in results["graph_scoped_vector"]
-        if case["review_status"] == "human_verified"
+        if case["curation_status"] == "author_curated"
     ]
     return {
         "strategies": strategies,
@@ -206,12 +206,12 @@ def _evaluate(
             "integrity": safe_ratio(citation_valid, citation_total),
             "invalid_evidence_id_count": len(invalid_ids),
             "invalid_evidence_ids": sorted(set(invalid_ids)),
-            "human_labeled_top_1_correctness": safe_ratio(
+            "author_curated_top_1_correctness": safe_ratio(
                 sum(case["top_1_correct"] for case in reviewed_cases),
                 len(reviewed_cases),
             ),
             "note": (
-                "Human labels come from the versioned evaluation fixtures; production "
+                "Author-curated labels come from the versioned evaluation fixtures; production "
                 "relationship verification_status remains independent."
             ),
         },
@@ -263,7 +263,7 @@ def _write_markdown(report: dict[str, Any], path: Path) -> None:
             "",
             f"- Citation Integrity: `{citation['integrity']['numerator']}/{citation['integrity']['denominator']} = {_percent(citation['integrity'])}`",
             f"- Invalid Evidence IDs: `{citation['invalid_evidence_id_count']}`",
-            f"- Human-labeled Top-1 correctness: `{citation['human_labeled_top_1_correctness']['numerator']}/{citation['human_labeled_top_1_correctness']['denominator']} = {_percent(citation['human_labeled_top_1_correctness'])}`",
+            f"- Author-curated Top-1 correctness: `{citation['author_curated_top_1_correctness']['numerator']}/{citation['author_curated_top_1_correctness']['denominator']} = {_percent(citation['author_curated_top_1_correctness'])}`",
             "",
             "> Graph-scoped retrieval can rank only relationships already selected by the prerequisite graph; vector similarity cannot alter the learning path.",
             "",

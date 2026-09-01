@@ -1,7 +1,7 @@
 # Target Resolver
 
 Source: `stage2_retrieval.json`  
-Git commit: `4d9a2293f97162eb58ce3955c2ff801a00631fe6`
+Git commit: `4b455217bcfeae93aaeb1c71b34fd17f9506c4eb`
 
 ## Metrics
 
@@ -11,7 +11,7 @@ Git commit: `4d9a2293f97162eb58ce3955c2ff801a00631fe6`
 | Recall@5 | 100.0% |
 | Cross-Lingual Top-1 | 100.0% |
 | Rejection Accuracy | 100.0% |
-| P95 Latency | 24.1 ms |
+| P95 Latency | 22.7 ms |
 
 ## Configuration
 

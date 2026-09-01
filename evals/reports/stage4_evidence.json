@@ -45,7 +45,7 @@
           {
             "case_id": "evidence-002",
             "question": "Why is sign-magnitude needed before ones' complement?",
-            "review_status": "human_verified",
+            "curation_status": "author_curated",
             "relevant_evidence_ids": [
               "prereq:G000026:G000027"
             ],
@@ -108,7 +108,7 @@
           {
             "case_id": "evidence-005",
             "question": "Why learn basic RS flip-flops before an edge-triggered D flip-flop?",
-            "review_status": "human_verified",
+            "curation_status": "author_curated",
             "relevant_evidence_ids": [
               "prereq:G000128:G000138"
             ],
@@ -173,7 +173,7 @@
           {
             "case_id": "evidence-001",
             "question": "为什么学习补码前要掌握反码？",
-            "review_status": "human_verified",
+            "curation_status": "author_curated",
             "relevant_evidence_ids": [
               "prereq:G000027:G000028"
             ],
@@ -236,7 +236,7 @@
           {
             "case_id": "evidence-002",
             "question": "Why is sign-magnitude needed before ones' complement?",
-            "review_status": "human_verified",
+            "curation_status": "author_curated",
             "relevant_evidence_ids": [
               "prereq:G000026:G000027"
             ],
@@ -299,7 +299,7 @@
           {
             "case_id": "evidence-003",
             "question": "海明码为什么需要奇偶校验码？",
-            "review_status": "human_verified",
+            "curation_status": "author_curated",
             "relevant_evidence_ids": [
               "prereq:G000039:G000040"
             ],
@@ -362,7 +362,7 @@
           {
             "case_id": "evidence-004",
             "question": "逻辑变量如何支撑逻辑函数的表示方法？",
-            "review_status": "human_verified",
+            "curation_status": "author_curated",
             "relevant_evidence_ids": [
               "prereq:G000006:G000063"
             ],
@@ -425,7 +425,7 @@
           {
             "case_id": "evidence-005",
             "question": "Why learn basic RS flip-flops before an edge-triggered D flip-flop?",
-            "review_status": "human_verified",
+            "curation_status": "author_curated",
             "relevant_evidence_ids": [
               "prereq:G000128:G000138"
             ],
@@ -488,7 +488,7 @@
           {
             "case_id": "evidence-006",
             "question": "编码器为什么依赖组合逻辑电路设计？",
-            "review_status": "human_verified",
+            "curation_status": "author_curated",
             "relevant_evidence_ids": [
               "prereq:G000045:G000046"
             ],
@@ -576,7 +576,7 @@
           {
             "case_id": "evidence-001",
             "question": "为什么学习补码前要掌握反码？",
-            "review_status": "human_verified",
+            "curation_status": "author_curated",
             "relevant_evidence_ids": [
               "prereq:G000027:G000028"
             ],
@@ -605,7 +605,7 @@
           {
             "case_id": "evidence-002",
             "question": "Why is sign-magnitude needed before ones' complement?",
-            "review_status": "human_verified",
+            "curation_status": "author_curated",
             "relevant_evidence_ids": [
               "prereq:G000026:G000027"
             ],
@@ -634,7 +634,7 @@
           {
             "case_id": "evidence-003",
             "question": "海明码为什么需要奇偶校验码？",
-            "review_status": "human_verified",
+            "curation_status": "author_curated",
             "relevant_evidence_ids": [
               "prereq:G000039:G000040"
             ],
@@ -663,7 +663,7 @@
           {
             "case_id": "evidence-004",
             "question": "逻辑变量如何支撑逻辑函数的表示方法？",
-            "review_status": "human_verified",
+            "curation_status": "author_curated",
             "relevant_evidence_ids": [
               "prereq:G000006:G000063"
             ],
@@ -692,7 +692,7 @@
           {
             "case_id": "evidence-005",
             "question": "Why learn basic RS flip-flops before an edge-triggered D flip-flop?",
-            "review_status": "human_verified",
+            "curation_status": "author_curated",
             "relevant_evidence_ids": [
               "prereq:G000128:G000138"
             ],
@@ -721,7 +721,7 @@
           {
             "case_id": "evidence-006",
             "question": "编码器为什么依赖组合逻辑电路设计？",
-            "review_status": "human_verified",
+            "curation_status": "author_curated",
             "relevant_evidence_ids": [
               "prereq:G000045:G000046"
             ],
@@ -758,12 +758,12 @@
       },
       "invalid_evidence_id_count": 0,
       "invalid_evidence_ids": [],
-      "human_labeled_top_1_correctness": {
+      "author_curated_top_1_correctness": {
         "numerator": 6,
         "denominator": 6,
         "value": 1.0
       },
-      "note": "Human labels come from the versioned evaluation fixtures; production relationship verification_status remains independent."
+      "note": "Author-curated labels come from the versioned evaluation fixtures; production relationship verification_status remains independent."
     },
     "cache": {
       "warmup_status": "hit",

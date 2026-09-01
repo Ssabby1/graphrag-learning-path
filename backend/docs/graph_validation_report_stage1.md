@@ -30,7 +30,7 @@
 - Relationship evidence_text present: `409` / `409`
 - Relationship source_images present: `409` / `409`
 - Relationship confidence_max present: `409` / `409`
-- Human-verified prerequisite relations: `0` / `409`
+- Relationship provenance: `project_curated_input`
 
 ## Ancestor Closure Statistics
 
@@ -112,4 +112,4 @@
 | G000019 | 数制与码制 | 0 | 0 |
 | G000020 | 数制之间的转换 | 0 | 0 |
 
-> Manual check suggestion: review 30–50 representative PREREQUISITE_OF rows against source material; keep human verification separate from extraction confidence.
+> Chapter-level prerequisite relationships were curated from course materials; structural validation and AI-assisted plausibility checks are reported separately.

@@ -197,9 +197,9 @@ def _evaluate_strategy(
                 "numerator": None,
                 "denominator": None,
                 "value": None,
-                "status": "not_measured_without_human_or_judge_review",
+                "status": "not_measured_without_external_model_evaluation",
             },
-            "human_faithfulness": {
+            "real_model_faithfulness": {
                 "value": None,
                 "status": "not_measured",
             },
@@ -297,7 +297,7 @@ def _write_markdown(report: dict[str, Any], path: Path) -> None:
             "",
             "- `structured_contract_fixture` uses a deterministic fake LLM. It validates parsing, language, citation, and fallback contracts only.",
             "- No external LLM/API key is required or called by this evaluation.",
-            "- Unsupported Claim Rate and human Faithfulness remain unmeasured; they must not be reported as 100%.",
+            "- Unsupported Claim Rate and real-model Faithfulness remain unmeasured; they must not be reported as 100%.",
             "",
         ]
     )

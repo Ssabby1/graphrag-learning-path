@@ -1,4 +1,4 @@
-"""Build or refresh a deterministic human-review queue for core prerequisite edges."""
+"""Build or refresh a deterministic AI-assisted quality queue for core prerequisite edges."""
 
 from __future__ import annotations
 
@@ -18,12 +18,19 @@ FIELDS = [
     "source_images",
     "confidence_max",
     "core_score",
-    "review_status",
-    "reviewer",
-    "reviewed_at",
-    "review_notes",
+    "check_status",
+    "checked_by",
+    "checked_at",
+    "check_notes",
 ]
-ALLOWED_STATUSES = {"pending", "human_verified", "rejected", "needs_revision"}
+ALLOWED_STATUSES = {
+    "pending",
+    "ai_plausible",
+    "needs_relation_revision",
+    "likely_wrong_direction",
+    "likely_unrelated",
+    "needs_source_check",
+}
 
 
 def read_rows(path: Path) -> list[dict[str, str]]:
@@ -35,7 +42,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--concepts-csv", required=True)
     parser.add_argument("--relations-csv", required=True)
-    parser.add_argument("--output", default="output/relationship_review_queue.csv")
+    parser.add_argument("--output", default="output/relationship_quality_queue.csv")
     parser.add_argument("--limit", type=int, default=50)
     return parser.parse_args()
 
@@ -80,9 +87,9 @@ def main() -> None:
         target = (row.get("to_concept_id") or "").strip()
         item_id = f"prereq:{source}:{target}"
         prior = existing.get(item_id, {})
-        status = (prior.get("review_status") or "pending").strip()
+        status = (prior.get("check_status") or "pending").strip()
         if status not in ALLOWED_STATUSES:
-            raise SystemExit(f"Invalid review_status {status!r} for {item_id}")
+            raise SystemExit(f"Invalid check_status {status!r} for {item_id}")
         queue.append(
             {
                 "evidence_id": item_id,
@@ -95,10 +102,10 @@ def main() -> None:
                 "source_images": (row.get("source_images") or "").strip(),
                 "confidence_max": (row.get("confidence_max") or "").strip(),
                 "core_score": degree[source] + degree[target],
-                "review_status": status,
-                "reviewer": prior.get("reviewer", ""),
-                "reviewed_at": prior.get("reviewed_at", ""),
-                "review_notes": prior.get("review_notes", ""),
+                "check_status": status,
+                "checked_by": prior.get("checked_by", ""),
+                "checked_at": prior.get("checked_at", ""),
+                "check_notes": prior.get("check_notes", ""),
             }
         )
 
@@ -108,9 +115,9 @@ def main() -> None:
         writer.writeheader()
         writer.writerows(queue)
 
-    counts = Counter(str(row["review_status"]) for row in queue)
+    counts = Counter(str(row["check_status"]) for row in queue)
     print(f"Wrote {len(queue)} core prerequisite relationships to {output}")
-    print("Review status: " + ", ".join(f"{name}={counts.get(name, 0)}" for name in sorted(ALLOWED_STATUSES)))
+    print("Check status: " + ", ".join(f"{name}={counts.get(name, 0)}" for name in sorted(ALLOWED_STATUSES)))
 
 
 if __name__ == "__main__":

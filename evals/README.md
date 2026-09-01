@@ -7,11 +7,11 @@ This directory freezes the pre-refactor baseline before the roadmap replaces gra
 All datasets use JSON Lines (`.jsonl`): one independent UTF-8 JSON object per line.
 
 - `target_resolver.jsonl`: multilingual target resolution, ambiguity, and rejection cases. `acceptable_target_ids` contains every accepted answer; `should_reject` makes negative cases explicit.
-- `path_planner.jsonl`: target/mastered inputs plus independently reviewable required and forbidden concepts. `review_status` distinguishes structural fixtures from human teaching review.
+- `path_planner.jsonl`: target/mastered inputs plus independently reviewable required and forbidden concepts. `curation_status` distinguishes structural fixtures from author-curated curriculum cases.
 - `evidence_retriever.jsonl`: a fixed path and relationship-level relevance labels. Evidence IDs use `prereq:{from_id}:{to_id}`.
 - `answer_generator.jsonl`: fixed path and Evidence Pack input so generator behavior is measured without upstream retrieval errors.
 
-The initial files are deliberately small, versioned contracts—not claims of statistical significance. Human teaching review remains pending unless a case explicitly says `human_verified`.
+The initial files are deliberately small, versioned contracts—not claims of statistical significance. Curriculum cases are project-curated fixtures.
 
 ## Reproduce the frozen baseline
 
@@ -63,7 +63,7 @@ HF_HOME="$PWD/backend/.cache/huggingface" PYTHONPATH="$PWD" \
   backend/.venv-macos-embeddings/bin/python evals/stage4_evidence_runner.py
 ```
 
-The report compares global vector retrieval over every relationship document with graph-scoped retrieval over prerequisite edges already selected by the Path Planner. Model/index warmup is recorded separately from hot-request latency. Citation Integrity is computed by deterministic membership validation against each generated Evidence Pack; human relevance labels remain separate from production `verification_status`.
+The report compares global vector retrieval over every relationship document with graph-scoped retrieval over prerequisite edges already selected by the Path Planner. Model/index warmup is recorded separately from hot-request latency. Citation Integrity is computed by deterministic membership validation against each generated Evidence Pack; fixture relevance labels remain separate from production `verification_status`.
 
 ## Reproduce the stage-5 Answer Generator evaluation
 
@@ -72,7 +72,7 @@ PYTHONPATH="$PWD" backend/.venv-macos-embeddings/bin/python \
   evals/stage5_answer_runner.py
 ```
 
-This evaluation never calls an external LLM. It separately measures the real deterministic bilingual fallback, a deterministic fake-LLM structured-output contract, and malformed JSON/timeout/hallucinated-citation guardrails. The fake fixture is not an LLM quality result. Unsupported Claim Rate and human Faithfulness remain explicitly unmeasured until a reviewed real-model evaluation is available.
+This evaluation never calls an external LLM. It separately measures the real deterministic bilingual fallback, a deterministic fake-LLM structured-output contract, and malformed JSON/timeout/hallucinated-citation guardrails. The fake fixture is not an LLM quality result. Unsupported Claim Rate and real-model Faithfulness remain explicitly unmeasured until an external-model evaluation is available.
 
 ## Reproduce the stage-6 scorecards and feature ablation
 

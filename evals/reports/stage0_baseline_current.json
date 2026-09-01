@@ -1351,7 +1351,7 @@
           "denominator": 2573,
           "value": 0.0
         },
-        "human_reviewed_required_recall": {
+        "author_curated_required_recall": {
           "numerator": 4,
           "denominator": 4,
           "value": 1.0
@@ -1373,7 +1373,7 @@
       "cases": [
         {
           "case_id": "path-001",
-          "review_status": "pending_human_review",
+          "curation_status": "directional_fixture",
           "path": [
             "G000011",
             "G000009",
@@ -1399,7 +1399,7 @@
         },
         {
           "case_id": "path-002",
-          "review_status": "pending_human_review",
+          "curation_status": "directional_fixture",
           "path": [
             "G000011",
             "G000009",
@@ -1427,7 +1427,7 @@
         },
         {
           "case_id": "path-003",
-          "review_status": "pending_human_review",
+          "curation_status": "directional_fixture",
           "path": [
             "G000001",
             "G000004",
@@ -1449,7 +1449,7 @@
         },
         {
           "case_id": "path-004",
-          "review_status": "human_verified",
+          "curation_status": "author_curated",
           "path": [
             "G000034",
             "G000038",
@@ -1470,7 +1470,7 @@
         },
         {
           "case_id": "path-005",
-          "review_status": "human_verified",
+          "curation_status": "author_curated",
           "path": [
             "G000020",
             "G000026",
@@ -1491,7 +1491,7 @@
         },
         {
           "case_id": "path-006",
-          "review_status": "product_rule_fixture",
+          "curation_status": "product_rule_fixture",
           "path": [
             "G000020",
             "G000026",
@@ -1511,7 +1511,7 @@
         },
         {
           "case_id": "path-007",
-          "review_status": "human_verified",
+          "curation_status": "author_curated",
           "path": [
             "G000001",
             "G000004",
@@ -1548,7 +1548,7 @@
         },
         {
           "case_id": "path-008",
-          "review_status": "pending_human_review",
+          "curation_status": "directional_fixture",
           "path": [
             "G000001",
             "G000004",
@@ -1570,7 +1570,7 @@
         },
         {
           "case_id": "path-009",
-          "review_status": "structural_fixture",
+          "curation_status": "structural_fixture",
           "path": [],
           "required_recall": {
             "numerator": 0,
@@ -1586,7 +1586,7 @@
         },
         {
           "case_id": "path-010",
-          "review_status": "product_rule_fixture",
+          "curation_status": "product_rule_fixture",
           "path": [],
           "required_recall": {
             "numerator": 0,

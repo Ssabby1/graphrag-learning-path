@@ -1,7 +1,7 @@
 {
   "run": {
-    "generated_at": "2026-09-01T06:19:38.615471+00:00",
-    "git_commit": "4d9a2293f97162eb58ce3955c2ff801a00631fe6",
+    "generated_at": "2026-09-01T08:46:21.996392+00:00",
+    "git_commit": "4b455217bcfeae93aaeb1c71b34fd17f9506c4eb",
     "git_dirty": true,
     "python": "3.13.15",
     "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
@@ -67,15 +67,15 @@
         "latency": {
           "count": 6,
           "p50_ms": 0.004,
-          "p95_ms": 0.742
+          "p95_ms": 0.61
         },
         "unsupported_claim_rate": {
           "numerator": null,
           "denominator": null,
           "value": null,
-          "status": "not_measured_without_human_or_judge_review"
+          "status": "not_measured_without_external_model_evaluation"
         },
-        "human_faithfulness": {
+        "real_model_faithfulness": {
           "value": null,
           "status": "not_measured"
         }
@@ -102,7 +102,7 @@
           "returned_required_citation_count": 1,
           "direction_correct": true,
           "prompt_template_leak": false,
-          "latency_ms": 0.986,
+          "latency_ms": 0.81,
           "fallback_reason": "llm_disabled_or_missing_api_key"
         },
         {
@@ -277,15 +277,15 @@
         "latency": {
           "count": 6,
           "p50_ms": 0.011,
-          "p95_ms": 0.04
+          "p95_ms": 0.035
         },
         "unsupported_claim_rate": {
           "numerator": null,
           "denominator": null,
           "value": null,
-          "status": "not_measured_without_human_or_judge_review"
+          "status": "not_measured_without_external_model_evaluation"
         },
-        "human_faithfulness": {
+        "real_model_faithfulness": {
           "value": null,
           "status": "not_measured"
         }
@@ -312,7 +312,7 @@
           "returned_required_citation_count": 1,
           "direction_correct": true,
           "prompt_template_leak": false,
-          "latency_ms": 0.046,
+          "latency_ms": 0.04,
           "fallback_reason": null
         },
         {
@@ -381,7 +381,7 @@
           "returned_required_citation_count": 1,
           "direction_correct": true,
           "prompt_template_leak": false,
-          "latency_ms": 0.01,
+          "latency_ms": 0.011,
           "fallback_reason": null
         },
         {

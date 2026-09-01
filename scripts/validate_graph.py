@@ -154,10 +154,6 @@ def analyze_prerequisite_graph(
     evidence_present = sum(bool(str(row.get("evidence_text") or "").strip()) for row in relation_rows)
     source_images_present = sum(bool(row.get("source_images")) for row in relation_rows)
     confidence_present = sum(row.get("confidence_max") is not None for row in relation_rows)
-    human_verified = sum(
-        str(row.get("verification_status") or "").strip().lower() in {"verified", "human_verified"}
-        for row in relation_rows
-    )
     names = {str(row.get("concept_id") or "").strip(): row.get("name") or "" for row in concept_rows}
     return {
         "dataset_hash": snapshot.content_hash,
@@ -190,7 +186,7 @@ def analyze_prerequisite_graph(
         "evidence_text_present_count": evidence_present,
         "source_images_present_count": source_images_present,
         "confidence_present_count": confidence_present,
-        "human_verified_relation_count": human_verified,
+        "relationship_provenance": "project_curated_input",
         "sample_targets": [
             {
                 "target_concept_id": target,
@@ -246,7 +242,7 @@ def collect_metrics(
                     "evidence_text_present_count": 0,
                     "source_images_present_count": 0,
                     "confidence_present_count": 0,
-                    "human_verified_relation_count": 0,
+                    "relationship_provenance": "project_curated_input",
                 }
             )
             return metrics
@@ -419,7 +415,7 @@ def build_report(metrics: dict[str, Any], args: argparse.Namespace) -> str:
         f"- Relationship confidence_max present: `{metrics.get('confidence_present_count', 0)}` / `{metrics['prerequisite_edge_count']}`"
     )
     lines.append(
-        f"- Human-verified prerequisite relations: `{metrics.get('human_verified_relation_count', 0)}` / `{metrics['prerequisite_edge_count']}`"
+        f"- Relationship provenance: `{metrics.get('relationship_provenance', 'project_curated_input')}`"
     )
     lines.append("")
 
@@ -488,7 +484,7 @@ def build_report(metrics: dict[str, Any], args: argparse.Namespace) -> str:
         )
     lines.append("")
     lines.append(
-        "> Manual check suggestion: review 30–50 representative PREREQUISITE_OF rows against source material; keep human verification separate from extraction confidence."
+        "> Chapter-level prerequisite relationships were curated from course materials; structural validation and AI-assisted plausibility checks are reported separately."
     )
     lines.append("")
     return "\n".join(lines)

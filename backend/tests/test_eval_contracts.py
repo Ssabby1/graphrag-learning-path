@@ -23,9 +23,9 @@ DATASET_FIELDS = {
         "case_id",
         "target_concept_id",
         "mastered_concepts",
-        "human_required_prerequisite_ids",
-        "human_forbidden_ids",
-        "review_status",
+        "required_prerequisite_ids",
+        "forbidden_ids",
+        "curation_status",
     },
     "evidence_retriever.jsonl": {
         "case_id",

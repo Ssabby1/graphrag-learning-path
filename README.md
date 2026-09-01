@@ -65,7 +65,7 @@ The public sample contains 15 synthetic, curated bilingual concepts and 18 relat
 | Answer Generator | Language match 6/6; invalid evidence IDs 0 | offline fallback + fake contract tests |
 | GraphRAG Contract | 42 nodes / 107 edges fully evidenced; answer context 8 | deterministic regression fixture |
 
-These are directional engineering evaluations, not claims of statistical generalisation. No external LLM was called for the versioned Answer Generator report: deterministic fallback claim lineage measured `0/6` unsupported claim templates, while real-model unsupported-claim rate and human faithfulness remain explicitly unmeasured. See the [four independent scorecards and feature ablation](evals/reports/stage6_summary.md).
+These are directional engineering evaluations, not claims of statistical generalisation. No external LLM was called for the versioned Answer Generator report: deterministic fallback claim lineage measured `0/6` unsupported claim templates, while real-model unsupported-claim rate and real-model faithfulness remain explicitly unmeasured. See the [four independent scorecards and feature ablation](evals/reports/stage6_summary.md).
 
 Key decisions supported by the ablation:
 

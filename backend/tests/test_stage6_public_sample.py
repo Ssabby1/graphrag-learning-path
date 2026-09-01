@@ -66,12 +66,12 @@ def test_unix_setup_documents_explicit_embedding_opt_in() -> None:
     assert "multilingual E5" in result.stdout
 
 
-def test_relationship_review_queue_requires_human_decisions(tmp_path) -> None:
-    output = tmp_path / "review.csv"
+def test_relationship_quality_queue_preserves_recorded_decisions(tmp_path) -> None:
+    output = tmp_path / "quality-check.csv"
     subprocess.run(
         [
             sys.executable,
-            str(ROOT / "scripts/build_relationship_review_queue.py"),
+            str(ROOT / "scripts/build_relationship_quality_queue.py"),
             "--concepts-csv",
             str(ROOT / "data/seed/concepts.csv"),
             "--relations-csv",
@@ -88,5 +88,5 @@ def test_relationship_review_queue_requires_human_decisions(tmp_path) -> None:
     with output.open(encoding="utf-8-sig", newline="") as handle:
         rows = list(csv.DictReader(handle))
     assert rows
-    assert all(row["review_status"] == "pending" for row in rows)
+    assert all(row["check_status"] == "pending" for row in rows)
     assert all(row["evidence_id"].startswith("prereq:") for row in rows)

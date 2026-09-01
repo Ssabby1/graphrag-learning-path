@@ -29,9 +29,8 @@
 {"case_id":"target-029","question":"我想学 Boolean expression 的标准形式","acceptable_target_ids":["G000119"],"should_reject":false,"query_language":"mixed","tags":["mixed","cross_lingual"]}
 {"case_id":"target-030","question":"Binary 二进制转换怎么入门？","acceptable_target_ids":["G000020"],"should_reject":false,"query_language":"mixed","tags":["mixed","natural_language"]}
 {"case_id":"target-031","question":"今天天气怎么样？","acceptable_target_ids":[],"should_reject":true,"query_language":"zh","tags":["reject","unrelated"]}
-{"case_id":"target-032","question":"帮我写一封求职邮件","acceptable_target_ids":[],"should_reject":true,"query_language":"zh","tags":["reject","unrelated"]}
+{"case_id":"target-032","question":"帮我规划一次周末旅行","acceptable_target_ids":[],"should_reject":true,"query_language":"zh","tags":["reject","unrelated"]}
 {"case_id":"target-033","question":"What is the weather tomorrow?","acceptable_target_ids":[],"should_reject":true,"query_language":"en","tags":["reject","unrelated"]}
 {"case_id":"target-034","question":"I want to learn something","acceptable_target_ids":[],"should_reject":true,"query_language":"en","tags":["reject","insufficient"]}
 {"case_id":"target-035","question":"这个怎么学？","acceptable_target_ids":[],"should_reject":true,"query_language":"zh","tags":["reject","insufficient"]}
 {"case_id":"target-036","question":"比较补码和海明码","acceptable_target_ids":["G000028","G000040"],"should_reject":true,"query_language":"zh","tags":["reject","multi_target_ambiguous"]}
-

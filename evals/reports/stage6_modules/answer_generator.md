@@ -1,7 +1,7 @@
 # Answer Generator
 
 Source: `stage5_answer_generator.json`  
-Git commit: `4d9a2293f97162eb58ce3955c2ff801a00631fe6`
+Git commit: `4b455217bcfeae93aaeb1c71b34fd17f9506c4eb`
 
 ## Metrics
 
@@ -27,5 +27,5 @@ Git commit: `4d9a2293f97162eb58ce3955c2ff801a00631fe6`
 ## Limits
 
 - No external LLM was called in this run.
-- The fallback unsupported-claim result follows deterministic claim lineage; real-model unsupported-claim rate and human faithfulness remain unmeasured.
+- The fallback unsupported-claim result follows deterministic claim lineage; real-model unsupported-claim rate and real-model faithfulness remain unmeasured.
 - Fake-LLM tests validate the contract, not model quality or faithfulness.

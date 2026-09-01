@@ -1,14 +1,14 @@
 {
   "run": {
-    "generated_at": "2026-08-30T12:54:31.296556+00:00",
+    "generated_at": "2026-09-01T08:43:21.463411+00:00",
     "dataset_profile": "full_local",
-    "git_commit": "dfe94a51119c3e62f92dc9ebd0bd3fe1788cf480",
+    "git_commit": "4b455217bcfeae93aaeb1c71b34fd17f9506c4eb",
     "git_dirty": true,
     "python": "3.13.15",
     "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
     "concepts_csv": "章节数据/数据汇总/outputs/fixed/concepts_all.csv",
     "relations_csv": "章节数据/数据汇总/outputs/fixed/relations_all.csv",
-    "target_dataset_sha256": "d5269a25d37ad6f76c50d931ecfefbc3fda84b56c6768686644590522bec0834"
+    "target_dataset_sha256": "4a52f57b13f23c10ab17fd7962323debc709451ff4f13e7d0e883cdfa17590e8"
   },
   "embedding": {
     "backend": "sentence_transformers",
@@ -28,7 +28,7 @@
     "relationship": {
       "document_count": 708,
       "hash": "458f3f053665e146a87d5b5ea4369146bbe54e40ea83a0521524b6b7f367f465",
-      "first_cache_status": "rebuilt",
+      "first_cache_status": "hit",
       "second_cache_status": "hit"
     }
   },
@@ -106,13 +106,13 @@
       },
       "latency": {
         "count": 36,
-        "p50_ms": 22.106,
-        "p95_ms": 24.123
+        "p50_ms": 21.334,
+        "p95_ms": 22.72
       }
     },
     "cache": {
-      "rebuilt": 1,
-      "hits": 35
+      "rebuilt": 0,
+      "hits": 36
     },
     "failures": [],
     "skipped": [],
@@ -174,8 +174,8 @@
           }
         ],
         "resolution_source": "exact",
-        "cache_status": "rebuilt",
-        "latency_ms": 1125.184
+        "cache_status": "hit",
+        "latency_ms": 165.082
       },
       {
         "case_id": "target-002",
@@ -235,7 +235,7 @@
         ],
         "resolution_source": "exact",
         "cache_status": "hit",
-        "latency_ms": 23.704
+        "latency_ms": 22.081
       },
       {
         "case_id": "target-003",
@@ -295,7 +295,7 @@
         ],
         "resolution_source": "exact",
         "cache_status": "hit",
-        "latency_ms": 23.099
+        "latency_ms": 21.607
       },
       {
         "case_id": "target-004",
@@ -355,7 +355,7 @@
         ],
         "resolution_source": "exact",
         "cache_status": "hit",
-        "latency_ms": 23.01
+        "latency_ms": 20.92
       },
       {
         "case_id": "target-005",
@@ -415,7 +415,7 @@
         ],
         "resolution_source": "exact",
         "cache_status": "hit",
-        "latency_ms": 22.988
+        "latency_ms": 21.02
       },
       {
         "case_id": "target-006",
@@ -475,7 +475,7 @@
         ],
         "resolution_source": "exact",
         "cache_status": "hit",
-        "latency_ms": 23.096
+        "latency_ms": 24.073
       },
       {
         "case_id": "target-007",
@@ -535,7 +535,7 @@
         ],
         "resolution_source": "exact",
         "cache_status": "hit",
-        "latency_ms": 22.852
+        "latency_ms": 22.054
       },
       {
         "case_id": "target-008",
@@ -595,7 +595,7 @@
         ],
         "resolution_source": "exact",
         "cache_status": "hit",
-        "latency_ms": 25.063
+        "latency_ms": 21.778
       },
       {
         "case_id": "target-009",
@@ -655,7 +655,7 @@
         ],
         "resolution_source": "exact",
         "cache_status": "hit",
-        "latency_ms": 22.967
+        "latency_ms": 21.346
       },
       {
         "case_id": "target-010",
@@ -715,7 +715,7 @@
         ],
         "resolution_source": "exact",
         "cache_status": "hit",
-        "latency_ms": 23.81
+        "latency_ms": 21.266
       },
       {
         "case_id": "target-011",
@@ -775,7 +775,7 @@
         ],
         "resolution_source": "exact",
         "cache_status": "hit",
-        "latency_ms": 22.958
+        "latency_ms": 20.964
       },
       {
         "case_id": "target-012",
@@ -835,7 +835,7 @@
         ],
         "resolution_source": "exact",
         "cache_status": "hit",
-        "latency_ms": 23.263
+        "latency_ms": 21.277
       },
       {
         "case_id": "target-013",
@@ -895,7 +895,7 @@
         ],
         "resolution_source": "exact",
         "cache_status": "hit",
-        "latency_ms": 21.51
+        "latency_ms": 20.497
       },
       {
         "case_id": "target-014",
@@ -955,7 +955,7 @@
         ],
         "resolution_source": "exact",
         "cache_status": "hit",
-        "latency_ms": 22.716
+        "latency_ms": 20.863
       },
       {
         "case_id": "target-015",
@@ -1015,7 +1015,7 @@
         ],
         "resolution_source": "exact",
         "cache_status": "hit",
-        "latency_ms": 22.642
+        "latency_ms": 21.484
       },
       {
         "case_id": "target-016",
@@ -1075,7 +1075,7 @@
         ],
         "resolution_source": "exact",
         "cache_status": "hit",
-        "latency_ms": 22.258
+        "latency_ms": 21.863
       },
       {
         "case_id": "target-017",
@@ -1135,7 +1135,7 @@
         ],
         "resolution_source": "exact",
         "cache_status": "hit",
-        "latency_ms": 21.954
+        "latency_ms": 21.439
       },
       {
         "case_id": "target-018",
@@ -1195,7 +1195,7 @@
         ],
         "resolution_source": "exact",
         "cache_status": "hit",
-        "latency_ms": 21.721
+        "latency_ms": 20.29
       },
       {
         "case_id": "target-019",
@@ -1255,7 +1255,7 @@
         ],
         "resolution_source": "exact",
         "cache_status": "hit",
-        "latency_ms": 22.588
+        "latency_ms": 21.148
       },
       {
         "case_id": "target-020",
@@ -1315,7 +1315,7 @@
         ],
         "resolution_source": "exact",
         "cache_status": "hit",
-        "latency_ms": 22.574
+        "latency_ms": 21.42
       },
       {
         "case_id": "target-021",
@@ -1375,7 +1375,7 @@
         ],
         "resolution_source": "exact",
         "cache_status": "hit",
-        "latency_ms": 22.477
+        "latency_ms": 21.019
       },
       {
         "case_id": "target-022",
@@ -1435,7 +1435,7 @@
         ],
         "resolution_source": "exact",
         "cache_status": "hit",
-        "latency_ms": 20.874
+        "latency_ms": 22.238
       },
       {
         "case_id": "target-023",
@@ -1495,7 +1495,7 @@
         ],
         "resolution_source": "vector",
         "cache_status": "hit",
-        "latency_ms": 21.771
+        "latency_ms": 22.269
       },
       {
         "case_id": "target-024",
@@ -1555,7 +1555,7 @@
         ],
         "resolution_source": "exact",
         "cache_status": "hit",
-        "latency_ms": 21.904
+        "latency_ms": 21.0
       },
       {
         "case_id": "target-025",
@@ -1615,7 +1615,7 @@
         ],
         "resolution_source": "vector",
         "cache_status": "hit",
-        "latency_ms": 20.507
+        "latency_ms": 20.648
       },
       {
         "case_id": "target-026",
@@ -1675,7 +1675,7 @@
         ],
         "resolution_source": "exact",
         "cache_status": "hit",
-        "latency_ms": 21.602
+        "latency_ms": 21.543
       },
       {
         "case_id": "target-027",
@@ -1735,7 +1735,7 @@
         ],
         "resolution_source": "exact",
         "cache_status": "hit",
-        "latency_ms": 21.098
+        "latency_ms": 21.479
       },
       {
         "case_id": "target-028",
@@ -1796,7 +1796,7 @@
         ],
         "resolution_source": "exact",
         "cache_status": "hit",
-        "latency_ms": 21.48
+        "latency_ms": 21.322
       },
       {
         "case_id": "target-029",
@@ -1856,7 +1856,7 @@
         ],
         "resolution_source": "exact",
         "cache_status": "hit",
-        "latency_ms": 20.893
+        "latency_ms": 21.765
       },
       {
         "case_id": "target-030",
@@ -1916,7 +1916,7 @@
         ],
         "resolution_source": "exact",
         "cache_status": "hit",
-        "latency_ms": 20.528
+        "latency_ms": 20.326
       },
       {
         "case_id": "target-031",
@@ -1974,11 +1974,11 @@
         ],
         "resolution_source": "rejected",
         "cache_status": "hit",
-        "latency_ms": 21.497
+        "latency_ms": 20.343
       },
       {
         "case_id": "target-032",
-        "question": "帮我写一封求职邮件",
+        "question": "帮我规划一次周末旅行",
         "query_language": "zh",
         "should_reject": true,
         "acceptable_target_ids": [],
@@ -1987,52 +1987,52 @@
         "correct": true,
         "ranked_ids": [
           "G000178",
-          "G000118",
-          "G000027",
-          "G000163",
-          "G000135"
+          "G000173",
+          "G000169",
+          "G000172",
+          "G000171"
         ],
         "reciprocal_rank": 0.0,
         "candidates": [
           {
             "concept_id": "G000178",
-            "score": 0.843489957120214,
+            "score": 0.8430066147852097,
             "rank": 1,
             "source": "vector",
-            "vector_score": 0.843489957120214
+            "vector_score": 0.8430066147852097
           },
           {
-            "concept_id": "G000118",
-            "score": 0.8430137955020494,
+            "concept_id": "G000173",
+            "score": 0.8430039955214761,
             "rank": 2,
             "source": "vector",
-            "vector_score": 0.8430137955020494
+            "vector_score": 0.8430039955214761
           },
           {
-            "concept_id": "G000027",
-            "score": 0.8418131132060904,
+            "concept_id": "G000169",
+            "score": 0.842196466502635,
             "rank": 3,
             "source": "vector",
-            "vector_score": 0.8418131132060904
+            "vector_score": 0.842196466502635
           },
           {
-            "concept_id": "G000163",
-            "score": 0.8404010810089985,
+            "concept_id": "G000172",
+            "score": 0.8413143044736806,
             "rank": 4,
             "source": "vector",
-            "vector_score": 0.8404010810089985
+            "vector_score": 0.8413143044736806
           },
           {
-            "concept_id": "G000135",
-            "score": 0.8397860136497144,
+            "concept_id": "G000171",
+            "score": 0.8410505314669044,
             "rank": 5,
             "source": "vector",
-            "vector_score": 0.8397860136497144
+            "vector_score": 0.8410505314669044
           }
         ],
         "resolution_source": "rejected",
         "cache_status": "hit",
-        "latency_ms": 20.547
+        "latency_ms": 20.55
       },
       {
         "case_id": "target-033",
@@ -2090,7 +2090,7 @@
         ],
         "resolution_source": "rejected",
         "cache_status": "hit",
-        "latency_ms": 21.461
+        "latency_ms": 21.489
       },
       {
         "case_id": "target-034",
@@ -2148,7 +2148,7 @@
         ],
         "resolution_source": "rejected",
         "cache_status": "hit",
-        "latency_ms": 19.965
+        "latency_ms": 21.28
       },
       {
         "case_id": "target-035",
@@ -2206,7 +2206,7 @@
         ],
         "resolution_source": "rejected",
         "cache_status": "hit",
-        "latency_ms": 21.66
+        "latency_ms": 20.243
       },
       {
         "case_id": "target-036",
@@ -2267,7 +2267,7 @@
         ],
         "resolution_source": "rejected",
         "cache_status": "hit",
-        "latency_ms": 21.724
+        "latency_ms": 21.428
       }
     ]
   },
