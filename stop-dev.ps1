@@ -13,8 +13,12 @@ foreach ($name in @("backend", "frontend")) {
     $processId = Get-Content -LiteralPath $pidPath | Select-Object -First 1
     $process = Get-Process -Id $processId -ErrorAction SilentlyContinue
     if ($process) {
-        & taskkill.exe /PID $processId /T /F | Out-Null
-        Write-Host "Stopped $name (PID $processId)."
+        $taskkillOutput = & taskkill.exe /PID $processId /T /F 2>&1
+        if ($LASTEXITCODE -eq 0 -or -not (Get-Process -Id $processId -ErrorAction SilentlyContinue)) {
+            Write-Host "Stopped $name (PID $processId)."
+        } else {
+            Write-Warning "Could not stop $name (PID $processId): $($taskkillOutput -join ' ')"
+        }
     } else {
         Write-Host "$name was not running (stale PID $processId)."
     }
@@ -22,3 +26,4 @@ foreach ($name in @("backend", "frontend")) {
 }
 
 Write-Host "Stop routine finished." -ForegroundColor Green
+$global:LASTEXITCODE = 0
