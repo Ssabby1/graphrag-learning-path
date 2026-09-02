@@ -19,6 +19,7 @@ export const COPY = {
     citations: "Validated Citations", evidenceRelations: "Path Relationships", integrity: "Citation Integrity", pathCoverage: "Path Evidence Coverage", retrievalRuntime: "Retrieval Runtime", semanticEmbedding: "Semantic E5", degradedHashing: "Degraded Hashing", notUsed: "Not Used", evidenceId: "Evidence ID", verification: "Curation Status",
     confidence: "Extraction Confidence", retrieval: "Retrieved Via", serviceNotice: "The backend is not ready. Start the local services, then refresh graph data.",
     chooseTarget: "Resolve or select a target before running the agent.", requestFailed: "The request failed. Check the backend log and try again.",
+    noStableTarget: "No stable target match. Rephrase the question or select a concept on the right.", closestCandidate: "Closest candidate",
     demoQuestion: "What should I learn before studying Karnaugh maps?", graphEmpty: "Generate a path to inspect the graph"
   },
   zh: {
@@ -35,6 +36,7 @@ export const COPY = {
     status: "路径状态", source: "回答来源", languageMeta: "回答语言", citations: "有效引用", evidenceRelations: "路径关系", integrity: "引用完整性", pathCoverage: "路径证据覆盖率", retrievalRuntime: "检索运行时", semanticEmbedding: "语义 E5", degradedHashing: "降级 Hashing", notUsed: "未使用", evidenceId: "证据 ID", verification: "整理状态",
     confidence: "抽取置信度", retrieval: "检索来源", serviceNotice: "后端尚未就绪。请启动本地服务，然后刷新图谱数据。",
     chooseTarget: "请先识别或选择目标知识点。", requestFailed: "请求失败，请检查后端日志后重试。",
+    noStableTarget: "无法稳定识别目标。请换一种说法，或在右侧手动选择知识点。", closestCandidate: "最接近的候选",
     demoQuestion: "What should I learn before studying Karnaugh maps?", graphEmpty: "生成路径后可在这里检查图谱"
   }
 };

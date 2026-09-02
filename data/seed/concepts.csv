@@ -4,7 +4,7 @@ c_002,逻辑门基础,Logic Gate Fundamentals,基本逻辑门|与或非门,logic
 c_003,真值表,Truth Tables,逻辑真值表,truth table|logic table,用输入输出组合描述逻辑行为,"Describe logic behavior with input and output combinations",1,02 Boolean Logic,,1.00
 c_004,布尔代数,Boolean Algebra,逻辑代数,Boolean logic|logic algebra,使用代数规则表示和变换逻辑函数,"Represent and transform logic functions with algebraic rules",2,02 Boolean Logic,,1.00
 c_005,最小项与最大项,Minterms and Maxterms,最小项|最大项,minterms|maxterms|canonical terms,用规范项表达逻辑函数,"Express logic functions with canonical terms",2,03 Logic Simplification,,1.00
-c_006,卡诺图构成,Karnaugh Map Construction,卡诺图|K图,Karnaugh map|K-map construction,按格雷码相邻规则组织最小项,"Arrange minterms using Gray-code adjacency",2,03 Logic Simplification,,1.00
+c_006,卡诺图构成,Karnaugh Map Construction,卡诺图|K图,Karnaugh map|K-map|K-map construction,按格雷码相邻规则组织最小项,"Arrange minterms using Gray-code adjacency",2,03 Logic Simplification,,1.00
 c_007,卡诺图化简,Karnaugh Map Simplification,K图化简,K-map simplification|logic minimization,通过相邻分组得到更简洁的逻辑表达式,"Derive simpler logic expressions by grouping adjacent cells",3,03 Logic Simplification,,1.00
 c_008,组合逻辑设计,Combinational Logic Design,组合电路设计,combinational circuit design,根据规格完成无状态逻辑电路设计,"Design stateless logic circuits from specifications",3,04 Combinational Circuits,,1.00
 c_009,半加器,Half Adder,一位半加器,half-adder,产生两个一位二进制数的和与进位,"Produce sum and carry for two one-bit inputs",2,04 Combinational Circuits,,1.00

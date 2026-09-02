@@ -6,7 +6,10 @@ import subprocess
 import sys
 
 from app.repositories.csv_graph_repository import CsvGraphRepository
+from app.retrieval.embedding_backend import UnicodeHashingEmbeddingBackend
+from app.retrieval.embedding_cache import EmbeddingCache
 from app.services.graphrag_service import query_graphrag
+from app.services.target_resolver import resolve_target
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -48,6 +51,18 @@ def test_cross_language_public_sample_runs_full_graphrag_chain(monkeypatch, tmp_
     assert result["meta"]["citation_integrity"] == 1.0
     assert result["meta"]["invalid_evidence_id_count"] == 0
     assert set(result["cited_evidence_ids"]) <= {item["evidence_id"] for item in result["selected_answer_evidence"]["items"]}
+
+
+def test_k_map_alias_resolves_in_offline_fallback(tmp_path) -> None:
+    result = resolve_target(
+        "学习 K-map 之前需要掌握哪些 concepts？",
+        PublicSampleRepository(),
+        embedding_backend=UnicodeHashingEmbeddingBackend(),
+        embedding_cache=EmbeddingCache(tmp_path),
+    )
+    assert result["target_concept_id"] == "c_006"
+    assert result["resolution_source"] == "exact"
+    assert result["rejected"] is False
 
 
 def test_cross_platform_entrypoints_exist() -> None:
